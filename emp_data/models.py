@@ -1,6 +1,5 @@
 from django.db import models
 from datetime import datetime
-# Create your models here.
 
 class Customer(models.Model):
     cName = models.CharField(max_length=50,primary_key=True)
@@ -13,16 +12,6 @@ class Customer(models.Model):
     def __str__(self):
         return str(self.cName)
     
-# class Buhead(models.Model): #Just has the names.. can use employee model to sort it 
-#     Bu_head_name=models.CharField(max_length=100,primary_key=True)
-#     def __str__(self):
-#         return self.Bu_head_name
-
-# class SalesIncharge(models.Model):
-#     incharge_name=models.CharField(max_length=100,primary_key=True)
-
-#     def __str__(self):
-#         return self.incharge_name
 
 class Role(models.Model):
     role_name=models.CharField(max_length=100,primary_key=True)
@@ -41,7 +30,6 @@ class Employee(models.Model):
     eExperience = models.IntegerField(default=0,null=True)
     eskills = models.CharField(max_length=100,null=True)
     eRole = models.ForeignKey(Role,on_delete=models.CASCADE) # designation
-    #eMP_Type = models.CharField(max_length=30,null=True) # either sales,software engineer, account
     estatus = models.CharField(max_length=100,null=True) # either free or deployed
     leadsoc_joining_date = models.DateField(null=True)
     customer_start_date = models.DateField(null=True)
@@ -55,7 +43,6 @@ class Employee(models.Model):
 from datetime import datetime
 
 class Emp_Experience(models.Model):
-    # e_id=models.CharField(max_length=15,null=True)
     e_id=models.CharField(max_length=5)
     refer_customer=models.CharField(max_length=100,null=True)
     customer_start_date=models.DateField(null=True)
@@ -77,9 +64,7 @@ class Customer_Requirements(models.Model):
     remain_positions = models.IntegerField(default=0)
     Position_Status = models.CharField(max_length=10) # active or closed        
     Sales_Incharge = models.CharField(max_length=50,null=True)# name of the person
-    #Candidate_List = models.CharField(max_length=100,null=True) # need candidate list
     Bu_head=models.CharField(max_length=50,null=True)
-    #Bu_remarks = models.CharField(max_length=1000,null=True, default="")
 
     class Meta:
         db_table = "customer_requirements"
@@ -107,9 +92,6 @@ class addEmpToCustomer(models.Model):# add two more fields: source (leadsoc,TA,V
     empstatus = models.CharField(max_length=100,null=True, default='')
     comp_name = models.CharField(max_length=100,null=True)
     added_date = models.DateField(null=True)
-    #empremarks = models.CharField(max_length=1000,null=True, default="")
-    # ta_remarks = models.CharField(max_length=1000,null=True, default="")
-    # sales_remarks = models.CharField(max_length=1000,null=True, default="")
     class Meta:
         db_table = "addemptocustomer"
 
@@ -121,7 +103,6 @@ class empRemarks(models.Model):
     refer_addemp = models.ForeignKey(addEmpToCustomer, on_delete = models.CASCADE)
     remark_date = models.DateField(null=True)
     remarks = models.CharField(max_length=1000,null=True, default="")
-    #cname = models.CharField(max_length=100,null=True)
     remark_author = models.CharField(max_length=100,null=True)
     class Meta:
         db_table = "empRemarks"
@@ -222,4 +203,3 @@ class TA_Resource(models.Model):
     Domain = models.CharField(max_length=100)
     T1 = models.CharField(max_length=100)
     T2 = models.CharField(max_length=100)
-    # resume = models.FileField()

@@ -87,8 +87,7 @@ urlpatterns = [
     path('ta_upload',views.ta_upload),
     path('delete_ta/<int:phone_number>',views.delete_ta),
 
-    #For experience page 
-    path('experience/<str:e_id>',views.experience),
+
     path('addexperience/<str:e_id>',views.addexperience),
     path('delete_experience/<int:exp_id>', views.delete_experience),
     

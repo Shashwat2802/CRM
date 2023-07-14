@@ -61,31 +61,28 @@
 
           <button class="btn-danger btn-sm" onclick="location.href='/deleteEmp/{{employee.e_id}}'"><i
               class="fa-solid fa-trash"></i></button>
-          {% if current_emp.eRole.role_name == 'HR' or  current_emp.eRole.role_name == 'Bu Head' %}
-            <button class="btn-success btn-sm" data-toggle="modal" data-target="#modalForm{{employee.ePhone}}"><i
-                class="fa-solid fa-pen-to-square"></i>
-            </button>
+          {% if current_emp.eRole.role_name == 'HR' or current_emp.eRole.role_name == 'Bu Head' %}
+          <button class="btn-success btn-sm" data-toggle="modal" data-target="#modalForm{{employee.ePhone}}"><i
+              class="fa-solid fa-pen-to-square"></i>
+          </button>
           {% else %}
-          <span class="d-inline-block" tabindex="0" data-bs-toggle="popover{{employee.e_id}}" data-bs-trigger="hover focus" data-bs-content="Authorized for HR or Bu-Head only" data-bs-placement="left">
+          <span class="d-inline-block" tabindex="0" data-bs-toggle="popover{{employee.e_id}}"
+            data-bs-trigger="hover focus" data-bs-content="Authorized for HR or Bu-Head only" data-bs-placement="left">
             <button class="btn-outline-secondary btn-success" disabled>
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
           </span>
-            
-            <script>
-              $(function () {
-                  $('[data-bs-toggle="popover{{employee.e_id}}"]').popover({ trigger: "hover focus" })
-              })
+
+          <script>
+            $(function () {
+              $('[data-bs-toggle="popover{{employee.e_id}}"]').popover({ trigger: "hover focus" })
+            })
           </script>
           {% endif %}
-          <!-- <button class="btn-success btn-sm" onclick="location.href='/editemp/{{employee.eFname}}'"><i
-              class="fa-solid fa-pen-to-square"></i></button> -->
           <button class="btn-info btn-sm data" data-toggle="modal" data-target="#modalTable{{employee.ePhone}}">
             <i class="fa-solid fa-eye"></i>
           </button>
-          <button class="btn-sm" onclick="location.href='/experience/{{employee.e_id}}'">
-            <i class="fa-solid fa-user" style="color: #e6db43;"></i>
-          </button>
+
 
           <div class="modal" id="modalTable{{employee.ePhone}}" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -129,81 +126,27 @@
                       <tr id="new_row">
                         <form method="POST" action="/addexperience/{{employee.e_id}}">
                           {% csrf_token %}
-                              <td>
-                                <select name="refer_customer" id="refer_customer">
-                                  {% for val in customerlist %}
-                                  <option value="{{val}}">{{val}}</option>
-                                  {% endfor %}
-                                </select>
-                              </td>
-                              <td>
-                                <input type='date' id='start_date' name="start_date">
-                              </td>
-                              <td>
-                                <input type='date' id='end_date' name="end_date">
-                              </td>
-                              <td>
-                                <button class='btn-info btn-sm' type='submit'>Submit</button>
-                              </td>  
-                        </form>                      
-                      </tr> 
-                      <!-- <script>
-                        $(document).ready(function() {
-                            $("add-exp{{employee.e_id}}").click(function() {
-                                $("#new_row").toggle();
-                            });
-                        });
-                      </script> -->
+                          <td>
+                            <select name="refer_customer" id="refer_customer">
+                              {% for val in customerlist %}
+                              <option value="{{val}}">{{val}}</option>
+                              {% endfor %}
+                            </select>
+                          </td>
+                          <td>
+                            <input type='date' id='start_date' name="start_date">
+                          </td>
+                          <td>
+                            <input type='date' id='end_date' name="end_date">
+                          </td>
+                          <td>
+                            <button class='btn-info btn-sm' type='submit'>Add</button>
+                          </td>
+                        </form>
+                      </tr>
                     </tbody>
                   </table>
-                  <!-- <button id="filterButton">Activate Filter</button>
 
-                  <p>Variable: <span id="variable">{{ variable_name }}</span></p>
-
-                  <script>
-                      // Get the button element
-                      var button = document.getElementById("filterButton");
-
-                      // Add a click event listener to the button
-                      button.addEventListener("click", function() {
-                          // Get the variable value from the Django context
-                          var variableValue = "{{ variable_name }}";
-
-                          // Toggle the variable value from false to true or vice versa
-                          variableValue = variableValue === 'true' ? 'false' : 'true';
-
-                          // Apply the custom filter
-                          var filteredValue = variableValue;
-
-                          // Update the variable element
-                          $('#variable').text(filteredValue);
-                      });
-                  </script> -->
-
-
-                  <!-- <button class="btn-info btn-sm" id="add-exp{{employee.e_id}}" name="add-exp{{employee.e_id}}" onclick="addRow()">
-                    Add Experience 
-                  </button> -->
-                
-              
-                  <!-- <button class="btn-info btn-sm" id="add-exp{{employee.e_id}}" name="add-exp{{employee.e_id}}">
-                    Add Experience 
-                  </button> -->
-                  <!-- <script>
-                    function Add_exp() {
-                      var my_row = ''
-                        
-                      $("#example1 tbody").append(my_row);
-                    };
-                  </script> -->
-                  <!--Version 1.0-->
-                  <!-- <script>
-                    function Add_exp() {
-                      var my_row = "<tr><form id='form1' action='http://127.0.0.1:8000/addexperience' method='GET'><td><select name=&quot;refer_customer[]&quot; id=&quot;refer_customer_0&quot;>{% for val in customerlist %}<option value=&quot;{{val}}&quot;>{{val}}</option>{% endfor %}</select></td><td><input type='date' id='start_date'></td><td><input type='date' id='end_date'></td><td><button class='btn-info btn-sm' type='submit' form='form1'>Submit</button></td></form></tr>";
-                      $("#example1 tbody").append(my_row);
-                    }
-                  </script> -->
-                  
                 </div>
 
               </div>
