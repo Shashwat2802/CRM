@@ -1,0 +1,299 @@
+{% extends 'basic.html' %}
+{% block extra %}
+{% load experience_filter %}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+
+  $(document).ready(function () {
+    $('#example').DataTable({
+      dom: 'Bfrtip',
+      buttons: [
+        'copyHtml5',
+        'excelHtml5',
+        'csvHtml5',
+        'pdfHtml5'
+      ]
+    });
+  });
+</script>
+{% endblock %}
+{% block body %}
+<center>
+  <div>
+    <h2 class="bg-info text-white">List of Employees</h2>
+  </div>
+</center>
+
+<div class="container-fluid">
+  <table class="table table-bordered table-hover" id="example" name="example">
+    <thead class="bg-info text-white">
+      <tr>
+        <th>Employee ID.</th>
+        <th>Name</th>
+        <th>Customer</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Designation</th>
+        <th>Status</th>
+        <th>LeadSoc Joining Date</th>
+        <th>Customer Start Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for employee in employees %}
+      <tr>
+        <td>{{employee.e_id}}</td>
+        <td>{{employee.eFname}} {{employee.eLname}}</td>
+        <td>{{employee.refer_Customer}}</td>
+        <td>{{employee.eEmail}}</td>
+        <td>{{employee.ePhone}}</td>
+        <td>{{employee.eRole}}</td>
+        <td>{{employee.estatus}}</td>
+        <td>{{employee.leadsoc_joining_date}}</td>
+        <td>{{employee.customer_start_date}}</td>
+
+        <td>
+
+          <button class="btn-danger btn-sm" onclick="location.href='/deleteEmp/{{employee.e_id}}'"><i
+              class="fa-solid fa-trash"></i></button>
+          {% if current_emp.eRole.role_name == 'HR' or  current_emp.eRole.role_name == 'Bu Head' %}
+            <button class="btn-success btn-sm" data-toggle="modal" data-target="#modalForm{{employee.ePhone}}"><i
+                class="fa-solid fa-pen-to-square"></i>
+            </button>
+          {% else %}
+          <span class="d-inline-block" tabindex="0" data-bs-toggle="popover{{employee.e_id}}" data-bs-trigger="hover focus" data-bs-content="Authorized for HR or Bu-Head only" data-bs-placement="left">
+            <button class="btn-outline-secondary btn-success" disabled>
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+          </span>
+            
+            <script>
+              $(function () {
+                  $('[data-bs-toggle="popover{{employee.e_id}}"]').popover({ trigger: "hover focus" })
+              })
+          </script>
+          {% endif %}
+          <!-- <button class="btn-success btn-sm" onclick="location.href='/editemp/{{employee.eFname}}'"><i
+              class="fa-solid fa-pen-to-square"></i></button> -->
+          <button class="btn-info btn-sm data" data-toggle="modal" data-target="#modalTable{{employee.ePhone}}">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+          <button class="btn-sm" onclick="location.href='/experience/{{employee.e_id}}'">
+            <i class="fa-solid fa-user" style="color: #e6db43;"></i>
+          </button>
+
+          <div class="modal" id="modalTable{{employee.ePhone}}" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5>Experience</h5>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                  <h5>Employee Name: {{employee.eFname}} {{employee.eLname}} </h5>
+                  <table class="table table-striped" id="example1" name="example1">
+                    <thead>
+                      <tr>
+                        <th>Company</th>
+                        <th>Customer Start Date</th>
+                        <th>Customer End Date</th>
+                        <th>Duration (In Days)</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for val in experiencelist %}
+                      {% if val.e_id == employee.e_id %}
+                      <tr>
+                        <td>{{val.refer_customer}}</td>
+                        <td>{{val.customer_start_date}}</td>
+                        <td>{{val.customer_end_date}}</td>
+                        <td>{{val.duration}}</td>
+                        <td>
+                          <button class="btn-success btn-sm">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                          </button>
+                          <button onclick="location.href='/delete_experience/{{val.id}}'" class="btn-danger btn-sm">
+                            <i class="fa-solid fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      {% endif %}
+                      {% endfor %}
+                      <tr id="new_row">
+                        <form method="POST" action="/addexperience/{{employee.e_id}}">
+                          {% csrf_token %}
+                              <td>
+                                <select name="refer_customer" id="refer_customer">
+                                  {% for val in customerlist %}
+                                  <option value="{{val}}">{{val}}</option>
+                                  {% endfor %}
+                                </select>
+                              </td>
+                              <td>
+                                <input type='date' id='start_date' name="start_date">
+                              </td>
+                              <td>
+                                <input type='date' id='end_date' name="end_date">
+                              </td>
+                              <td>
+                                <button class='btn-info btn-sm' type='submit'>Submit</button>
+                              </td>  
+                        </form>                      
+                      </tr> 
+                      <!-- <script>
+                        $(document).ready(function() {
+                            $("add-exp{{employee.e_id}}").click(function() {
+                                $("#new_row").toggle();
+                            });
+                        });
+                      </script> -->
+                    </tbody>
+                  </table>
+                  <!-- <button id="filterButton">Activate Filter</button>
+
+                  <p>Variable: <span id="variable">{{ variable_name }}</span></p>
+
+                  <script>
+                      // Get the button element
+                      var button = document.getElementById("filterButton");
+
+                      // Add a click event listener to the button
+                      button.addEventListener("click", function() {
+                          // Get the variable value from the Django context
+                          var variableValue = "{{ variable_name }}";
+
+                          // Toggle the variable value from false to true or vice versa
+                          variableValue = variableValue === 'true' ? 'false' : 'true';
+
+                          // Apply the custom filter
+                          var filteredValue = variableValue;
+
+                          // Update the variable element
+                          $('#variable').text(filteredValue);
+                      });
+                  </script> -->
+
+
+                  <!-- <button class="btn-info btn-sm" id="add-exp{{employee.e_id}}" name="add-exp{{employee.e_id}}" onclick="addRow()">
+                    Add Experience 
+                  </button> -->
+                
+              
+                  <!-- <button class="btn-info btn-sm" id="add-exp{{employee.e_id}}" name="add-exp{{employee.e_id}}">
+                    Add Experience 
+                  </button> -->
+                  <!-- <script>
+                    function Add_exp() {
+                      var my_row = ''
+                        
+                      $("#example1 tbody").append(my_row);
+                    };
+                  </script> -->
+                  <!--Version 1.0-->
+                  <!-- <script>
+                    function Add_exp() {
+                      var my_row = "<tr><form id='form1' action='http://127.0.0.1:8000/addexperience' method='GET'><td><select name=&quot;refer_customer[]&quot; id=&quot;refer_customer_0&quot;>{% for val in customerlist %}<option value=&quot;{{val}}&quot;>{{val}}</option>{% endfor %}</select></td><td><input type='date' id='start_date'></td><td><input type='date' id='end_date'></td><td><button class='btn-info btn-sm' type='submit' form='form1'>Submit</button></td></form></tr>";
+                      $("#example1 tbody").append(my_row);
+                    }
+                  </script> -->
+                  
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="modal" id="modalForm{{employee.ePhone}}" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="staticBackdropLabel">Enter the new details</h1>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                  <!-- <nav class="navbar bg-body-tertiary"> -->
+                  <div class="container-fluid">
+                    <form action="/updateEmp/{{employee.e_id}}" method="POST">
+                      {% csrf_token %}
+                      <div class="form-group">
+                        <label for="Required_skills">Update First Name :</label>
+                        <input type="text" class="form-control" id="eFname" name="eFname" placeholder="Enter First Name"
+                          value="{{employee.eFname}}">
+                      </div>
+                      <div class="form-group">
+                        <label for="eLname">Update Last Name:</label>
+                        <input type="text" class="form-control" id="eLname" name="eLname" placeholder="Enter Last Name"
+                          value="{{employee.eLname}}">
+                      </div>
+                      <div class="form-group">
+                        <label for="refer_Customer">Customer</label>
+                        <select name="refer_Customer" id="refer_Customer">
+                          {% for val in customerlist %}
+                          <option value="{{val}}">{{val}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="eEmail">Update Email Id :</label>
+                        <input type="email" class="form-control" id="eEmail" name="eEmail"
+                          placeholder="Enter opened positions" value="{{employee.eEmail}}">
+                      </div>
+                      <div class="form-group">
+
+                        <label for="eRole">Update Role</label>
+                        <select name="eRole" id="eRole">
+                          {% for val in rolelist %}
+                          <option value="{{val}}">{{val}}</option>
+                          {% endfor %}
+                        </select>
+
+                      </div>
+                      <div class="form-group">
+                        <label for="estatus">Update status:</label>
+                        <select name="estatus" id="estatus">
+                          {% for val in statuslist %}
+                          <option value="{{val}}">{{val}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+
+                      <!-- <div class="form-group">
+
+                                              <label for="customer_start_date">Update Customer Start Date:</label>
+                                                <input type="date" class="form-control" id="customer_start_date"
+                                                    name="customer_start_date" value="{{employee.customer_start_date}}">
+                                                    
+
+                                            </div> -->
+
+                  </div>
+                  <!-- <div class="form-group">
+                                        <label for="Sales_Incharge">Sales Incharge</label>
+                                        <select name="Sales_Incharge" id="Sales_Incharge">
+                                          {% for val in saleslist %}
+                                          <option value="{{val}}">{{val}}</option>
+                                          {% endfor %}
+                                        </select>
+                                      </div> -->
+                  <button type="submit" class="btn btn-primary">Update</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
