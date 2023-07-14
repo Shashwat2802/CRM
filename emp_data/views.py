@@ -65,7 +65,6 @@ def addEmployee(request):
             messages.success(request,"Details Saved !")
         else:
             return HttpResponse("mandatory params not given" )#form.errors)
-        # erole=form.cleaned_data['eRole']
         emp_name=request.POST.get('eFname',False)
         erole=request.POST.get('eRole',False)
         if (request.POST.get('estatus')=='Free'):
@@ -88,26 +87,14 @@ def addEmployee(request):
 
         return render(request, 'addemp.html',{'zipped_lists': list1,'rolelist':rolelist,'status':['Free','Deployed','Support Team']})
 
-def experience(request,e_id):
-    instance=Employee.objects.get(pk=e_id)
-    first_name=instance.eFname
-    last_name=instance.eLname
-    name=first_name + " " + last_name
-    custom=Customer.objects.all()
-    today = date.today().strftime("%Y-%m-%d")
-    customerlist=[]
-    for item in custom:
-        customerlist.append(item.cName)
-    return render(request,'experience.html',{'e_id':e_id,'name':name,'customerlist':customerlist, 'today': today})
-
-
 
 def addexperience(request, e_id):
     if request.method == 'POST':
-        c_name = request.POST.getlist('refer_customer')
+        c_name = request.POST.get('refer_customer')
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
-        instance=Emp_Experience(e_id=e_id,refer_customer=c_name[0],customer_start_date=start_date,customer_end_date=end_date)
+        print("Raghu1",c_name, start_date,end_date,request.POST)
+        instance=Emp_Experience(e_id=e_id,refer_customer=c_name,customer_start_date=start_date,customer_end_date=end_date)
         instance.save()
         return redirect('/listEmployees')
     else:
