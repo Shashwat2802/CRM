@@ -68,17 +68,15 @@ urlpatterns = [
     #path('candidate_search',views.candidate_search),
 
      #Customer paths 
-    path('comp', views.comp),
+    path('addCustomer', views.addCustomer),
     path('show', views.show),
-    # path('edit/<str:cName>', views.edit),
     path('update/<str:cName>', views.update),
     path('delete/<str:cName>', views.delete), 
 
     #employee paths
-    path('emp', views.emp),
-    path('showemp', views.showemp),
+    path('addEmployee', views.addEmployee),
+    path('listEmployees', views.listEmployees),
     path('deleteEmp/<str:e_id>', views.deleteEmp),
-    # path('editemp/<str:eFname>', views.editemp), 
     path('updateEmp/<str:e_id>', views.updateEmp),
 
 
