@@ -7,96 +7,16 @@
   <div>
     <div class="container">
           <h3 style="color: rgba(16, 4, 33, 0.926);padding-top: 5%;">Add Employee Details</h3>
-    <form action="/emp" method="POST">
+    <form action="/addEmployee" method="POST">
       {% csrf_token %}
 
-      <!--<div class="form-group">
-        <label class="form-label">First Name:</label>
-        <div>{{form.eFname}}</div>
-        <<input type="text" value="{{form.eFname}}" 
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Last Name:</label>
-        <div>{{form.eLname}}</div>
-        <<input type="text" value="{{form.eFname}}" />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Employee Customer:</label>
-       <div>{{form.eCustomer}}</div>
-         <input type="text" value="{{form.eLname}}" />
-      </div>
-
-<p style="color:crimson">Company not available?</p><button class="btn-warning btn-sm" onclick="location.href='/comp'">Click Here</button>
-
-      <div class="form-group">
-        <label class="form-label">Employee Email:</label>
-        <div>{{form.eEmail}}</div>
-        <input type="text" value="{{form.eEmail}}" />
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Employee phone:</label>
-        <div>{{form.ePhone}}</div>
-        <input type="text" value="{{form.ePhone}}" />
-      </div><br>
-
-      <div class="form-group">
-        <label class="form-label">Employee Experience:</label>
-        <div>{{form.eExperience}}</div>
-        <input type="text" value="{{form.ePhone}}" />
-      </div><br>
-
-      <div class="form-group">
-        <label class="form-label">Employee Skills:</label>
-        <div>{{form.eskills}}</div>
-        <input type="text" value="{{form.ePhone}}" />
-      </div><br>
-
-      <div class="form-group">
-        <label class="form-label">Employee Role:</label>
-        <div>{{form.eRole}}</div>
-        <input type="text" value="{{form.ePhone}}" />
-      </div><br>
-
-      <div class="form-group">
-        <label class="form-label">Employee Type:</label>
-        <div>{{form.eMP_Type}}</div>
-        <input type="text" value="{{form.ePhone}}" />
-      </div><br>
-
-      <div class="form-group">
-        <label class="form-label">Employee Status:</label>
-        <div>{{form.estatus}}</div>
-        <input type="text" value="{{form.ePhone}}" />
-      </div><br>
-
-      <div class="form-group">
-        <label class="form-label">Employee joining to leadsoc:</label>
-        <div>{{form.leadsoc_joining_date}}</div>
-        <input type="text" value="{{form.ePhone}}" />
-      </div><br>
-
-      <div class="form-group">
-        <label class="form-label">Employee joining to customer:</label>
-        <div>{{form.customer_start_date}}</div>
-        <input type="text" value="{{form.ePhone}}" />
-      </div><br>
-
-      <div class="form-group">
-        <label class="form-label">Employee Remarks:</label>
-        <div>{{form.remarks}}</div>
-        <input type="text" value="{{form.ePhone}}" />
-      </div><br>-->
-      <div class="form-group">
+     <div class="form-group">
         <label for="e_id">Employee Id</label>
         <input type="text" class="form-control" id="e_id" name="e_id" placeholder="Enter Employee ID">
       </div>
       <div class="form-group">
         <label for="eFname">First Name:</label>
         <input type="text" class="form-control" id="eFname" name="eFname" placeholder="Enter First Name">
-        <!--<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>-->
       </div>
         <div class="form-group">
           <label for="eLname">Last Name:</label>

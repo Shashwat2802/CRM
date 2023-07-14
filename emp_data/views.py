@@ -25,29 +25,22 @@ def loginCheck(request):
         user = auth.authenticate(username = username, password = password)
         if user is not None:
             auth.login(request, user)
-            return redirect("/emp")
+            return redirect("/addEmployee")
         else:
             messages.info(request, 'invalid credentials')
-            return redirect("/emp")
-
-
-
+            return redirect("/addEmployee")
     else:
         form = loginForm()
         return render(request, "regsitration/login.html")
 
 
-
 #Home page
 def home(request):
     return render(request,"home.html")
-'''
-def admin_login(request):
-    return render(request, 'admin_login.html')
-'''
+
 # To add Customer
 
-def comp(request):
+def addCustomer(request):
     if request.method == "POST":
 
         form = CustomerForm(request.POST)
@@ -63,68 +56,22 @@ def comp(request):
     return render(request, "index.html", {'form':form})
 
 
-# add company details
-'''
-def comp(request):
-    if request.method == "POST":
-        print("Hi Anil")
-        cName = request.POST['cName']
-        cEmail = request.POST['cEmail']
-        cLogo = request.POST['cLogo']
-        cUrl = request.POST['cUrl']
-        ins=Customer(cName=cName,cEmail=cEmail,cLogo=cLogo,cUrl=cUrl)
-        ins.save()
-
-        print(cName)
-    return render(request, 'index.html')
-'''
-
-def emp(request):
+def addEmployee(request):
     form=EmployeeForm()
     if request.method == "POST":
-        '''eFname = request.POST['eFname']
-        eLname = request.POST['eLname']
-        refer_Customer_no = request.POST['refer_Customer']
-        eEmail = request.POST['eEmail']
-        ePhone = int(request.POST['ePhone'])
-        eExperience =request.POST['eExperience']
-        eskills = request.POST['eskills']
-        eRole = request.POST['eRole']
-        eMP_Type = request.POST['eMP_Type']
-        estatus = request.POST['estatus']
-        leadsoc_joining_date = request.POST['leadsoc_joining_date']
-        customer_start_date = request.POST['customer_start_date']
-        remarks = request.POST['remarks']
-        ins=Employee(eFname=eFname, eLname=eLname, refer_Customer_id=refer_Customer_no, eEmail=eEmail, ePhone=ePhone, 
-                     eExperience=eExperience,eskills=eskills,eRole=eRole,eMP_Type=eMP_Type,estatus=estatus,
-                     leadsoc_joining_date=leadsoc_joining_date,customer_start_date=customer_start_date,remarks=remarks)
-        ins.save()'''
         form=EmployeeForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request,"Details Saved !")
+        else:
+            return HttpResponse("mandatory params not given" )#form.errors)
         # erole=form.cleaned_data['eRole']
         emp_name=request.POST.get('eFname',False)
         erole=request.POST.get('eRole',False)
-        # ePhone=request.POST.get('ePhone',False)
         if (request.POST.get('estatus')=='Free'):
             candidate_instance=CandidateList(candidate_name=emp_name,interview_status='Rejected')
             candidate_instance.save()
-            return redirect(f'/showemp')
-        # if erole=='Bu Head':
-        #     # return HttpResponse('Bu Head')
-        #     instance=Buhead(Bu_head_name=emp_name)
-        #     instance.save()
-        #     return redirect(f'/showemp')
-
-        # if erole=='Sales Incharge':
-        #     # return HttpResponse('Sales Incharge')
-        #     instance=SalesIncharge(incharge_name=emp_name)
-        #     instance.save()
-        #     return redirect(f'/showemp')
-
-
-        # return redirect('/showemp')
+            return redirect(f'/listEmployees')
         else:
             return HttpResponse(form.errors)
     
@@ -140,7 +87,6 @@ def emp(request):
 
 
         return render(request, 'addemp.html',{'zipped_lists': list1,'rolelist':rolelist,'status':['Free','Deployed','Support Team']})
-
 
 def experience(request,e_id):
     instance=Employee.objects.get(pk=e_id)
@@ -163,47 +109,22 @@ def addexperience(request, e_id):
         end_date = request.POST.get('end_date')
         instance=Emp_Experience(e_id=e_id,refer_customer=c_name[0],customer_start_date=start_date,customer_end_date=end_date)
         instance.save()
-        return redirect('/showemp')
+        return redirect('/listEmployees')
     else:
         return HttpResponse("Error")
-    # num_entries=len(request.POST.getlist('refer_customer[]'))
-    # name=request.POST.getlist('refer_customer[]')
-    # start=request.POST.getlist('customer_start_date[]')
-    # end=request.POST.getlist('customer_end_date[]')
-    # for i in range(num_entries):
-    #     c_name=name[i]
-    #     s_date=start[i]
-    #     e_date=end[i]
-    #     instance=Emp_Experience(e_id=e_id,refer_customer=c_name,customer_start_date=s_date,customer_end_date=e_date)
-    #     instance.save()
-    # return redirect('/showemp')
+   
 
 def delete_experience(request, exp_id): 
     exp_instance = Emp_Experience.objects.get(id=exp_id)
     exp_instance.delete()
-    return redirect('/showemp')
+    return redirect('/listEmployees')
 
 
 def add_cust_requirements(request):
     form=Customer_RequirementForm()
     if request.method == "POST":
         
-        '''Requirement_Id = request.POST['Requirement_Id']
-        customers = request.POST['customers']
-        Customer_Requirement_id = request.POST['Customer_Requirement_id']
-        Required_skills = request.POST['Required_skills']
-        Job_Description = request.POST['Job_Description']
-        Required_Experience =request.POST['Required_Experience']
-        Open_positions = request.POST['Open_positions']
-        remain_positions = request.POST['remain_positions'] 
-        Position_Status = request.POST['Position_Status']        
-        Sales_Incharge = request.POST['Sales_Incharge']
-        bu_head = request.POST['Bu_head']        
-        cust_require_data=Customer_Requirements(Requirement_Id=Requirement_Id,customers_id=customers,Customer_Requirement_id=Customer_Requirement_id, 
-                                                Required_skills=Required_skills, Job_Description=Job_Description, Required_Experience=Required_Experience,
-                                                   Open_positions =Open_positions, remain_positions=remain_positions, Position_Status=Position_Status,
-                                                    Sales_Incharge=Sales_Incharge, Bu_head=bu_head)
-        cust_require_data.save()'''
+        
         form=Customer_RequirementForm(request.POST)
         if form.is_valid():
             form.save()
@@ -722,35 +643,13 @@ def delete_Emp_Customer(request,eFname,Customer_Requirement_id):
     company=req.customers
     return redirect(f'/showEmpToCustomer/{company}/{Customer_Requirement_id}')
 
-
-  
-  
-  
-# To create employee
-'''
-def emp(request):
-    if request.method == "POST":
-        
-        form = EmployeeForm(request.POST)
-        if form.is_valid():
-            
-            try:
-                form.save()
-                return redirect("/showemp.html")
-            except:
-                pass
-    else:
-        
-        form = EmployeeForm()
-        
-    return render(request, "addemp.html", {'form':form})
-'''
-
 # To show employee details
-def showemp(request):
+def listEmployees(request):
     if not request.user.is_authenticated:
         return redirect('home')
     employees = Employee.objects.all()
+
+    print("lists",employees)
     current_user = request.user.username.title()
     current_emp = Employee.objects.get(eFname=current_user)
     customerlist=Customer.objects.all()
@@ -765,14 +664,8 @@ def deleteEmp(request, e_id):
         return redirect('home')
     employee = Employee.objects.get(pk=e_id)
     employee.delete()
-    return redirect("/showemp")
+    return redirect("/listEmployees")
 
-# To edit employee details
-# def editemp(request, eFname):
-#     if not request.user.is_authenticated:
-#         return redirect('home')
-#     employee = Employee.objects.get(eFname=eFname)
-#     return render(request, "editemployee.html", {'employee':employee})
 
 # To update employee details
 def updateEmp(request, e_id):
@@ -787,32 +680,13 @@ def updateEmp(request, e_id):
         employee.refer_Customer=Customer(cName=request.POST['refer_Customer'])
         employee.eEmail=request.POST['eEmail']
         newval=Role(role_name=request.POST['eRole'])
-        # if str(employee.eRole)=='Bu Head' and str(newval.role_name)=='Sales Incharge':
-        #     Bu_instance=Buhead.objects.filter(pk=ref_name)
-        #     Bu_instance.delete()
-        #     s_instance=SalesIncharge(incharge_name=employee.eFname)
-        #     s_instance.save()
-        #     employee.eRole=newval
-        # if str(employee.eRole)=='Sales Incharge' and str(newval.role_name)=='Bu Head':
-        #     s_instance=SalesIncharge.objects.filter(pk=ref_name)
-        #     s_instance.delete()
-        #     Bu_instance=Buhead(Bu_head_name=employee.eFname)
-        #     Bu_instance.save()
-        #     employee.eRole=newval
         employee.eRole=newval
         employee.estatus=request.POST['estatus']
         employee.save()
 
-    return redirect("/showemp")
+    return redirect("/listEmployees")
 
-    # form = EmployeeForm(request.POST, instance= employee)
-    
-    # if form.is_valid():
         
-    #     form.save()
-        
-    return render(request, "editemployee.html", {'employee': employee})
-
 def save_emp_details(request): 
     if not request.user.is_authenticated:
         return redirect('home')
@@ -866,7 +740,7 @@ def simple_upload(request):
             if data[9]=='Free':
                 newvalue=CandidateList(candidate_name=data[1],interview_status='Rejected')
                 newvalue.save()
-        return redirect("/showemp")
+        return redirect("/listEmployees")
         
     return render(request,'upload.html')
 
