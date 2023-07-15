@@ -31,13 +31,6 @@ class Customer_RequirementsAdmin(ImportExportModelAdmin):
     list_filter = ()
     fieldsets = ()
 
-@admin.register(models.CandidateList)
-class CandidateList(ImportExportModelAdmin):
-    list_display = ('candidate_name','interview_status')
-    search_fields = ['candidate_name','interview_status']
-    filter_horizontal = ()
-    list_filter = ()
-    fieldsets = ()
 
 @admin.register(models.addEmpToCustomer)
 class addEmpToCustomer(ImportExportModelAdmin):

@@ -48,7 +48,6 @@ urlpatterns = [
     path("save_emp_details", views.save_emp_details, name="save_emp_details"),
     path('addSalesReqs',views.addSalesReqs),
     path('job_description',views.job_description),  
-    path('add_candidate',views.add_candidate),
     path('show_candidate/<str:customers>/<int:Customer_Requirement_id>',views.show_candidate),
     path('savedvalues/<str:customer_name>/<int:Customer_Requirement_id>',views.savedvalues),
     path('showEmpToCustomer/<str:cust_name>/<int:Customer_Requirement_id>',views.showEmpToCustomer),

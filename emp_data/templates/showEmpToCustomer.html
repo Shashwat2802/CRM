@@ -5,23 +5,15 @@
     <center>
         <div>
             <h3 class="bg-info text-white">{{cust_name}} Applied Candidate List</h3>
-
-
-
         </div>
     </center>
     <table class="table">
         <thead class="badge-info text-white">
             <tr>
                 <th>No.</th>
-                <th>Candidate name</th>
-                <!-- <th>Candidate Lname</th> -->
-                <!-- <th>Candidate Skills</th> -->
+                <th>Candidate</th>
                 <th>Customer</th>
-                <!-- <th>Join date</th> -->
                 <th>Remarks</th>
-                <!-- <th>Remarks from TA</th>
-                <th>Remarks from Sales</th> -->
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -30,11 +22,8 @@
         <tbody>
             {% for values in form %}
             <tr>
-                <!--<td>{{customer_requirement.Requirement_Id}}</td>-->
                 <td>{{forloop.counter}}</td>
                 <td>{{values.eFname}} {{values.eLname}}</td>
-                <!-- <td></td> -->
-                <!-- <td>{{values.eskills}}</td> -->
                 <td>{{values.refer_Customer}}</td>
                 <td> 
 

@@ -84,15 +84,6 @@ class Customer_Requirements(models.Model):
     def __str__(self):
         return str(self.customers)
     
-class CandidateList(models.Model):
-    candidate_name = models.CharField(max_length=100,default="",editable=False,primary_key=True)
-    interview_status = models.CharField(max_length=100,null=True)
-    
-    class Meta:
-        db_table = "candidate_list"
-    
-    def __str__(self):
-        return self.candidate_name
 
 class addEmpToCustomer(models.Model):# add two more fields: source (leadsoc,TA,VM), source_id
     req_id=models.IntegerField() #Model name change: Employee requirement 

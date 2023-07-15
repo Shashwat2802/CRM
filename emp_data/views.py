@@ -65,14 +65,7 @@ def addEmployee(request):
             messages.success(request,"Details Saved !")
         else:
             return HttpResponse("mandatory params not given" )#form.errors)
-        emp_name=request.POST.get('eFname',False)
-        erole=request.POST.get('eRole',False)
-        if (request.POST.get('estatus')=='Free'):
-            candidate_instance=CandidateList(candidate_name=emp_name,interview_status='Rejected')
-            candidate_instance.save()
-            return redirect(f'/listEmployees')
-        else:
-            return HttpResponse(form.errors)
+
     
     else:
         list=Customer.objects.all()
@@ -194,12 +187,25 @@ def listSalesReqs(request):
                                                              'bu_select':'Choose', "sales_select":'Choose', 'status_select':'Choose'})
 
 def filtered_cust_requirements(request,bu,sales,st):
-    if bu=='All':
-        customer_requirements=Customer_Requirements.objects.filter(Sales_Incharge=sales,Position_Status=st)
-    elif sales=='All':
-        customer_requirements=Customer_Requirements.objects.filter(Bu_head=bu,Position_Status=st)
-    else:
-        customer_requirements=Customer_Requirements.objects.filter(Bu_head=bu,Sales_Incharge=sales,Position_Status=st)
+    filter_conditions={}
+    if bu != 'All' and bu != 'Choose':
+        filter_conditions['Bu_head'] = bu
+
+    if sales != 'All' and sales != 'Choose':
+        filter_conditions['Sales_Incharge'] = sales
+
+    if st != 'All' and st != 'Choose':
+        filter_conditions['Position_Status'] = st
+
+    print("FIlter COndition",filter_conditions,bu,sales,st)
+    customer_requirements=  Customer_Requirements.objects.filter(**filter_conditions)
+
+    # if bu=='All':
+    #     customer_requirements=Customer_Requirements.objects.filter(Sales_Incharge=sales,Position_Status=st)
+    # elif sales=='All':
+    #     customer_requirements=Customer_Requirements.objects.filter(Bu_head=bu,Position_Status=st)
+    # else:
+    #     customer_requirements=Customer_Requirements.objects.filter(Bu_head=bu,Sales_Incharge=sales,Position_Status=st)
     all_remarks = Remarks.objects.all()
     bu_head = getBUList()
     current_user = request.user.username.title() 
@@ -290,18 +296,7 @@ def job_description(request):
     job_desc = Customer_Requirements.objects.values('Job_Description')
     return render(request,"job_description.html",{'job_desc':job_desc})
 
-# adding candidate details in customer_requirement page
-def add_candidate(request):
-    if not request.user.is_authenticated:
-        return redirect('home')
-    if request.method == 'POST':
-        candidate_name = request.POST['candidate_name']
-        interview_status = request.POST['interview_status']
-        candidate_data  = CandidateList(candidate_name=candidate_name,interview_status=interview_status)
-        candidate_data.save()        
-        return redirect("/show_candidate.html")
-    else:
-        return render(request,"add_candidates.html")
+
 
 
 def show_candidate(request,customers,Customer_Requirement_id):
@@ -647,9 +642,7 @@ def simple_upload(request):
                 data[11],
                 )
             value.save()
-            if data[9]=='Free':
-                newvalue=CandidateList(candidate_name=data[1],interview_status='Rejected')
-                newvalue.save()
+ 
         return redirect("/listEmployees")
         
     return render(request,'upload.html')
