@@ -85,19 +85,19 @@
     <thead class="badge-info text-white">
         <tr>
         <tr>
-            <th>Req. ID</th>
-            <th>Customers</th>
-            <th>Cust. Req. ID</th>
-            <th>Req. Skills</th>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Customer ReqID</th>
+            <th>Skills</th>
             <th>Job Desc.</th>
             <th>Exp.</th>
             <th>Total Reqs</th>
-            <th>Yet To Fill</th>
+            <th>To Fill</th>
             <th>Status</th>
-            <th>Sales Incharge</th>
+            <th>BDM</th>
             <th>BU Head</th>
             <th>Remarks</th>
-            <th>Candidate List</th>
+            <th>Candidates</th>
             <th>Actions</th>
         </tr>
         </tr>
@@ -107,10 +107,7 @@
         {% for val in customer_requirements %}
         <tr>
             <div>
-                <!--<td>{{customer_requirement.Requirement_Id}}</td>-->
-
                 <td>{{forloop.counter}}</td>
-
                 <td>{{val.customers}}</td>
                 <td>{{val.Customer_Requirement_id}}</td>
                 <td>{{val.Required_skills}}</td>
