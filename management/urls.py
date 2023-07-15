@@ -36,21 +36,17 @@ urlpatterns = [
     path("simple_upload",views.simple_upload),
     path("customer_data_upload",views.customer_data_upload),
     path('requirement_upload',views.customer_requirement_file),
-    #path('admin_login/',admin.site.urls),
-    #path('admin_login',views.admin_login),
-    # user signup path
-    #path('signup',views.signup),
     path("home",views.home),
     
    # customer requirements details
-    path("show_cust_requirements", views.show_cust_requirements),#, name='show_cust_requirements'),
+    path("listSalesReqs", views.listSalesReqs),
     path("remarks/<int:cust_requirement_id>", views.remarks),
     path('filter/<str:bu>/<str:sales>/<str:st>',views.filtered_cust_requirements),
 
     path("cust_req_dropdown/<str:ref>", views.cust_req_dropdown),
 
     path("save_emp_details", views.save_emp_details, name="save_emp_details"),
-    path('add_cust_requirements',views.add_cust_requirements),
+    path('addSalesReqs',views.addSalesReqs),
     path('job_description',views.job_description),  
     path('add_candidate',views.add_candidate),
     path('show_candidate/<str:customers>/<int:Customer_Requirement_id>',views.show_candidate),
@@ -60,18 +56,16 @@ urlpatterns = [
 
     path('selection_status/<str:status>/<int:Customer_Requirement_id>', views.selection_status),
 
-    # path('addempcustomer',views.addempcustomer),
     path('checkbox',views.checkbox),
     path('dropDownCustomer',views.dropDownCustomer),
     path('showDropDown',views.showDropDown),
-    path('update_cust_requirements/<int:Customer_Requirement_id>',views.update_cust_requirements),
-    #path('candidate_search',views.candidate_search),
+    path('updateSaleReqs/<int:Customer_Requirement_id>',views.updateSaleReqs),
 
      #Customer paths 
     path('addCustomer', views.addCustomer),
-    path('show', views.show),
-    path('update/<str:cName>', views.update),
-    path('delete/<str:cName>', views.delete), 
+    path('listCustomers', views.listCustomers),
+    path('updateCustomers/<str:cName>', views.updateCustomers),
+    path('deleteCustomer/<str:cName>', views.deleteCustomer), 
 
     #employee paths
     path('addEmployee', views.addEmployee),
@@ -88,8 +82,8 @@ urlpatterns = [
     path('delete_ta/<int:phone_number>',views.delete_ta),
 
 
-    path('addexperience/<str:e_id>',views.addexperience),
-    path('delete_experience/<int:exp_id>', views.delete_experience),
+    path('addEmployeeExperience/<str:e_id>',views.addEmployeeExperience),
+    path('deleteEmployeeExperience/<int:exp_id>', views.deleteEmployeeExperience),
     
     # employee deleted from customer
     path('delete_Emp_Customer/<str:eFname>/<int:Customer_Requirement_id>', views.delete_Emp_Customer),

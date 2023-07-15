@@ -48,7 +48,7 @@ def addCustomer(request):
             try:
                 form.save()
                 messages.success(request, 'Company Details saved successfully')
-                return redirect("/show")
+                return redirect("/listCustomers")
             except:
                 pass
     else:
@@ -88,26 +88,25 @@ def addEmployee(request):
         return render(request, 'addemp.html',{'zipped_lists': list1,'rolelist':rolelist,'status':['Free','Deployed','Support Team']})
 
 
-def addexperience(request, e_id):
+def addEmployeeExperience(request, e_id):
     if request.method == 'POST':
         c_name = request.POST.get('refer_customer')
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
-        print("Raghu1",c_name, start_date,end_date,request.POST)
-        instance=Emp_Experience(e_id=e_id,refer_customer=c_name,customer_start_date=start_date,customer_end_date=end_date)
+        instance=EmpExperienceHistory(e_id=e_id,refer_customer=c_name,customer_start_date=start_date,customer_end_date=end_date)
         instance.save()
         return redirect('/listEmployees')
     else:
         return HttpResponse("Error")
    
 
-def delete_experience(request, exp_id): 
-    exp_instance = Emp_Experience.objects.get(id=exp_id)
+def deleteEmployeeExperience(request, exp_id): 
+    exp_instance = EmpExperienceHistory.objects.get(id=exp_id)
     exp_instance.delete()
     return redirect('/listEmployees')
 
 
-def add_cust_requirements(request):
+def addSalesReqs(request):
     form=Customer_RequirementForm()
     if request.method == "POST":
         
@@ -116,29 +115,20 @@ def add_cust_requirements(request):
         if form.is_valid():
             form.save()
             messages.success(request,'Details Saved !')
-            return redirect('/show_cust_requirements')
+            return redirect('/listSalesReqs')
         else:
             return HttpResponse(form.errors)
 
     else:
-        list1=Customer.objects.all()
-        list2=Employee.objects.filter(eRole='Bu Head')
-        list3=Employee.objects.filter(eRole='Sales Incharge')
-        customerlist=[]
-        bulist=[]
-        saleslist=[]
-        for item in list1:
-            customerlist.append(item.cName)
-        for item in list2:
-            bulist.append(item.eFname)
-        for item in list3:
-            saleslist.append(item.eFname)
-        return render(request, 'addcustrequirements.html',{'customerlist': customerlist, 'bulist': bulist, 'saleslist' : saleslist})
+        customerList=list(map(lambda x:x.cName ,Customer.objects.all()))
+        BUList=list(map(lambda x:x.eFname ,getBUList()))
+        SalesList=list(map(lambda x:x.eFname ,getSalesTeam()))
+
+        return render(request, 'addcustrequirements.html',{'customerlist': customerList, 'bulist': BUList, 'saleslist' : SalesList})
 
 # To retrieve Customer details
 
-def update_cust_requirements(request,Customer_Requirement_id):
-    # model_instance=get_object_or_404(Customer_Requirements, pk=Requirement_id) 
+def updateSaleReqs(request,Customer_Requirement_id):
     model_instance=Customer_Requirements.objects.get(pk=Customer_Requirement_id)
     model_instance.Required_skills=request.POST['Required_skills']
     model_instance.Job_Description=request.POST['Job_Description']
@@ -149,44 +139,31 @@ def update_cust_requirements(request,Customer_Requirement_id):
     model_instance.Sales_Incharge=request.POST['Sales_Incharge']
     model_instance.Bu_head = request.POST['Bu_Head']
     model_instance.save()
-    return redirect('/show_cust_requirements')  
-    
-    
-    if request.method=='POST':
-        form=Customer_RequirementForm(request.POST,instance=model_instance)
-        if form.is_valid():
-            form.save()
-    return redirect('/show_cust_requirements')    
+    return redirect('/listSalesReqs')  
+        
 
-def show(request):
+def listCustomers(request):
     if not request.user.is_authenticated:
         return redirect('home')
     companies = Customer.objects.all()
     return render(request, "show.html", {'companies':companies})
 
-# To Edit Customer details
-# def edit(request, cName):
-#     if not request.user.is_authenticated:
-#         return redirect('home')
-#     customer = Customer.objects.get(cName=cName)
-#     return render(request, "edit.html", {'customer':customer})
-
 # To Update Customer
-def update(request, cName):
+def updateCustomers(request, cName):
     if not request.user.is_authenticated:
         return redirect('home')
     customer = get_object_or_404(Customer,pk=cName)
     form = CustomerForm(request.POST or None, instance= customer)
     if form.is_valid():
          form.save()
-         return redirect("/show")
+         return redirect("/listCustomers")
     else:
         return HttpResponse(form.errors)
     
     # return render(request, "edit.html", {'customer': customer})
 
 # To Delete Customer details
-def delete(request, cName):
+def deleteCustomer(request, cName):
     if not request.user.is_authenticated:
         return redirect('home')
     
@@ -194,41 +171,29 @@ def delete(request, cName):
     customer.delete()    
     messages.success(request,'The Selected customer'  + str(customer.cName) +  'is deleted successfully')
    
-    return redirect("/show")
+    return redirect("/listCustomers")
 
 
-# from django.db.models import Q
+def getSalesTeam():
+    return Employee.objects.filter(Q(eRole='SALES_STAFF')| Q(eRole='SALES_HEAD'))
 
-# def show_cust_requirements(request):
-#     customer_requirements = Customer_Requirements.objects.all()
-#     form = Employee.objects.filter(estatus='Free').values()
-#     if request.method == "GET":
-#         skills = request.GET.get('searchskill')
-#         if skills:
-#             form = Employee.objects.filter(Q(eskills__icontains=skills) & Q(estatus='Free'))
-#         else:
-#             form = Employee.objects.filter(estatus='Free')
-#     return render(request, "show_cust_requirements.html", {'customer_requirements': customer_requirements, 'form': form})
+def getBUList():
+    return Employee.objects.filter(eRole='BUH')
 
-
-def show_cust_requirements(request):
+def listSalesReqs(request):
     if not request.user.is_authenticated:
         return redirect('home')
     else :
-        customer_requirements = Customer_Requirements.objects.all()
-        #saleslist=SalesIncharge.objects.all()
+        customer_requirements = Customer_Requirements.objects.all()  #RAGHU : To limit, Sort, select only Active
         all_remarks = Remarks.objects.all()
         current_user = request.user.username.title()
-        sales_incharge = Employee.objects.filter(eRole="Sales Incharge")
-        bu_head = Employee.objects.filter(eRole="Bu Head")
+        sales_incharge = getSalesTeam()
+        bu_head = getBUList()
         return render(request,'show_cust_requirements.html',{'customer_requirements':customer_requirements,'remarks':all_remarks, 
                                                              'sales_incharge': sales_incharge, 'bu_head': bu_head, 'current_user':current_user,
                                                              'bu_select':'Choose', "sales_select":'Choose', 'status_select':'Choose'})
 
 def filtered_cust_requirements(request,bu,sales,st):
-    # buhead=request.GET.get('arg1')
-    # salesincharge=request.GET.get('arg2')
-    # status=request.GET.get('arg3')
     if bu=='All':
         customer_requirements=Customer_Requirements.objects.filter(Sales_Incharge=sales,Position_Status=st)
     elif sales=='All':
@@ -236,9 +201,9 @@ def filtered_cust_requirements(request,bu,sales,st):
     else:
         customer_requirements=Customer_Requirements.objects.filter(Bu_head=bu,Sales_Incharge=sales,Position_Status=st)
     all_remarks = Remarks.objects.all()
-    bu_head = Employee.objects.filter(eRole="Bu Head")
+    bu_head = getBUList()
     current_user = request.user.username.title() 
-    sales_incharge= Employee.objects.filter(eRole="Sales Incharge")
+    sales_incharge= getSalesTeam()
     return render(request,'show_cust_requirements.html',{'customer_requirements':customer_requirements,'remarks':all_remarks, 
                                                         'sales_incharge': sales_incharge, 'bu_head': bu_head, 'current_user':current_user,'bu_select': bu, "sales_select": sales, 'status_select': st})
 
@@ -250,11 +215,8 @@ def remarks(request, cust_requirement_id):
         emp = Employee.objects.get(eFname = current_user)
         new_remark = Remarks(refer_emp = emp, remarks=remark_text, remark_date=today, cust_requirement_id=cust_requirement_id)
         new_remark.save()
-        # model_instance = Customer_Requirements.objects.get(Customer_Requirement_id=cust_id)
-        # model_instance.Bu_remarks = request.POST.get('BU_remark_text', '')
-        # model_instance.save()
         
-        return redirect('/show_cust_requirements')
+        return redirect('/listSalesReqs')
 
 def cust_req_dropdown(request, ref): 
     if ref[:1] == 'P':
@@ -272,12 +234,12 @@ def cust_req_dropdown(request, ref):
         cust = Customer_Requirements.objects.get(pk=ref[1:2])
         cust.Bu_head = ref[2:]
     cust.save()
-    return redirect('/show_cust_requirements')
+    return redirect('/listSalesReqs')
     
 
 def summary(request):
-    first=Employee.objects.filter(eRole="Bu Head")
-    second=Employee.objects.filter(eRole="Sales Incharge")
+    first=getBUList()
+    second=getSalesTeam()
     saleslist=[]
     bulist=[]
     for val in first:
@@ -324,34 +286,8 @@ def delete_ta(request,phone_number):
 
 
 
-
-# def sample_view(request):
-#     current_user = request.user
-#     return HttpResponse(current_user.username)
-
-    # form = Employee.objects.filter(estatus ='Free').values()
-    # if request.method == "GET":   
-    #     free = Employee.objects.filter(estatus ='Free').values()              
-    #     skills = request.GET.get('searchskill')
-    #     #f = Employee.objects.values_list('eskills')
-    #     if skills == free:  
-    #     #if skills != f:
-    #         form = Employee.objects.filter(eskills__icontains= skills).filter(estatus__icontains= free)
-    #         #above eskills form column name with double underscore icontain inbuilt attribute
-    # return render(request, "show_cust_requirements.html", {'customer_requirements':customer_requirements, 'form': form})
-
-
-# show customer_requirements details
-'''
-def show_cust_requirements(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
-    customer_requirements = Customer_Requirements.objects.all()
-    return render(request, "show_cust_requirements.html", {'customer_requirements':customer_requirements})
-'''
 def job_description(request):
     job_desc = Customer_Requirements.objects.values('Job_Description')
-    #print(job_desc)
     return render(request,"job_description.html",{'job_desc':job_desc})
 
 # adding candidate details in customer_requirement page
@@ -366,29 +302,16 @@ def add_candidate(request):
         return redirect("/show_candidate.html")
     else:
         return render(request,"add_candidates.html")
-'''
-def show_candidate(request):
-    candidate = CandidateList.objects.all()
-    return render(request,"show_candidate.html",{'candidate':candidate})'''
-'''
-def show_candidate(request):
-    candidate = Employee.objects.filter(estatus ='Free').values()
-    return render(request,"show_candidate.html",{'candidate':candidate})'''
-# search and show the data
+
 
 def show_candidate(request,customers,Customer_Requirement_id):
 
     form = Employee.objects.filter(estatus ='Free').values()
-    #form = Employee.objects.all()
     if request.method == "GET":   
         free = Employee.objects.filter(estatus ='Free').values()              
         skills = request.GET.get('searchskill')      
-        #f = Employee.objects.values_list('eskills')
         if skills != None: 
-        #if skills == free:
             form = Employee.objects.filter(eskills__icontains= skills)
-            #above eskills form column name with double underscore icontain inbuilt attribute
-
     return render(request,'show_candidate.html',{'form':form , 'customer_name':customers,'Customer_Requirement_id':Customer_Requirement_id})
 
 def checkbox(request):
@@ -640,7 +563,7 @@ def listEmployees(request):
     current_user = request.user.username.title()
     current_emp = Employee.objects.get(eFname=current_user)
     customerlist=Customer.objects.all()
-    experiencelist=Emp_Experience.objects.all()
+    experiencelist=EmpExperienceHistory.objects.all()   #RAGHU: This has to be changed from here
     rolelist=Role.objects.all()
     add_exp_btn = True
     return render(request, "showemp.html", {'employees':employees,'customerlist':customerlist,'experiencelist':experiencelist,'rolelist':rolelist,'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp, 'add_exp_btn': add_exp_btn})
@@ -688,7 +611,7 @@ def save_emp_details(request):
                 eskills=employee.eskills
             )
             add_emp.save()
-    return redirect("/show_cust_requirements")
+    return redirect("/listSalesReqs")
 
 
 # this is working upload employee data to model
@@ -755,7 +678,7 @@ def customer_data_upload(request):
                 data[2],                           
                 )
             value.save()
-        return redirect("/show")
+        return redirect("/listCustomers")
     
     return render(request,'upload.html')
 
@@ -791,7 +714,7 @@ def customer_requirement_file(request):
                 #data[10]                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
                 )
             value.save()
-        return redirect("/show_cust_requirements")
+        return redirect("/listSalesReqs")
         
     return render(request,'customer_requirement_data.html')
 

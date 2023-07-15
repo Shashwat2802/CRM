@@ -61,7 +61,7 @@
 
           <button class="btn-danger btn-sm" onclick="location.href='/deleteEmp/{{employee.e_id}}'"><i
               class="fa-solid fa-trash"></i></button>
-          {% if current_emp.eRole.role_name == 'HR' or current_emp.eRole.role_name == 'Bu Head' %}
+          {% if current_emp.eRole.role_name == 'HR' or current_emp.eRole.role_name == 'BUH' %}
           <button class="btn-success btn-sm" data-toggle="modal" data-target="#modalForm{{employee.ePhone}}"><i
               class="fa-solid fa-pen-to-square"></i>
           </button>
@@ -116,7 +116,7 @@
                           <button class="btn-success btn-sm">
                             <i class="fa-solid fa-pen-to-square"></i>
                           </button>
-                          <button onclick="location.href='/delete_experience/{{val.id}}'" class="btn-danger btn-sm">
+                          <button onclick="location.href='/deleteEmployeeExperience/{{val.id}}'" class="btn-danger btn-sm">
                             <i class="fa-solid fa-trash"></i>
                           </button>
                         </td>
@@ -124,7 +124,7 @@
                       {% endif %}
                       {% endfor %}
                       <tr id="new_row">
-                        <form method="POST" action="/addexperience/{{employee.e_id}}">
+                        <form method="POST" action="/addEmployeeExperience/{{employee.e_id}}">
                           {% csrf_token %}
                           <td>
                             <select name="refer_customer" id="refer_customer">

@@ -13,6 +13,18 @@ class Customer(models.Model):
         return str(self.cName)
     
 
+
+#Let this be default Roles
+# PE, PL,PM, ==> Project Engineer
+# TE,TL,TM  ==> Test Engineer
+# VPE,VPL  ==> Vendor Project engineers(on LeadSoc Roles)
+# VOS=> Vendor OutSourced( Vendor Candididate not on LeadSoc Rols)
+# BUH, 
+# TA_HEAD, TA_STAFF
+# SALES_HEAD, SALES_STAFF
+# HR_STAFF, HR_MGR
+# FIN_MGR, FIN_STAFF
+# OPS_HEAD, OPS_STAFF //Operation Staffs
 class Role(models.Model):
     role_name=models.CharField(max_length=100,primary_key=True)
 
@@ -42,7 +54,7 @@ class Employee(models.Model):
          
 from datetime import datetime
 
-class Emp_Experience(models.Model):
+class EmpExperienceHistory(models.Model):
     e_id=models.CharField(max_length=5)
     refer_customer=models.CharField(max_length=100,null=True)
     customer_start_date=models.DateField(null=True)

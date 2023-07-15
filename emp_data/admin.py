@@ -60,7 +60,7 @@ class addEmpToCustomer(ImportExportModelAdmin):
 admin.site.register(models.Role)
 
 
-@admin.register(models.Emp_Experience)
+@admin.register(models.EmpExperienceHistory) #CHANGING CLASS NAME
 class Emp_ExperienceAdmin(ImportExportModelAdmin):
     list_display=('e_id','refer_customer','customer_start_date','customer_end_date')
 
