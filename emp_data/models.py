@@ -68,7 +68,7 @@ class EmpExperienceHistory(models.Model):
 
 class Customer_Requirements(models.Model):
     customers = models.ForeignKey(Customer, on_delete = models.CASCADE)
-    Customer_Requirement_id = models.IntegerField(primary_key=True)
+    Customer_Requirement_id = models.CharField(max_length=100,null=True)
     Required_skills = models.TextField()
     Job_Description = models.TextField()
     Required_Experience = models.FloatField(default=0)
@@ -77,6 +77,9 @@ class Customer_Requirements(models.Model):
     Position_Status = models.CharField(max_length=10) # active or closed        
     Sales_Incharge = models.CharField(max_length=50,null=True)# name of the person
     Bu_head=models.CharField(max_length=50,null=True)
+    history = models.TextField(default="")
+    reqIdPK = models.AutoField(primary_key=True)
+
 
     class Meta:
         db_table = "customer_requirements"

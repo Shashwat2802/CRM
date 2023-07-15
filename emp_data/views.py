@@ -121,8 +121,8 @@ def addSalesReqs(request):
 
 # To retrieve Customer details
 
-def updateSaleReqs(request,Customer_Requirement_id):
-    model_instance=Customer_Requirements.objects.get(pk=Customer_Requirement_id)
+def updateSaleReqs(request,reqIdPK):
+    model_instance=Customer_Requirements.objects.get(pk=reqIdPK)
     model_instance.Required_skills=request.POST['Required_skills']
     model_instance.Job_Description=request.POST['Job_Description']
     model_instance.Required_Experience=request.POST['Required_Experience']
@@ -131,6 +131,8 @@ def updateSaleReqs(request,Customer_Requirement_id):
     model_instance.Position_Status=request.POST['Position_Status']
     model_instance.Sales_Incharge=request.POST['Sales_Incharge']
     model_instance.Bu_head = request.POST['Bu_Head']
+    model_instance.history = request.POST['history']
+
     model_instance.save()
     return redirect('/listSalesReqs')  
         
@@ -299,7 +301,7 @@ def job_description(request):
 
 
 
-def show_candidate(request,customers,Customer_Requirement_id):
+def show_candidate(request,customers,reqIdPK):
 
     form = Employee.objects.filter(estatus ='Free').values()
     if request.method == "GET":   
@@ -307,7 +309,7 @@ def show_candidate(request,customers,Customer_Requirement_id):
         skills = request.GET.get('searchskill')      
         if skills != None: 
             form = Employee.objects.filter(eskills__icontains= skills)
-    return render(request,'show_candidate.html',{'form':form , 'customer_name':customers,'Customer_Requirement_id':Customer_Requirement_id})
+    return render(request,'show_candidate.html',{'form':form , 'customer_name':customers,'reqIdPK':reqIdPK})
 
 def checkbox(request):
     if not request.user.is_authenticated:
@@ -331,56 +333,35 @@ def checkbox(request):
 
 from .forms import addEmpToCustomerForm
 
-# def addempcustomer(request):
-#     if not request.user.is_authenticated:
-#         return redirect('home')
-#     form=addEmpToCustomerForm()
-#     if request.method == 'POST':        
-#         form = addEmpToCustomerForm(request.POST)
-#         if form.is_valid():
-#             form.save()         
-#             return redirect('/showEmpToCustomer')
-#     context = {'form': form}
-#     return render(request, 'showEmpToCustomer.html', context)
-
-
-def savedvalues(request,customer_name,Customer_Requirement_id):
+def savedvalues(request,customer_name,reqIdPK):
 
     
     if request.method == 'POST':
         emp = request.POST.getlist('eFname')
         print(emp)
-        savedata1 = addEmpToCustomer()
         emp1=[]
         today = date.today()
         for i in emp:
             newval=Employee.objects.get(eFname=i)
             newval.estatus='Deployed'
             newval.save()
-            final=addEmpToCustomer(req_id=Customer_Requirement_id,eFname=newval.eFname,eLname=newval.eLname,eskills=newval.eskills,refer_Customer=Customer(cName=customer_name),estatus='Deployed', comp_name= customer_name, added_date=today)
+            final=addEmpToCustomer(req_id=reqIdPK,eFname=newval.eFname,eLname=newval.eLname,eskills=newval.eskills,refer_Customer=Customer(cName=customer_name),estatus='Deployed', comp_name= customer_name, added_date=today)
             final.save()
             newval2=addEmpToCustomer.objects.filter(eFname=i)
             emp1.append(newval2)
-        # return HttpResponse(emp1)
-    #         savedata2=Employee.objects.get(eFname=val)
-    #         savedata1=addEmpToCustomer(eFname=savedata2.eFname,eLname=savedata2.eLname,eskills=savedata2.eskills,refer_Customer=10,estatus='deployed')
-    #         savedata1.save()
-    #         # emp.append(savedata2)
-    #     # savedata.eFname=request.POST.getlist('eFname')
-    #     # savedata.save()
+
             
-    return redirect(f'/showEmpToCustomer/{customer_name}/{Customer_Requirement_id}')
+    return redirect(f'/showEmpToCustomer/{customer_name}/{reqIdPK}')
 
 #show added employe to customer
-def showEmpToCustomer(request, cust_name,Customer_Requirement_id):  
+def showEmpToCustomer(request, cust_name,reqIdPK):  
     if not request.user.is_authenticated:
         return redirect('home')
-    emp_data = addEmpToCustomer.objects.filter(req_id=Customer_Requirement_id)
-    req_instance=Customer_Requirements.objects.get(pk=Customer_Requirement_id)
+    emp_data = addEmpToCustomer.objects.filter(req_id=reqIdPK)
+    req_instance=Customer_Requirements.objects.get(pk=reqIdPK)
     position=req_instance.remain_positions
     empremarks = empRemarks.objects.all()
-    #return HttpResponse(empremarks.remark_date)
-    return render(request, "showEmpToCustomer.html", {'form':emp_data,'Customer_Requirement_id':Customer_Requirement_id,'position':position,
+    return render(request, "showEmpToCustomer.html", {'form':emp_data,'reqIdPK':reqIdPK,'position':position,
     'cust_name': cust_name, 'remarks': empremarks})
 
 
@@ -395,37 +376,23 @@ def emp_remarks(request, eFname):
         new_remark = empRemarks(refer_addemp=emp, remark_date=today, remarks=remark_text, remark_author=current_user)
         new_remark.save()
         return redirect(f'/showEmpToCustomer/{emp.comp_name}/{emp.req_id}')
-        # cname = model_instance.comp_name
-        # if eFname[:2] == 'BU':
-        #     model_instance.bu_remarks = request.POST.get('BU_remark_text', '')
-        # elif eFname[:2] == 'TA':
-        #     model_instance.ta_remarks = request.POST.get('TA_remark_text', '')
-        # elif eFname[:2] == 'SL':
-        #     model_instance.sales_remarks = request.POST.get('SL_remark_text', '')
-        # model_instance.save()
-    #return redirect(f'/showEmpToCustomer/{cname}')
 
 
-def selection_status(request, status,Customer_Requirement_id): 
+def selection_status(request, status,reqIdPK): 
     model_instance = addEmpToCustomer.objects.get(eFname=status[2:])
-    requirement_instance=Customer_Requirements.objects.get(pk=Customer_Requirement_id)
+    requirement_instance=Customer_Requirements.objects.get(pk=reqIdPK)
     cname = model_instance.comp_name
-    #if request.method == 'POST':
-        #model_instance = addEmpToCustomer.objects.get(eFname=status[2:])
+
     if status[:2] == 'SL':
         model_instance.empstatus = 'Selected'
 
         requirement_instance.remain_positions-=1
         model_instance.save()
         requirement_instance.save()
-
-        #return HttpResponse('something in it')
     elif status[:2] == 'RJ': 
         model_instance.empstatus = 'Rejected'
         model_instance.save()   
-        #return HttpResponse('something else in it')
-    # else: 
-    #     return HttpResponse('none')
+
     elif status[:2]=='BU':
         model_instance.empstatus='Shortlisted by BU'
         model_instance.save()
@@ -441,7 +408,7 @@ def selection_status(request, status,Customer_Requirement_id):
     elif status[:2]=='RR':
         model_instance.empstatus='Resume Rejected'
         model_instance.save()
-    return redirect(f'/showEmpToCustomer/{cname}/{Customer_Requirement_id}')
+    return redirect(f'/showEmpToCustomer/{cname}/{reqIdPK}')
 
 # To display all the VM candidates 
 def show_vm(request):
@@ -522,8 +489,8 @@ def showDropDown(request):
 
 # delete employee from addEmpToCustomer table
 
-def delete_Emp_Customer(request,eFname,Customer_Requirement_id):   
-    req=Customer_Requirements.objects.get(pk=Customer_Requirement_id)
+def delete_Emp_Customer(request,eFname,reqIdPK):   
+    req=Customer_Requirements.objects.get(pk=reqIdPK)
     if not request.user.is_authenticated:
         return redirect('home') 
     try:
@@ -540,13 +507,13 @@ def delete_Emp_Customer(request,eFname,Customer_Requirement_id):
         status_instance=Employee.objects.get(eFname=eFname)[0]
         status_instance.estatus='Free'
         status_instance.save()
-        req=Customer_Requirements.objects.get(pk=Customer_Requirement_id)
+        req=Customer_Requirements.objects.get(pk=reqIdPK)
         req.remain_positions+=1
         req.save()
 
     messages.success(request,'The Selected Employee'  + emp.eFname +  'is deleted successfully')
     company=req.customers
-    return redirect(f'/showEmpToCustomer/{company}/{Customer_Requirement_id}')
+    return redirect(f'/showEmpToCustomer/{company}/{reqIdPK}')
 
 # To show employee details
 def listEmployees(request):
