@@ -54,7 +54,7 @@ class Employee(models.Model):
          
 from datetime import datetime
 
-class Emp_Experience(models.Model):
+class EmpExperienceHistory(models.Model):
     e_id=models.CharField(max_length=5)
     refer_customer=models.CharField(max_length=100,null=True)
     customer_start_date=models.DateField(null=True)

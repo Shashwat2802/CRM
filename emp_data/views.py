@@ -93,7 +93,7 @@ def addEmployeeExperience(request, e_id):
         c_name = request.POST.get('refer_customer')
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
-        instance=Emp_Experience(e_id=e_id,refer_customer=c_name,customer_start_date=start_date,customer_end_date=end_date)
+        instance=EmpExperienceHistory(e_id=e_id,refer_customer=c_name,customer_start_date=start_date,customer_end_date=end_date)
         instance.save()
         return redirect('/listEmployees')
     else:
@@ -101,7 +101,7 @@ def addEmployeeExperience(request, e_id):
    
 
 def deleteEmployeeExperience(request, exp_id): 
-    exp_instance = Emp_Experience.objects.get(id=exp_id)
+    exp_instance = EmpExperienceHistory.objects.get(id=exp_id)
     exp_instance.delete()
     return redirect('/listEmployees')
 
@@ -563,7 +563,7 @@ def listEmployees(request):
     current_user = request.user.username.title()
     current_emp = Employee.objects.get(eFname=current_user)
     customerlist=Customer.objects.all()
-    experiencelist=Emp_Experience.objects.all()
+    experiencelist=EmpExperienceHistory.objects.all()   #RAGHU: This has to be changed from here
     rolelist=Role.objects.all()
     add_exp_btn = True
     return render(request, "showemp.html", {'employees':employees,'customerlist':customerlist,'experiencelist':experiencelist,'rolelist':rolelist,'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp, 'add_exp_btn': add_exp_btn})
