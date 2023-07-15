@@ -194,12 +194,25 @@ def listSalesReqs(request):
                                                              'bu_select':'Choose', "sales_select":'Choose', 'status_select':'Choose'})
 
 def filtered_cust_requirements(request,bu,sales,st):
-    if bu=='All':
-        customer_requirements=Customer_Requirements.objects.filter(Sales_Incharge=sales,Position_Status=st)
-    elif sales=='All':
-        customer_requirements=Customer_Requirements.objects.filter(Bu_head=bu,Position_Status=st)
-    else:
-        customer_requirements=Customer_Requirements.objects.filter(Bu_head=bu,Sales_Incharge=sales,Position_Status=st)
+    filter_conditions={}
+    if bu != 'All' and bu != 'Choose':
+        filter_conditions['Bu_head'] = bu
+
+    if sales != 'All' and sales != 'Choose':
+        filter_conditions['Sales_Incharge'] = sales
+
+    if st != 'All' and st != 'Choose':
+        filter_conditions['Position_Status'] = st
+
+    print("FIlter COndition",filter_conditions,bu,sales,st)
+    customer_requirements=  Customer_Requirements.objects.filter(**filter_conditions)
+
+    # if bu=='All':
+    #     customer_requirements=Customer_Requirements.objects.filter(Sales_Incharge=sales,Position_Status=st)
+    # elif sales=='All':
+    #     customer_requirements=Customer_Requirements.objects.filter(Bu_head=bu,Position_Status=st)
+    # else:
+    #     customer_requirements=Customer_Requirements.objects.filter(Bu_head=bu,Sales_Incharge=sales,Position_Status=st)
     all_remarks = Remarks.objects.all()
     bu_head = getBUList()
     current_user = request.user.username.title() 
