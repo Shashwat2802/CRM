@@ -85,7 +85,7 @@
     <thead class="badge-info text-white">
         <tr>
         <tr>
-            <th>ID</th>
+            <th>Sl#</th>
             <th>Customer</th>
             <th>Customer ReqID</th>
             <th>Skills</th>
@@ -113,19 +113,19 @@
                 <td>{{val.Required_skills}}</td>
                 <td>
                     <button type="button" class="btn-sm" data-toggle="modal"
-                        data-target="#jobDescriptionModal{{val.Customer_Requirement_id}}">
+                        data-target="#jobDescriptionModal{{val.reqIdPK}}">
                         {{ val.Job_Description|truncatewords:5 }}
 
                     </button>
                     <!-- Modal -->
-                    <div class="modal fade" id="jobDescriptionModal{{val.Customer_Requirement_id}}" tabindex="-1"
-                        role="dialog" aria-labelledby="jobDescriptionModalLabel{{val.Customer_Requirement_id}}"
+                    <div class="modal fade" id="jobDescriptionModal{{val.reqIdPK}}" tabindex="-1"
+                        role="dialog" aria-labelledby="jobDescriptionModalLabel{{val.reqIdPK}}"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-scrollable" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title"
-                                        id="jobDescriptionModalLabel{{val.Customer_Requirement_id}}">Job Description
+                                        id="jobDescriptionModalLabel{{val.reqIdPK}}">Job Description
                                     </h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
@@ -152,17 +152,17 @@
 
                 <td>
                     <button type="button" class="btn-sm btn-info" data-toggle="modal"
-                        data-target="#BURemarksModal{{val.Customer_Requirement_id}}">
+                        data-target="#BURemarksModal{{val.reqIdPK}}">
                         <i class="fa-regular fa-eye"></i>
                     </button>
                     <!-- Modal -->
-                    <div class="modal fade" id="BURemarksModal{{val.Customer_Requirement_id}}" tabindex="-1"
-                        role="dialog" aria-labelledby="BURemarksModalLabel{{val.Customer_Requirement_id}}"
+                    <div class="modal fade" id="BURemarksModal{{val.reqIdPK}}" tabindex="-1"
+                        role="dialog" aria-labelledby="BURemarksModalLabel{{val.reqIdPK}}"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-scrollable" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="BURemarksModalLabel{{val.Customer_Requirement_id}}">
+                                    <h5 class="modal-title" id="BURemarksModalLabel{{val.reqIdPK}}">
                                         Remarks of: {{val.customers}}</h5>
 
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -171,7 +171,7 @@
                                 </div>
                                 <div class="modal-body">
                                     {% for remark in remarks reversed%}
-                                    {% if remark.cust_id == val.Customer_Requirement_id %}
+                                    {% if remark.cust_id == val.reqIdPK %}
                                     <div class="card">
                                         <div class="card-header">
                                             <h5 class="card-title">{{remark.refer_emp}}</h5>
@@ -196,12 +196,12 @@
                     <!--For the edit button-->
                     {% if current_user == val.Sales_Incharge or current_user == val.Bu_head %}
                     <button type="button" class="btn-sm btn-success" data-toggle="modal"
-                        data-target="#BURemarksEdit{{val.Customer_Requirement_id}}">
+                        data-target="#BURemarksEdit{{val.reqIdPK}}">
                         <i class="fa-regular fa-pen-to-square"></i>
                     </button>
 
                     {% else %}
-                    <span class="d-inline-block" tabindex="0" data-bs-toggle="popover{{val.Customer_Requirement_id}}"
+                    <span class="d-inline-block" tabindex="0" data-bs-toggle="popover{{val.reqIdPK}}"
                         data-bs-trigger="hover focus"
                         data-bs-content="Authorized for {{val.Sales_Incharge}} and {{val.Bu_head}}"
                         data-bs-placement="bottom">
@@ -212,12 +212,12 @@
 
                     <script>
                         $(function () {
-                            $('[data-bs-toggle="popover{{val.Customer_Requirement_id}}"]').popover({ trigger: "hover focus" })
+                            $('[data-bs-toggle="popover{{val.reqIdPK}}"]').popover({ trigger: "hover focus" })
                         })
                     </script>
                     {% endif %}
                     <!-- Modal form -->
-                    <div class="modal" id="BURemarksEdit{{val.Customer_Requirement_id}}" data-bs-backdrop="static"
+                    <div class="modal" id="BURemarksEdit{{val.reqIdPK}}" data-bs-backdrop="static"
                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-scrollable">
                             <div class="modal-content">
@@ -230,7 +230,7 @@
                                 <div class="modal-body">
                                     <!-- <nav class="navbar bg-body-tertiary"> -->
                                     <div class="container-fluid">
-                                        <form action="/remarks/{{val.Customer_Requirement_id}}" method="POST">
+                                        <form action="/remarks/{{val.reqIdPK}}" method="POST">
                                             {% csrf_token %}
                                             <div class="form-group">
                                                 <label for="Job_Description">Edit remarks:</label>
@@ -248,21 +248,21 @@
                 <!-- Button trigger modal -->
                 <td>
                     <button type="button" class="btn-warning btn-sm"
-                        onclick="location.href='/show_candidate/{{val.customers}}/{{val.Customer_Requirement_id}}'">
+                        onclick="location.href='/show_candidate/{{val.customers}}/{{val.reqIdPK}}'">
                         <i class="fa-sharp fa-regular fa-plus"></i>
                     </button>
                     <button type="button" class="btn-info btn-sm"
-                        onclick="location.href='/showEmpToCustomer/{{val.customers}}/{{val.Customer_Requirement_id}}'">
+                        onclick="location.href='/showEmpToCustomer/{{val.customers}}/{{val.reqIdPK}}'">
 
                         <i class="fa-regular fa-eye"></i>
                     </button>
                 </td>
                 <td>
                     <button class="btn-success btn-sm" data-toggle="modal"
-                        data-target="#modalForm{{val.Customer_Requirement_id}}"><i
+                        data-target="#modalForm{{val.reqIdPK}}"><i
                             class="fa-solid fa-pen-to-square"></i></button>
                     <!-- Modal form -->
-                    <div class="modal" id="modalForm{{val.Customer_Requirement_id}}" data-bs-backdrop="static"
+                    <div class="modal" id="modalForm{{val.reqIdPK}}" data-bs-backdrop="static"
                         data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-scrollable">
                             <div class="modal-content">
@@ -276,7 +276,7 @@
                                     <div class="container-fluid">
                                         <h6>Customer : {{val.customers}}</h6>
                                         <h6>Customer Requirement id : {{val.Customer_Requirement_id}}</h6>
-                                        <form action="/updateSaleReqs/{{val.Customer_Requirement_id}}" method="POST">
+                                        <form action="/updateSaleReqs/{{val.reqIdPK}}" method="POST">
                                             {% csrf_token %}
                                             <div class="form-group">
                                                 <label for="Required_skills">Updated Required Skills:</label>

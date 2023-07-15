@@ -25,8 +25,8 @@ class EmployeeAdmin(ImportExportModelAdmin):
 
 @admin.register(models.Customer_Requirements)
 class Customer_RequirementsAdmin(ImportExportModelAdmin):
-    list_display = ('customers','Customer_Requirement_id','Required_skills','Job_Description','Required_Experience','Open_positions','Position_Status','Sales_Incharge','Bu_head')
-    search_fields = ['Position_Status','Required_skills','Sales_Incharge']
+    list_display = ('reqIdPK','customers','Customer_Requirement_id','Required_skills','Job_Description','Required_Experience','Open_positions','Position_Status','Sales_Incharge','Bu_head','history')
+    search_fields = ['Job_Description','Required_skills','history']
     filter_horizontal = ()
     list_filter = ()
     fieldsets = ()
@@ -40,15 +40,6 @@ class addEmpToCustomer(ImportExportModelAdmin):
     list_filter = ()
     fieldsets = ()
 
-# admin.site.register(models.Buhead)
-# # class BuheadAdmin(ImportExportModelAdmin):
-# #     list_display=('Bu_head_name',)
-# #     search_fields=['Bu_head_name']
-# #     filter_horizontal=()
-# #     list_filter=()
-# #     fieldsets=()
-
-# admin.site.register(models.SalesIncharge)
     
 admin.site.register(models.Role)
 

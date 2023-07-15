@@ -48,17 +48,17 @@ urlpatterns = [
     path("save_emp_details", views.save_emp_details, name="save_emp_details"),
     path('addSalesReqs',views.addSalesReqs),
     path('job_description',views.job_description),  
-    path('show_candidate/<str:customers>/<int:Customer_Requirement_id>',views.show_candidate),
-    path('savedvalues/<str:customer_name>/<int:Customer_Requirement_id>',views.savedvalues),
-    path('showEmpToCustomer/<str:cust_name>/<int:Customer_Requirement_id>',views.showEmpToCustomer),
+    path('show_candidate/<str:customers>/<int:reqIdPK>',views.show_candidate),
+    path('savedvalues/<str:customer_name>/<int:reqIdPK>',views.savedvalues),
+    path('showEmpToCustomer/<str:cust_name>/<int:reqIdPK>',views.showEmpToCustomer),
     path('emp_remarks/<str:eFname>', views.emp_remarks),
 
-    path('selection_status/<str:status>/<int:Customer_Requirement_id>', views.selection_status),
+    path('selection_status/<str:status>/<int:reqIdPK>', views.selection_status),
 
     path('checkbox',views.checkbox),
     path('dropDownCustomer',views.dropDownCustomer),
     path('showDropDown',views.showDropDown),
-    path('updateSaleReqs/<int:Customer_Requirement_id>',views.updateSaleReqs),
+    path('updateSaleReqs/<int:reqIdPK>',views.updateSaleReqs),
 
      #Customer paths 
     path('addCustomer', views.addCustomer),
@@ -85,7 +85,7 @@ urlpatterns = [
     path('deleteEmployeeExperience/<int:exp_id>', views.deleteEmployeeExperience),
     
     # employee deleted from customer
-    path('delete_Emp_Customer/<str:eFname>/<int:Customer_Requirement_id>', views.delete_Emp_Customer),
+    path('delete_Emp_Customer/<str:eFname>/<int:reqIdPK>', views.delete_Emp_Customer),
     path('summary',views.summary),
 
     #For VM page

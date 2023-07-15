@@ -42,3 +42,8 @@ To run the project
 
 5. python manage.py runserver
 6. copy generated IP Adress and paste into the browser, output will be visible. 
+
+
+
+# To remove all entries in a table
+python manage.py shell -c "from emp_data.models  import Customer_Requirements; Customer_Requirements.objects.all().delete()"
