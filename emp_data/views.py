@@ -65,14 +65,7 @@ def addEmployee(request):
             messages.success(request,"Details Saved !")
         else:
             return HttpResponse("mandatory params not given" )#form.errors)
-        emp_name=request.POST.get('eFname',False)
-        erole=request.POST.get('eRole',False)
-        if (request.POST.get('estatus')=='Free'):
-            candidate_instance=CandidateList(candidate_name=emp_name,interview_status='Rejected')
-            candidate_instance.save()
-            return redirect(f'/listEmployees')
-        else:
-            return HttpResponse(form.errors)
+
     
     else:
         list=Customer.objects.all()
@@ -303,18 +296,7 @@ def job_description(request):
     job_desc = Customer_Requirements.objects.values('Job_Description')
     return render(request,"job_description.html",{'job_desc':job_desc})
 
-# adding candidate details in customer_requirement page
-def add_candidate(request):
-    if not request.user.is_authenticated:
-        return redirect('home')
-    if request.method == 'POST':
-        candidate_name = request.POST['candidate_name']
-        interview_status = request.POST['interview_status']
-        candidate_data  = CandidateList(candidate_name=candidate_name,interview_status=interview_status)
-        candidate_data.save()        
-        return redirect("/show_candidate.html")
-    else:
-        return render(request,"add_candidates.html")
+
 
 
 def show_candidate(request,customers,Customer_Requirement_id):
@@ -660,9 +642,7 @@ def simple_upload(request):
                 data[11],
                 )
             value.save()
-            if data[9]=='Free':
-                newvalue=CandidateList(candidate_name=data[1],interview_status='Rejected')
-                newvalue.save()
+ 
         return redirect("/listEmployees")
         
     return render(request,'upload.html')
