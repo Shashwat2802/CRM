@@ -25,7 +25,10 @@
         <td style="text-align: center">{{customer.cEmail}}</td>
         <td style="text-align: center">{{customer.cUrl}}</td>
         <td style="text-align: center">
-          <button class="btn-danger btn-sm" onclick="location.href='/delete/{{customer.cName}}'">
+          <button
+            class="btn-danger btn-sm"
+            onclick="location.href='/deleteCustomer/{{customer.cName}}'"
+          >
             <i class="fa-solid fa-trash"></i>
           </button>
         </td>

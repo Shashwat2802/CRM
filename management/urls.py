@@ -63,9 +63,9 @@ urlpatterns = [
 
      #Customer paths 
     path('addCustomer', views.addCustomer),
-    path('show', views.show),
-    path('update/<str:cName>', views.update),
-    path('delete/<str:cName>', views.delete), 
+    path('listCustomers', views.listCustomers),
+    path('updateCustomers/<str:cName>', views.updateCustomers),
+    path('deleteCustomer/<str:cName>', views.deleteCustomer), 
 
     #employee paths
     path('addEmployee', views.addEmployee),

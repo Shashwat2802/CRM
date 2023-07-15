@@ -48,7 +48,7 @@ def addCustomer(request):
             try:
                 form.save()
                 messages.success(request, 'Company Details saved successfully')
-                return redirect("/show")
+                return redirect("/listCustomers")
             except:
                 pass
     else:
@@ -142,28 +142,28 @@ def updateSaleReqs(request,Customer_Requirement_id):
     return redirect('/listSalesReqs')  
         
 
-def show(request):
+def listCustomers(request):
     if not request.user.is_authenticated:
         return redirect('home')
     companies = Customer.objects.all()
     return render(request, "show.html", {'companies':companies})
 
 # To Update Customer
-def update(request, cName):
+def updateCustomers(request, cName):
     if not request.user.is_authenticated:
         return redirect('home')
     customer = get_object_or_404(Customer,pk=cName)
     form = CustomerForm(request.POST or None, instance= customer)
     if form.is_valid():
          form.save()
-         return redirect("/show")
+         return redirect("/listCustomers")
     else:
         return HttpResponse(form.errors)
     
     # return render(request, "edit.html", {'customer': customer})
 
 # To Delete Customer details
-def delete(request, cName):
+def deleteCustomer(request, cName):
     if not request.user.is_authenticated:
         return redirect('home')
     
@@ -171,7 +171,7 @@ def delete(request, cName):
     customer.delete()    
     messages.success(request,'The Selected customer'  + str(customer.cName) +  'is deleted successfully')
    
-    return redirect("/show")
+    return redirect("/listCustomers")
 
 
 def getSalesTeam():
@@ -678,7 +678,7 @@ def customer_data_upload(request):
                 data[2],                           
                 )
             value.save()
-        return redirect("/show")
+        return redirect("/listCustomers")
     
     return render(request,'upload.html')
 
