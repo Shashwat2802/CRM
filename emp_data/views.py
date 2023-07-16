@@ -3,7 +3,7 @@ from pkgutil import get_data
 import queue
 import quopri
 from django.shortcuts import render,redirect,get_object_or_404
-from emp_data.models import Customer,Employee,Customer_Requirements, Remarks, empRemarks
+from emp_data.models import Customer,Employee,Customer_Requirements,  empRemarks
 from .resources import EmployeeResource
 from emp_data.forms import CustomerForm,EmployeeForm, addEmpToCustomerForm,loginForm,UploadFileForm,Customer_RequirementForm,TA_Form, VmCandidateForm
 from django.contrib import messages
@@ -180,11 +180,10 @@ def listSalesReqs(request):
         return redirect('home')
     else :
         customer_requirements = Customer_Requirements.objects.all()  #RAGHU : To limit, Sort, select only Active
-        all_remarks = Remarks.objects.all()
         current_user = request.user.username.title()
         sales_incharge = getSalesTeam()
         bu_head = getBUList()
-        return render(request,'show_cust_requirements.html',{'customer_requirements':customer_requirements,'remarks':all_remarks, 
+        return render(request,'show_cust_requirements.html',{'customer_requirements':customer_requirements, 
                                                              'sales_incharge': sales_incharge, 'bu_head': bu_head, 'current_user':current_user,
                                                              'bu_select':'Choose', "sales_select":'Choose', 'status_select':'Choose'})
 
@@ -208,22 +207,21 @@ def filtered_cust_requirements(request,bu,sales,st):
     #     customer_requirements=Customer_Requirements.objects.filter(Bu_head=bu,Position_Status=st)
     # else:
     #     customer_requirements=Customer_Requirements.objects.filter(Bu_head=bu,Sales_Incharge=sales,Position_Status=st)
-    all_remarks = Remarks.objects.all()
     bu_head = getBUList()
     current_user = request.user.username.title() 
     sales_incharge= getSalesTeam()
-    return render(request,'show_cust_requirements.html',{'customer_requirements':customer_requirements,'remarks':all_remarks, 
+    return render(request,'show_cust_requirements.html',{'customer_requirements':customer_requirements,
                                                         'sales_incharge': sales_incharge, 'bu_head': bu_head, 'current_user':current_user,'bu_select': bu, "sales_select": sales, 'status_select': st})
-
-def remarks(request, cust_requirement_id):
+    
+def addSalesReqComment(request, reqIdPK):
     if request.method == 'POST':
         current_user = request.user.username.title()
         remark_text = request.POST.get('remark_text', '')
         today = date.today()
-        emp = Employee.objects.get(eFname = current_user)
-        new_remark = Remarks(refer_emp = emp, remarks=remark_text, remark_date=today, cust_requirement_id=cust_requirement_id)
-        new_remark.save()
-        
+        salesReq = Customer_Requirements.objects.get(pk=reqIdPK)
+        print("Existing Comment",salesReq.history)
+        salesReq.history=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+salesReq.history
+        salesReq.save()
         return redirect('/listSalesReqs')
 
 def cust_req_dropdown(request, ref): 

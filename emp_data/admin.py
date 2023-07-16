@@ -48,7 +48,6 @@ admin.site.register(models.Role)
 class Emp_ExperienceAdmin(ImportExportModelAdmin):
     list_display=('e_id','refer_customer','customer_start_date','customer_end_date')
 
-admin.site.register(models.Remarks)
 
 admin.site.register(models.empRemarks)
 
