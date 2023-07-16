@@ -187,7 +187,7 @@ def listSalesReqs(request):
                                                              'sales_incharge': sales_incharge, 'bu_head': bu_head, 'current_user':current_user,
                                                              'bu_select':'Choose', "sales_select":'Choose', 'status_select':'Choose'})
 
-def filtered_cust_requirements(request,bu,sales,st):
+def filteredSaleReqs(request,bu,sales,st):
     filter_conditions={}
     if bu != 'All' and bu != 'Choose':
         filter_conditions['Bu_head'] = bu
@@ -331,9 +331,7 @@ def checkbox(request):
 
 from .forms import addEmpToCustomerForm
 
-def savedvalues(request,customer_name,reqIdPK):
-
-    
+def savedvalues(request,customer_name,reqIdPK):   
     if request.method == 'POST':
         emp = request.POST.getlist('eFname')
         print(emp)
@@ -347,8 +345,6 @@ def savedvalues(request,customer_name,reqIdPK):
             final.save()
             newval2=addEmpToCustomer.objects.filter(eFname=i)
             emp1.append(newval2)
-
-            
     return redirect(f'/showEmpToCustomer/{customer_name}/{reqIdPK}')
 
 #show added employe to customer

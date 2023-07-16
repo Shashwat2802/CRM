@@ -40,7 +40,7 @@ urlpatterns = [
     
    # customer requirements details
     path("listSalesReqs", views.listSalesReqs),
-    path('filter/<str:bu>/<str:sales>/<str:st>',views.filtered_cust_requirements),
+    path('filter/<str:bu>/<str:sales>/<str:st>',views.filteredSaleReqs),
     path("addSalesReqComment/<int:reqIdPK>", views.addSalesReqComment),
 
     path("cust_req_dropdown/<str:ref>", views.cust_req_dropdown),

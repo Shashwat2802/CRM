@@ -89,7 +89,7 @@ class Customer_Requirements(models.Model):
     
 
 class addEmpToCustomer(models.Model):# add two more fields: source (leadsoc,TA,VM), source_id
-    req_id=models.IntegerField() #Model name change: Employee requirement 
+    req_id=models.ForeignKey(Customer_Requirements, on_delete = models.CASCADE) #Model name change: Employee requirement 
     eFname = models.CharField(max_length=100,null=True)
     eLname = models.CharField(max_length=100, null=True)
     eskills = models.CharField(max_length=100,null=True)
