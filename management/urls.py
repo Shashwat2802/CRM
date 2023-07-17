@@ -33,7 +33,7 @@ admin.site.index_title = "Welcome to LeadSoc Technologies PVT LTD."
     
 urlpatterns = [        
     path('admin/', admin.site.urls),
-    path("simple_upload",views.simple_upload),
+    path("bulkUploadEmployee",views.bulkUploadEmployee),
     path("customer_data_upload",views.customer_data_upload),
     path('requirement_upload',views.customer_requirement_file),
     path("home",views.home),
