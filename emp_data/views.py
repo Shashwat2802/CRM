@@ -573,7 +573,26 @@ def bulkUploadEmployee(request):
         
         imported_data = dataset.load(new_employee.read(), format='xlsx')
         for data in imported_data:
-            #print(data[1])
+            print("Customer name",data)
+            roleName=data[8]
+            custName=data[3]
+            cust=Customer.objects.filter(cName=custName)
+
+            if cust.exists():
+                print("Extsing Customer",cust)
+            else :
+                print("Customer does not exists")
+                newCust=Customer(cName=custName,cEmail='test@gmail.com',cUrl="test.com")
+                newCust.save()
+            
+            role=Role.objects.filter(role_name=roleName)
+            if role.exists():
+                print("Extsing role",role)
+            else :
+                print("role does not exists")
+                newRole=Role(role_name=roleName)
+                newRole.save()
+               
             value = Employee(
                 data[0],
                 data[1],
