@@ -64,6 +64,8 @@ def addEmployee(request):
         if form.is_valid():
             form.save()
             messages.success(request,"Details Saved !")
+            return redirect("/listEmployees")
+
         else:
             print("Error in data", form)
             return HttpResponse("mandatory params not given" )#form.errors)
@@ -860,10 +862,6 @@ class LoginView(RedirectURLMixin, FormView):
 
 
 class LogoutView(RedirectURLMixin, TemplateView):
-    """
-    Log out the user and display the 'You are logged out' message.
-    """
-
     http_method_names = ["post", "options"]
     template_name = "registration/logged_out.html"
     extra_context = None
