@@ -88,34 +88,26 @@ class Customer_Requirements(models.Model):
         return str(self.customers)
     
 
-class addEmpToCustomer(models.Model):# add two more fields: source (leadsoc,TA,VM), source_id
-    req_id=models.ForeignKey(Customer_Requirements, on_delete = models.CASCADE) #Model name change: Employee requirement 
+
+class EmployeeReqMapping(models.Model):
+    req_id=models.IntegerField(default=0) #Model name change: Employee requirement 
+
+    # req_id=models.ForeignKey(Customer_Requirements, on_delete = models.CASCADE) #Model name change: Employee requirement 
     eFname = models.CharField(max_length=100,null=True)
     eLname = models.CharField(max_length=100, null=True)
     eskills = models.CharField(max_length=100,null=True)
-    refer_Customer = models.ForeignKey(Customer, on_delete = models.CASCADE)
     estatus = models.CharField(max_length=100,null=True)
     empstatus = models.CharField(max_length=100,null=True, default='')
-    comp_name = models.CharField(max_length=100,null=True)
     added_date = models.DateField(null=True)
+    source = models.CharField(max_length=100,null=True, default='LEADSOC')
+    sourceId = models.CharField(max_length=100,null=True,default='') # Can We  give foriegn key from 3 different table, like VM,TA, employee
+    history = models.TextField(default="")
+
     class Meta:
-        db_table = "addemptocustomer"
+        db_table = "employeereqmapping"
 
     def __str__(self):
-        return str(self.eFname)
-
-
-class empRemarks(models.Model): 
-    refer_addemp = models.ForeignKey(addEmpToCustomer, on_delete = models.CASCADE)
-    remark_date = models.DateField(null=True)
-    remarks = models.CharField(max_length=1000,null=True, default="")
-    remark_author = models.CharField(max_length=100,null=True)
-    class Meta:
-        db_table = "empRemarks"
-        
-    def __str__(self):
-        return str(self.refer_addemp.eFname)
-    
+        return str(self.req_id)
 
 
 # model for VM candidates 
@@ -143,6 +135,8 @@ class VmResource(models.Model):
     email = models.EmailField()
     phone_number = models.IntegerField()
     mode = models.CharField(max_length=500)
+    vmIdPK = models.AutoField(primary_key=True,default='')
+
 
     class Meta:
         db_table = "VmResource"
