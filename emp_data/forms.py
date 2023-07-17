@@ -4,7 +4,7 @@ from emp_data.models import Customer
 from emp_data.models import Login
 
 from emp_data.models import Customer_Requirements
-from emp_data.models import addEmpToCustomer
+from emp_data.models import EmployeeReqMapping
 from emp_data.models import TA_Resource
 from emp_data.models import VmResource
 # This is for employee
@@ -25,9 +25,9 @@ class Customer_RequirementForm(forms.ModelForm):
         model = Customer_Requirements
         fields = "__all__"
 
-class addEmpToCustomerForm(forms.ModelForm):
+class employeeReqMappingForm(forms.ModelForm):
     class Meta:
-        model = addEmpToCustomer
+        model = EmployeeReqMapping
         fields = "__all__"
         
 class loginForm(forms.ModelForm):

@@ -29,11 +29,11 @@
 <div class="form-inline">
     <div class="d-inline-block">
         <span>
-            <button class="btn-sm" onclick="location.href='/summary'">Summary</button>
+            <button class="go-btn" style="border-radius: 30px;" onclick="location.href='/summary'">Summary</button>
         </span>
-        <span>
+        <span class="btn">
             Sales
-            <select name="saleslist" id="sales">
+            <select class="btn" name="saleslist" id="sales">
                 <option value="{{sales_select}}" selected hidden disabled>{{sales_select}}</option>
                 {% for val in sales_incharge %}
                 <option value="{{val.eFname}}">{{val.eFname}}</option>
@@ -41,9 +41,9 @@
                 <option value="All">All</option>
             </select>
         </span>
-        <span style="margin-left: 30;">
+        <span style="margin-left: 30;" class="btn">
             BUH
-            <select name="buhead" id="buhead">
+            <select name="buhead" id="buhead" class="btn" style="border-radius: 30px;">
                 <option value="{{bu_select}}" selected disabled hidden>{{bu_select}}</option>
                 {% for val in bu_head %}
                 <option value="{{val.eFname}}">{{val.eFname}}</option>
@@ -52,9 +52,9 @@
             </select>
         </span>
 
-        <span style="margin-left: 30;">
+        <span style="margin-left: 30;" class="btn">
             Status
-            <select name="statuslist" id="status">
+            <select name="statuslist" id="status" class="btn" style="border-radius: 30px;">
                 <option value="{{status_select}}" selected disabled hidden>{{status_select}}</option>
                 <option value="Active">Active</option>
                 <option value="Inactive">Closed</option>
@@ -62,11 +62,11 @@
             </select>
         </span>
         <span style="margin-left: 30;">
-            <button class="go-btn" type="submit" onClick="window.location.href = getLink()">Search</button>
+            <button class="go-btn" style="border-radius: 30px;" type="submit" onClick="window.location.href = getLink()">Search</button>
 
         </span>
         <span style="margin-left: 10;">
-            <button class="go-btn" type="submit" onclick="location.href='/listSalesReqs'">Refresh</button>
+            <button class="go-btn" style="border-radius: 30px;" type="submit" onclick="location.href='/listSalesReqs'">Refresh</button>
         </span>
 
     </div>
@@ -190,11 +190,11 @@
                 <!-- Button trigger modal -->
                 <td>
                     <button type="button" class="btn-warning btn-sm"
-                        onclick="location.href='/show_candidate/{{val.customers}}/{{val.reqIdPK}}'">
+                        onclick="location.href='/show_candidate/{{val.reqIdPK}}'">
                         <i class="fa-sharp fa-regular fa-plus"></i>
                     </button>
                     <button type="button" class="btn-info btn-sm"
-                        onclick="location.href='/showEmpToCustomer/{{val.customers}}/{{val.reqIdPK}}'">
+                        onclick="location.href='/showEmpToCustomer/{{val.reqIdPK}}'">
 
                         <i class="fa-regular fa-eye"></i>
                     </button>

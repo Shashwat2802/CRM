@@ -32,16 +32,15 @@ class Customer_RequirementsAdmin(ImportExportModelAdmin):
     fieldsets = ()
 
 
-@admin.register(models.addEmpToCustomer)
-class addEmpToCustomer(ImportExportModelAdmin):
-    list_display = ('req_id','eFname','eLname','refer_Customer','eskills')
-    search_fields = ['eFname','eLname','refer_Customer','eskills']
+@admin.register(models.EmployeeReqMapping)
+class EmployeeReqMappingAdmin(ImportExportModelAdmin):
+    list_display = ('req_id','eFname','eLname','eskills')
+    search_fields = ['eFname','eLname','eskills']
     filter_horizontal = ()
     list_filter = ()
     fieldsets = ()
 
     
-admin.site.register(models.Role)
 
 
 @admin.register(models.EmpExperienceHistory) #CHANGING CLASS NAME
@@ -49,10 +48,12 @@ class Emp_ExperienceAdmin(ImportExportModelAdmin):
     list_display=('e_id','refer_customer','customer_start_date','customer_end_date')
 
 
-admin.site.register(models.empRemarks)
 
 @admin.register(models.TA_Resource)
 class Ta_ResourceAdmin(ImportExportModelAdmin):
     list_display=('ta_id','name','skillset','education','phone_number','email')
 
 admin.site.register(models.VmResource)
+
+admin.site.register(models.Role)
+

@@ -3,9 +3,9 @@ from pkgutil import get_data
 import queue
 import quopri
 from django.shortcuts import render,redirect,get_object_or_404
-from emp_data.models import Customer,Employee,Customer_Requirements,  empRemarks
+from emp_data.models import Customer,Employee,Customer_Requirements
 from .resources import EmployeeResource
-from emp_data.forms import CustomerForm,EmployeeForm, addEmpToCustomerForm,loginForm,UploadFileForm,Customer_RequirementForm,TA_Form, VmCandidateForm
+from emp_data.forms import CustomerForm,EmployeeForm, employeeReqMappingForm,loginForm,UploadFileForm,Customer_RequirementForm,TA_Form, VmCandidateForm
 from django.contrib import messages
 from django.contrib.auth.models import auth
 from emp_data.models import *
@@ -16,6 +16,7 @@ import xlwt
 from django.http import HttpResponse
 from django.db.models import Q
 from datetime import date
+from django.db.models import Func, F
 
 def loginCheck(request):
     if request.method == 'POST':
@@ -64,6 +65,7 @@ def addEmployee(request):
             form.save()
             messages.success(request,"Details Saved !")
         else:
+            print("Error in data", form)
             return HttpResponse("mandatory params not given" )#form.errors)
 
     
@@ -187,7 +189,7 @@ def listSalesReqs(request):
                                                              'sales_incharge': sales_incharge, 'bu_head': bu_head, 'current_user':current_user,
                                                              'bu_select':'Choose', "sales_select":'Choose', 'status_select':'Choose'})
 
-def filtered_cust_requirements(request,bu,sales,st):
+def filteredSaleReqs(request,bu,sales,st):
     filter_conditions={}
     if bu != 'All' and bu != 'Choose':
         filter_conditions['Bu_head'] = bu
@@ -299,15 +301,13 @@ def job_description(request):
 
 
 
-def show_candidate(request,customers,reqIdPK):
-
-    form = Employee.objects.filter(estatus ='Free').values()
+def show_candidate(request,reqIdPK):
+    form = Employee.objects.filter(Q(estatus ='Free')|Q(estatus='pendingProcessing') ).values()
     if request.method == "GET":   
-        free = Employee.objects.filter(estatus ='Free').values()              
         skills = request.GET.get('searchskill')      
         if skills != None: 
             form = Employee.objects.filter(eskills__icontains= skills)
-    return render(request,'show_candidate.html',{'form':form , 'customer_name':customers,'reqIdPK':reqIdPK})
+    return render(request,'show_candidate.html',{'form':form ,'reqIdPK':reqIdPK})
 
 def checkbox(request):
     if not request.user.is_authenticated:
@@ -319,67 +319,51 @@ def checkbox(request):
             s = request.POST.getlist('checks')
             print(s)
             for i in s:               
-                savedata = addEmpToCustomer()
+                savedata = EmployeeReqMapping()
                 savedata.eFname = i
                 savedata.save()         
             
 
         return redirect('/showEmpToCustomer')
     else:
-        return redirect('showEmpToCustomer')
+        return redirect('/showEmpToCustomer')
 
 
-from .forms import addEmpToCustomerForm
 
-def savedvalues(request,customer_name,reqIdPK):
-
-    
+def mapEmpToReq(request,reqIdPK):   
     if request.method == 'POST':
-        emp = request.POST.getlist('eFname')
-        print(emp)
-        emp1=[]
+        selectedEmpList = request.POST.getlist('empId')
+        print("employee list",selectedEmpList)
+        # emp1=[]
         today = date.today()
-        for i in emp:
-            newval=Employee.objects.get(eFname=i)
-            newval.estatus='Deployed'
-            newval.save()
-            final=addEmpToCustomer(req_id=reqIdPK,eFname=newval.eFname,eLname=newval.eLname,eskills=newval.eskills,refer_Customer=Customer(cName=customer_name),estatus='Deployed', comp_name= customer_name, added_date=today)
+        salesReq=Customer_Requirements.objects.get(pk=reqIdPK)
+        print("Req",salesReq, salesReq.Bu_head)
+        for i in selectedEmpList:
+            emp=Employee.objects.get(e_id=i)
+            emp.estatus='pendingProcessing'
+            emp.save()
+            print("Employee status upated",emp)
+            final=EmployeeReqMapping(req_id=salesReq,eFname=emp.eFname,eLname=emp.eLname,eskills=emp.eskills,  added_date=today,source='LEADSOC',sourceId=emp.e_id)
             final.save()
-            newval2=addEmpToCustomer.objects.filter(eFname=i)
-            emp1.append(newval2)
-
-            
-    return redirect(f'/showEmpToCustomer/{customer_name}/{reqIdPK}')
+            # newval2=EmployeeReqMapping.objects.filter(eFname=i)
+            # emp1.append(newval2)
+    return redirect(f'/showEmpToCustomer/{reqIdPK}')
 
 #show added employe to customer
-def showEmpToCustomer(request, cust_name,reqIdPK):  
+def showEmpToCustomer(request,reqIdPK):  
     if not request.user.is_authenticated:
         return redirect('home')
-    emp_data = addEmpToCustomer.objects.filter(req_id=reqIdPK)
+    emp_data = EmployeeReqMapping.objects.filter(req_id=reqIdPK)
     req_instance=Customer_Requirements.objects.get(pk=reqIdPK)
     position=req_instance.remain_positions
-    empremarks = empRemarks.objects.all()
     return render(request, "showEmpToCustomer.html", {'form':emp_data,'reqIdPK':reqIdPK,'position':position,
-    'cust_name': cust_name, 'remarks': empremarks})
+    })
 
-
-
-def emp_remarks(request, eFname):
-    if request.method == 'POST':
-        current_user = request.user.username.title()
-        emp = addEmpToCustomer.objects.get(eFname=eFname)
-        remark_text = request.POST.get('remark_text', '')
-        today = date.today()
-        emp = addEmpToCustomer.objects.get(eFname = eFname)
-        new_remark = empRemarks(refer_addemp=emp, remark_date=today, remarks=remark_text, remark_author=current_user)
-        new_remark.save()
-        return redirect(f'/showEmpToCustomer/{emp.comp_name}/{emp.req_id}')
 
 
 def selection_status(request, status,reqIdPK): 
-    model_instance = addEmpToCustomer.objects.get(eFname=status[2:])
+    model_instance = EmployeeReqMapping.objects.get(eFname=status[2:])
     requirement_instance=Customer_Requirements.objects.get(pk=reqIdPK)
-    cname = model_instance.comp_name
 
     if status[:2] == 'SL':
         model_instance.empstatus = 'Selected'
@@ -406,7 +390,7 @@ def selection_status(request, status,reqIdPK):
     elif status[:2]=='RR':
         model_instance.empstatus='Resume Rejected'
         model_instance.save()
-    return redirect(f'/showEmpToCustomer/{cname}/{reqIdPK}')
+    return redirect(f'/showEmpToCustomer/{reqIdPK}')
 
 # To display all the VM candidates 
 def show_vm(request):
@@ -471,7 +455,7 @@ def vm_data_upload(request):
 def dropDownCustomer(request):
     if request.method == "POST":
         if request.POST.get('cName'):
-            savevalue = addEmpToCustomer()
+            savevalue = EmployeeReqMapping()
             savevalue.refer_Customer = request.POST.get('cName')
             savevalue.save()
             messages.success(request,'The Selected customer' +savevalue.refer_Customer+ 'is saved successfully')
@@ -481,26 +465,25 @@ def dropDownCustomer(request):
             return render(request,'showEmpToCustomer')
         
 def showDropDown(request):
-    display_cust = addEmpToCustomer.objects.all()
+    display_cust = EmployeeReqMapping.objects.all()
 
     return render(request,'showEmpToCustomer.html',{'display_cust':display_cust})
 
-# delete employee from addEmpToCustomer table
 
 def delete_Emp_Customer(request,eFname,reqIdPK):   
     req=Customer_Requirements.objects.get(pk=reqIdPK)
     if not request.user.is_authenticated:
         return redirect('home') 
     try:
-        emp = addEmpToCustomer.objects.get(eFname=eFname)
+        emp = EmployeeReqMapping.objects.get(eFname=eFname)
         status_instance=Employee.objects.get(eFname=eFname)
         status_instance.estatus='Free'
         status_instance.save()
         emp.delete()
         req.remain_positions+=1
         req.save()
-    except addEmpToCustomer.MultipleObjectsReturned:
-        emp = addEmpToCustomer.objects.filter(eFname=eFname)[0]
+    except EmployeeReqMapping.MultipleObjectsReturned:
+        emp = EmployeeReqMapping.objects.filter(eFname=eFname)[0]
         emp.delete()
         status_instance=Employee.objects.get(eFname=eFname)[0]
         status_instance.estatus='Free'
@@ -518,10 +501,9 @@ def listEmployees(request):
     if not request.user.is_authenticated:
         return redirect('home')
     employees = Employee.objects.all()
+    current_user = request.user.username
+    current_emp = Employee.objects.get(eFname__icontains=current_user)
 
-    print("lists",employees)
-    current_user = request.user.username.title()
-    current_emp = Employee.objects.get(eFname=current_user)
     customerlist=Customer.objects.all()
     experiencelist=EmpExperienceHistory.objects.all()   #RAGHU: This has to be changed from here
     rolelist=Role.objects.all()
@@ -564,7 +546,7 @@ def save_emp_details(request):
         selected_employees = request.POST.getlist('employee_checkbox')
         for employee_id in selected_employees:
             employee = Employee.objects.get(id=employee_id)
-            add_emp = addEmpToCustomer(
+            add_emp = employeeReqMapping(
                 eFname=employee.eFname,
                 eLname=employee.eLname,
                 refer_Customer=request.user.customer,  # Assuming you have a logged-in user with a related customer
@@ -575,7 +557,7 @@ def save_emp_details(request):
 
 
 # this is working upload employee data to model
-def simple_upload(request):
+def bulkUploadEmployee(request):
     if not request.user.is_authenticated:
         return redirect('home')
     

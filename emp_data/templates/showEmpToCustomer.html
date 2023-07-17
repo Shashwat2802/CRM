@@ -4,7 +4,7 @@
 
     <center>
         <div>
-            <h3 class="bg-info text-white">{{cust_name}} Applied Candidate List</h3>
+            <h3 class="bg-info text-white"> Applied Candidate List</h3>
         </div>
     </center>
     <table class="table">
@@ -12,7 +12,6 @@
             <tr>
                 <th>No.</th>
                 <th>Candidate</th>
-                <th>Customer</th>
                 <th>Remarks</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -24,7 +23,6 @@
             <tr>
                 <td>{{forloop.counter}}</td>
                 <td>{{values.eFname}} {{values.eLname}}</td>
-                <td>{{values.refer_Customer}}</td>
                 <td> 
 
                     <button type="button" class="btn-sm btn-info" data-toggle="modal" data-target="#BURemarksModal{{values.eFname}}">
@@ -81,7 +79,6 @@
                                 </div>
 
                             <div class="modal-body"> 
-                                    <!-- <nav class="navbar bg-body-tertiary"> -->
                                     <div class="container-fluid">
                                         <form action="/emp_remarks/{{values.eFname}}" method="POST">
                                             {% csrf_token %}
