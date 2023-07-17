@@ -557,7 +557,7 @@ def save_emp_details(request):
 
 
 # this is working upload employee data to model
-def simple_upload(request):
+def bulkUploadEmployee(request):
     if not request.user.is_authenticated:
         return redirect('home')
     
