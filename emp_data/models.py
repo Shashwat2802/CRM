@@ -90,9 +90,9 @@ class Customer_Requirements(models.Model):
 
 
 class EmployeeReqMapping(models.Model):
-    req_id=models.IntegerField(default=0) #Model name change: Employee requirement 
+    # req_id=models.IntegerField(default=0) #Model name change: Employee requirement 
 
-    # req_id=models.ForeignKey(Customer_Requirements, on_delete = models.CASCADE) #Model name change: Employee requirement 
+    req_id=models.ForeignKey(Customer_Requirements, on_delete = models.CASCADE) #Model name change: Employee requirement 
     eFname = models.CharField(max_length=100,null=True)
     eLname = models.CharField(max_length=100, null=True)
     eskills = models.CharField(max_length=100,null=True)

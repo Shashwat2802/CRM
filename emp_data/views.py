@@ -364,7 +364,6 @@ def showEmpToCustomer(request,reqIdPK):
 def selection_status(request, status,reqIdPK): 
     model_instance = EmployeeReqMapping.objects.get(eFname=status[2:])
     requirement_instance=Customer_Requirements.objects.get(pk=reqIdPK)
-    cname = model_instance.comp_name
 
     if status[:2] == 'SL':
         model_instance.empstatus = 'Selected'
@@ -391,7 +390,7 @@ def selection_status(request, status,reqIdPK):
     elif status[:2]=='RR':
         model_instance.empstatus='Resume Rejected'
         model_instance.save()
-    return redirect(f'/showEmpToCustomer/{cname}/{reqIdPK}')
+    return redirect(f'/showEmpToCustomer/{reqIdPK}')
 
 # To display all the VM candidates 
 def show_vm(request):
