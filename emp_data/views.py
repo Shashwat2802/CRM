@@ -270,7 +270,20 @@ def summary(request):
              'bulist':bulist,
              'length':length}
     return render(request,'summary.html',context)
-        
+
+
+def addCommentToEmployeedReqTable(request, reqIdPK,source,sourceId):
+    print("****ID",reqIdPK,source,sourceId)
+    if request.method == 'POST':
+        current_user = request.user.username.title()
+        remark_text = request.POST.get('remark_text', '')
+        today = date.today()
+        mapping = EmployeeReqMapping.objects.get(req_id=reqIdPK,source=source,sourceId=sourceId)
+        print("Existing mapping",mapping.req_id,mapping.eFname,mapping.sourceId)
+        mapping.history=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+mapping.history
+        mapping.save()
+        return redirect(f'/showEmpToCustomer/{reqIdPK}')
+
 
 def add_ta(request):
     form=TA_Form()
