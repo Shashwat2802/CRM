@@ -51,6 +51,8 @@ urlpatterns = [
     path('show_candidate/<int:reqIdPK>',views.show_candidate),
     path('mapEmpToReq/<int:reqIdPK>',views.mapEmpToReq),
     path('showEmpToCustomer/<int:reqIdPK>',views.showEmpToCustomer),
+    path("addCommentToEmployeedReqTable/<int:reqIdPK>/<str:source>/<str:sourceId>", views.addCommentToEmployeedReqTable),
+
     # path('emp_remarks/<str:eFname>', views.emp_remarks),
 
     path('selection_status/<str:status>/<int:reqIdPK>', views.selection_status),
