@@ -3,20 +3,6 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<script>
-
-    $(document).ready(function () {
-        $('#example').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5',
-                'pdfHtml5'
-            ]
-        });
-    });
-</script>
 {% endblock %}
 
 {% block body %}
@@ -53,42 +39,171 @@
                     <button class="btn-success btn-sm" data-toggle="modal"
                         data-target="#modalupdate{{value.phone_number}}"><i class="fa-solid fa-pen-to-square"></i>
                     </button>
-                    <!-- <button class="btn-success btn-sm data" data-toggle="modal" data-target="#modalUpdate{{value.phone_number}}">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </button> -->
-                    <button class="btn-info btn-sm" data-toggle="modal" data-target="#modalMore{{value.phone_number}}">
-                        <i class="fa-solid fa-eye"></i>
+                    
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModalLong">
+                        <i class="fa-regular fa-eye"></i>
                     </button>
-                    <div class="modal" id="modalMore{{value.phone_number}}" data-bs-backdrop="static"
-                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title fs-5" id="staticBackdropLabel">More Details</h5>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                </div>
-                                <div class="modal-body">
-
-                                    <div>
-                                        Name : {{value.name}} <br>
-                                        TA ID : {{value.ta_id}} <br>
-                                        Archvied : {{value.archived}} <br>
-                                        Skillset : {{value.skillset}} <br>
-                                        Phone Number : {{value.phone_number}} <br>
-                                        Email ID : {{value.email}} <br>
-                                        Education : {{value.education}}<br>
-                                        Experience : {{value.experience}}<br>
-                                        Relevant Experience : {{value.relevant_exp}}<br>
-                                        Current Organization : {{value.current_org}}<br>
-                                        Current CTC : {{value.current_ctc}}<br>
-                                        Expected CTC : {{value.expected_ctc}}<br>
-                                        Current Location : {{value.current_loc}}<br>
-                                        Preferred Location : {{value.preferred_loc}}<br>
-                                        Status : {{value.status}}<br>
-
-                                    </div>
-                                </div>
+  
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-scrollable" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Details for {{val.vmIdPK}}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                             </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <h5 for="position_status">TA ID</h5> {{value.ta_id}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="pr_date">Archived</h5> {{value.archived}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="vendor_name">Date</h5> {{value.date}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="candidate_source">Name</h5> {{value.name}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="candidate_name">BU</h5> {{value.BU}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="skillset">Position</h5> {{value.Position}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="experience">skillset</h5> {{value.skillset}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="education">Education</h5> {{value.education}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="billing_rate">experience </h5> {{val.experience}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="bu_head">relevant_exp</h5> {{value.relevant_exp}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="location">current_org</h5> {{value.current_org}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="notice_period">current_ctc</h5> {{value.current_ctc}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="reviewer_name">expected_ctc</h5> {{value.expected_ctc}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="remarks_panel">actual_notice_period</h5> {{value.actual_notice_period}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="vm_comment">notice_period</h5> {{value.notice_period}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="client_name">current_loc</h5> {{value.current_loc}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="interview_schedule">preferred_loc</h5> {{value.preferred_loc}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="interview_status">phone_number</h5> {{value.phone_number}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="comments">email </h5> {{value.email }}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="remarks">status</h5> {{value.status}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="email">BU_comments</h5> {{value.BU_comments}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="phone_number">TA_comments</h5> {{value.TA_comments}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="mode">T1_panel</h5> {{value.T1_panel}}
+                                </div>
+                                <hr>     
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="mode">T1_IW_date </h5> {{value.T1_IW_date }}
+                                </div>
+                                <hr> 
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="mode">T1_panel</h5> {{value.T1_panel}}
+                                </div>
+                                <hr> 
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="mode">T2_panel</h5> {{value.T2_panel}}
+                                </div>
+                                <hr> 
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="mode">T2_IW_date</h5> {{value.T2_IW_date}}
+                                </div>
+                                <hr> 
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="mode">source</h5> {{value.source}}
+                                </div>
+                                <hr>
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="mode">Rec_prime</h5> {{value.Rec_prime}}
+                                </div>
+                                <hr> 
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="mode">Domain</h5> {{value.Domain}}
+                                </div>
+                                <hr> 
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="mode">T1 </h5> {{value.T1}}
+                                </div>
+                                <hr> 
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="mode">T2</h5> {{value.T2}}
+                                </div>
+                                <hr>  
+                                <hr>
+                                <div class="form-group">
+                                    <h5 for="mode">owner</h5> {{value.owner}}
+                                </div>
+                                <hr>                                                                                                                         
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                            </div>
+                        </div>
                         </div>
                     </div>
 </div>
@@ -104,169 +219,169 @@
                 <form action="#" method="POST">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="archived">Update Archived:</label>
+                        <label for="archived">Update Archived</label>
                         <br>
-                        <input type="text" name="archived" id="archived" placeholder="{{value.archived}}">
+                        <input type="text" name="archived" id="archived" class="form-control" placeholder="{{value.archived}}">
                     </div>
                     <div class="form-group">
-                        <label for="date">Update Date:</label>
+                        <label for="date">Update Date</label>
                         <br>
-                        <input type="date" name="date" id="date">
+                        <input type="date" name="date" id="date" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="name">Update Name:</label>
+                        <label for="name">Update Name</label>
                         <br>
-                        <input type="text" name="name" id="name" placeholder="{{value.name}}">
+                        <input type="text" name="name" id="name" class="form-control" placeholder="{{value.name}}">
                     </div>
                     <div class="form-group">
-                        <label for="BU">Update BU:</label>
+                        <label for="BU">Update BU</label>
                         <br>
-                        <input type="text" name="BU" id="BU" placeholder="{{value.BU}}">
+                        <input type="text" name="BU" id="BU" class="form-control" placeholder="{{value.BU}}">
                     </div>
                     <div class="form-group">
-                        <label for="Position">Update Position:</label>
+                        <label for="Position">Update Position</label>
                         <br>
-                        <input type="text" name="Position" id="Position" placeholder="{{value.Position}}">
+                        <input type="text" name="Position" id="Position" class="form-control" placeholder="{{value.Position}}">
                     </div>
                     <div class="form-group">
-                        <label for="skillset">Update Skillset:</label>
+                        <label for="skillset">Update Skillset</label>
                         <br>
-                        <input type="text" name="skillset" id="skillset" placeholder="{{value.skillset}}">
+                        <input type="text" name="skillset" id="skillset" class="form-control" placeholder="{{value.skillset}}">
                     </div>
                     <div class="form-group">
-                        <label for="education">Update Education:</label>
+                        <label for="education">Update Education</label>
                         <br>
-                        <input type="text" name="education" id="education" placeholder="{{value.education}}">
+                        <input type="text" name="education" id="education" class="form-control" placeholder="{{value.education}}">
                     </div>
                     <div class="form-group">
-                        <label for="experience">Update Experience:</label>
+                        <label for="experience">Update Experience</label>
                         <br>
-                        <input type="number" name="experience" id="experience" step="any"
+                        <input type="number" name="experience" id="experience" class="form-control" step="any"
                             placeholder="{{value.experience}}">
                     </div>
                     <div class="form-group">
-                        <label for="relevant_exp">Update Relevant Exp:</label>
+                        <label for="relevant_exp">Update Relevant Exp</label>
                         <br>
-                        <input type="number" name="relevant_exp" id="relevant_exp" step="any"
+                        <input type="number" name="relevant_exp" id="relevant_exp" class="form-control" step="any"
                             placeholder="{{value.relevant_exp}}">
                     </div>
                     <div class="form-group">
-                        <label for="current_org">Update Current Organization:</label>
+                        <label for="current_org">Update Current Organization</label>
                         <br>
-                        <input type="text" name="current_org" id="current_org" placeholder="{{value.current_org}}">
+                        <input type="text" name="current_org" id="current_org" class="form-control" placeholder="{{value.current_org}}">
                     </div>
                     <div class="form-group">
-                        <label for="current_ctc">Update Current CTC:</label>
+                        <label for="current_ctc">Update Current CTC</label>
                         <br>
-                        <input type="number" name="current_ctc" id="current_ctc" step="any"
+                        <input type="number" name="current_ctc" id="current_ctc" class="form-control" step="any"
                             placeholder="{{value.current_ctc}}">
                     </div>
                     <div class="form-group">
-                        <label for="expected_ctc">Update Expected CTC:</label>
+                        <label for="expected_ctc">Update Expected CTC</label>
                         <br>
-                        <input type="number" name="expected_ctc" id="expected_ctc" step="any"
+                        <input type="number" name="expected_ctc" id="expected_ctc" class="form-control"step="any"
                             placeholder="{{value.expected_ctc}}">
                     </div>
                     <div class="form-group">
-                        <label for="actual_notice_period">Update Actual Notice Period:</label>
+                        <label for="actual_notice_period">Update Actual Notice Period</label>
                         <br>
-                        <input type="number" name="actual_notice_period" id="actual_notice_period"
+                        <input type="number" name="actual_notice_period" id="actual_notice_period" class="form-control"
                             placeholder="{{value.actual_notice_period}}">
                     </div>
                     <div class="form-group">
-                        <label for="notice_period">Update Notice Period:</label>
+                        <label for="notice_period">Update Notice Period</label>
                         <br>
-                        <input type="number" name="notice_period" id="notice_period"
+                        <input type="number" name="notice_period" id="notice_period" class="form-control"
                             placeholder="{{value.notice_period}}">
                     </div>
                     <div class="form-group">
-                        <label for="current_loc">Update Current Location:</label>
+                        <label for="current_loc">Update Current Location</label>
                         <br>
-                        <input type="text" name="current_loc" id="current_loc" placeholder="{{value.current_loc}}">
+                        <input type="text" name="current_loc" id="current_loc" class="form-control" placeholder="{{value.current_loc}}">
                     </div>
                     <div class="form-group">
-                        <label for="preferred_loc">Update preferred Location:</label>
+                        <label for="preferred_loc">Update preferred Location</label>
                         <br>
-                        <input type="text" name="preferred_loc" id="preferred_loc"
+                        <input type="text" name="preferred_loc" id="preferred_loc" class="form-control"
                             placeholder="{{value.preferred_loc}}">
                     </div>
                     <div class="form-group">
-                        <label for="email">Update Email:</label>
+                        <label for="email">Update Email</label>
                         <br>
-                        <input type="email" name="email" id="email" placeholder="{{value.email}}">
+                        <input type="email" name="email" id="email" class="form-control" placeholder="{{value.email}}">
                     </div>
                     <div class="form-group">
-                        <label for="status">Update Status:</label>
+                        <label for="status">Update Status</label>
                         <br>
-                        <input type="text" name="status" id="status" placeholder="{{value.status}}">
+                        <input type="text" name="status" id="status" class="form-control" placeholder="{{value.status}}">
                     </div>
                     <div class="form-group">
-                        <label for="BU_comments">Update BU Comments:</label>
+                        <label for="BU_comments">Update BU Comments</label>
                         <br>
-                        <input type="text" name="BU_comments" id="BU_comments" placeholder="{{value.BU_comments}}">
+                        <input type="text" name="BU_comments" id="BU_comments" class="form-control" placeholder="{{value.BU_comments}}">
                     </div>
                     <div class="form-group">
-                        <label for="TA_comments">Update TA Comments:</label>
+                        <label for="TA_comments">Update TA Comments</label>
                         <br>
-                        <input type="text" name="TA_comments" id="TA_comments" placeholder="{{value.TA_comments}}">
+                        <input type="text" name="TA_comments" id="TA_comments" class="form-control" placeholder="{{value.TA_comments}}">
                     </div>
                     <div class="form-group">
-                        <label for="comment_by_prerana">Update Comment By Prerana:</label>
+                        <label for="comment_by_prerana">Update Comment By Prerana</label>
                         <br>
-                        <input type="text" name="comment_by_prerana" id="comment_by_prerana"
+                        <input type="text" name="comment_by_prerana" id="comment_by_prerana" class="form-control"
                             placeholder="{{value.comment_by_prerana}}">
                     </div>
                     <div class="form-group">
-                        <label for="T1_panel">Update T1 Panel:</label>
+                        <label for="T1_panel">Update T1 Panel</label>
                         <br>
-                        <input type="text" name="T1_panel" id="T1_panel" placeholder="{{value.T1_panel}}">
+                        <input type="text" name="T1_panel" id="T1_panel" class="form-control" placeholder="{{value.T1_panel}}">
                     </div>
                     <div class="form-group">
-                        <label for="T1_IW_date">Update T1 IW Date:</label>
+                        <label for="T1_IW_date">Update T1 IW Date</label>
                         <br>
-                        <input type="date" name="T1_IW_date" id="T1_IW_date">
+                        <input type="date" name="T1_IW_date" id="T1_IW_date" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="T2_panel">Update T2 Panel:</label>
+                        <label for="T2_panel">Update T2 Panel</label>
                         <br>
-                        <input type="text" name="T2_panel" id="T2_panel" placeholder="{{value.T2_panel}}">
+                        <input type="text" name="T2_panel" id="T2_panel" class="form-control" placeholder="{{value.T2_panel}}">
                     </div>
                     <div class="form-group">
-                        <label for="T2_IW_date">Update T2 IW Date:</label>
+                        <label for="T2_IW_date">Update T2 IW Date</label>
                         <br>
-                        <input type="date" name="T2_IW_date" id="T2_IW_date">
+                        <input type="date" name="T2_IW_date" id="T2_IW_date" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="source">Update Source:</label>
+                        <label for="source">Update Source</label>
                         <br>
-                        <input type="text" name="source" id="source" placeholder="{{value.source}}">
+                        <input type="text" name="source" id="source" class="form-control" placeholder="{{value.source}}">
                     </div>
                     <div class="form-group">
-                        <label for="Rec_prime">Update Rec Prime:</label>
+                        <label for="Rec_prime">Update Rec Prime</label>
                         <br>
-                        <input type="text" name="Rec_prime" id="Rec_prime" placeholder="{{value.Rec_prime}}">
+                        <input type="text" name="Rec_prime" id="Rec_prime" class="form-control" placeholder="{{value.Rec_prime}}">
                     </div>
                     <div class="form-group">
-                        <label for="Domain">Update Domain:</label>
+                        <label for="Domain">Update Domain</label>
                         <br>
-                        <input type="text" name="Domain" id="Domain" placeholder="{{value.Domain}}">
+                        <input type="text" name="Domain" id="Domain" class="form-control" placeholder="{{value.Domain}}">
                     </div>
                     <div class="form-group">
-                        <label for="T1">Update T1:</label>
+                        <label for="T1">Update T1</label>
                         <br>
-                        <input type="text" name="T1" id="T1" placeholder="{{value.T1}}">
+                        <input type="text" name="T1" id="T1" class="form-control" placeholder="{{value.T1}}">
                     </div>
                     <div class="form-group">
-                        <label for="T2">Update T2:</label>
+                        <label for="T2">Update T2</label>
                         <br>
-                        <input type="text" name="T2" id="T2" placeholder="{{value.T2}}">
+                        <input type="text" name="T2" id="T2" class="form-control" placeholder="{{value.T2}}">
                     </div>
                     <!-- <div class="form-group">
                                     <label for="resume">Resume:</label>
                                     <input type="file" name="resume" id="resume">
                                 </div> -->
                     <br>
-                    <input type="submit" value="Submit">
+                    <input type="submit" value="Update Details">
                 </form>
 
             </div>

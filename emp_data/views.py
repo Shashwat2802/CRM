@@ -135,7 +135,13 @@ def updateSaleReqs(request,reqIdPK):
     model_instance.Position_Status=request.POST['Position_Status']
     model_instance.Sales_Incharge=request.POST['Sales_Incharge']
     model_instance.Bu_head = request.POST['Bu_Head']
-    model_instance.history = request.POST['history']
+    if 'history' in request.POST:
+        hist=request.POST['history']
+        print("hist",hist)
+        model_instance.history = hist
+    
+    # print("history",hist)
+    # model_instance.history = request.POST['history']
 
     model_instance.save()
     return redirect('/listSalesReqs')  
@@ -299,7 +305,7 @@ def add_ta(request):
 
 def show_ta(request):
     ta_instance=TA_Resource.objects.all()
-    return render(request,'showTa.html',{'ta_instance':ta_instance})
+    return render(request,'showTA.html',{'ta_instance':ta_instance})
 
 def delete_ta(request,phone_number):
     instance=TA_Resource.objects.get(pk=phone_number)
@@ -458,7 +464,8 @@ def vm_data_upload(request):
                 remarks=data[19],
                 email=data[20],
                 phone_number=data[21],
-                mode=data[22]
+                mode=data[22],
+                vmIdPK = data[23]
             )
             value.save()
         return redirect("/show_vm")
