@@ -136,7 +136,7 @@ class VmResource(models.Model):
     phone_number = models.IntegerField()
     mode = models.CharField(max_length=500)
     vmIdPK = models.AutoField(primary_key=True,default=0)
-    owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
+    # owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
 
 
 
@@ -194,7 +194,7 @@ class TA_Resource(models.Model):
     Domain = models.CharField(max_length=100)
     T1 = models.CharField(max_length=100)
     T2 = models.CharField(max_length=100)
-    owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
+    # owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
 
     class Meta:
         db_table = "TA_Resource"

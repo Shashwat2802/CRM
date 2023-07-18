@@ -135,7 +135,13 @@ def updateSaleReqs(request,reqIdPK):
     model_instance.Position_Status=request.POST['Position_Status']
     model_instance.Sales_Incharge=request.POST['Sales_Incharge']
     model_instance.Bu_head = request.POST['Bu_Head']
-    model_instance.history = request.POST['history']
+    if 'history' in request.POST:
+        hist=request.POST['history']
+        print("hist",hist)
+        model_instance.history = hist
+    
+    # print("history",hist)
+    # model_instance.history = request.POST['history']
 
     model_instance.save()
     return redirect('/listSalesReqs')  
