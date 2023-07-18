@@ -135,7 +135,7 @@ class VmResource(models.Model):
     email = models.EmailField()
     phone_number = models.IntegerField()
     mode = models.CharField(max_length=500)
-    vmIdPK = models.AutoField(primary_key=True,default='')
+    vmIdPK = models.AutoField(primary_key=True,default=0)
 
 
     class Meta:
