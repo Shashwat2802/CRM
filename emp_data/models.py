@@ -135,9 +135,8 @@ class VmResource(models.Model):
     email = models.EmailField()
     phone_number = models.IntegerField()
     mode = models.CharField(max_length=500)
-    vmIdPK = models.AutoField(primary_key=True,default=0)
-    owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
-
+    vmIdPK = models.AutoField(primary_key=True,default='')
+    #owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
 
 
     class Meta:
@@ -184,7 +183,7 @@ class TA_Resource(models.Model):
     status = models.CharField(max_length=100)
     BU_comments = models.CharField(max_length=1000)
     TA_comments = models.CharField(max_length=1000)
-    comment_by_prerana = models.CharField(max_length=500)
+    #comment_by_prerana = models.CharField(max_length=500)
     T1_panel = models.CharField(max_length=100)
     T1_IW_date = models.DateField()
     T2_panel = models.CharField(max_length=100)
@@ -194,5 +193,9 @@ class TA_Resource(models.Model):
     Domain = models.CharField(max_length=100)
     T1 = models.CharField(max_length=100)
     T2 = models.CharField(max_length=100)
-    owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
+    #owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
 
+    class Meta:
+        db_table = "TA_Resource"
+    def __str__(self):
+        return str(self.name)
