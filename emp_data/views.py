@@ -286,7 +286,7 @@ def add_ta(request):
 
 def show_ta(request):
     ta_instance=TA_Resource.objects.all()
-    return render(request,'showTa.html',{'ta_instance':ta_instance})
+    return render(request,'showTA.html',{'ta_instance':ta_instance})
 
 def delete_ta(request,phone_number):
     instance=TA_Resource.objects.get(pk=phone_number)
@@ -445,7 +445,8 @@ def vm_data_upload(request):
                 remarks=data[19],
                 email=data[20],
                 phone_number=data[21],
-                mode=data[22]
+                mode=data[22],
+                vmIdPK = data[23]
             )
             value.save()
         return redirect("/show_vm")
