@@ -224,14 +224,27 @@
                                         <form action="/updateSaleReqs/{{val.reqIdPK}}" method="POST">
                                             {% csrf_token %}
 
-                                                <div class="form-group">
+                                            <div class="form-group">
+                                                <br>
                                                 <label for="Position_Status">Position Status:</label>
 
                                                 <!-- Dont do formating for below 2 lines? -->
-<select name="Position_Status" id="Position_Status">
-    <option value="Active" {% if val.Position_Status == 'Active' %}selected{% endif %}>Active</option>
-    <option value="Closed" {% if val.Position_Status == 'Closed' %}selected{% endif %}>Closed</option>
-</select>
+                                                <select name="Position_Status" id="Position_Status">
+                                                    <option value="Active" {% if val.Position_Status == 'Active' %} \
+                                                    selected{% endif %}>Active</option>
+
+                                                    <option value="Closed" {% if val.Position_Status == 'Closed' %} \
+                                                    selected{% endif %}>Closed</option>
+
+                                         
+                                                </select>
+
+                                            <label for="priority">Priority</label>
+                                            <select name="priority" id="priority">
+                                                <option value=1>P1</option>
+                                                <option value=2>P2</option>
+                                                <option value=3>P3</option>
+                                            </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="Required_skills">Updated Required Skills:</label>
@@ -243,12 +256,7 @@
                                                 <textarea name="Job_Description" id="Job_Description" cols="50"
                                                     rows="20">{{val.Job_Description}}</textarea>
                                             </div>
-                                            <label for="priority">Priority</label>
-                                            <select name="priority" id="priority">
-                                                <option value=1>P1</option>
-                                                <option value=2>P2</option>
-                                                <option value=3>P3</option>
-                                            </select>
+                         
                                             <div class="form-group">
                                                 <label for="Required_Experience">Updated Required
                                                     Experience:</label>
@@ -263,7 +271,7 @@
                                                     value="{{val.Open_positions}}">
                                             </div>
 
- 
+
 
                                             <div class="form-group">
                                                 <label for="Job_Description">Remarks</label>
