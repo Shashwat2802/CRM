@@ -135,6 +135,7 @@ def updateSaleReqs(request,reqIdPK):
     model_instance.Position_Status=request.POST['Position_Status']
     model_instance.Sales_Incharge=request.POST['Sales_Incharge']
     model_instance.Bu_head = request.POST['Bu_Head']
+    model_instance.priority = request.POST['priority']
     if 'history' in request.POST:
         hist=request.POST['history']
         print("hist",hist)
