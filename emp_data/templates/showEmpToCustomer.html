@@ -26,7 +26,7 @@
             {% for values in form %}
             <tr>
                 <td>{{forloop.counter}}</td>
-                <td>{{values.eFname}} {{values.eLname}}</td>
+                <td>{{values.name}}</td>
 
                 <td>
                     <p class="btn-sm" data-toggle="modal" data-target="#hist{{reqIdPK}}">
@@ -70,16 +70,19 @@
 
                 </td>
 
-                
-                <td>
-                    {{values.empstatus}}
-                </td>
                 <td>
                     {{values.source}}
                 </td>
-                 <td>
-                    {{values.sourceId}}
+                <td>
+
                 </td>
+                <td>
+                    {{values.empstatus}}
+                </td>
+                
+                 <!-- <td>
+                    {{values.sourceId}}
+                </td> -->
                 <td>
 
                       {% if position > 0 %}

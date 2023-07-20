@@ -47,9 +47,13 @@ urlpatterns = [
 
     path("save_emp_details", views.save_emp_details, name="save_emp_details"),
     path('addSalesReqs',views.addSalesReqs),
-    path('job_description',views.job_description),  
+    path('job_description',views.job_description),
+
     path('show_candidate/<int:reqIdPK>',views.show_candidate),
-    path('mapEmpToReq/<int:reqIdPK>',views.mapEmpToReq),
+    path('show_talist/<int:reqIdPK>',views.show_talist),
+    path('show_vmlist/<int:reqIdPK>',views.show_vmlist),
+    
+    path('mapEmpToReq/<int:reqIdPK>/<int:choice>',views.mapEmpToReq),
     path('showEmpToCustomer/<int:reqIdPK>',views.showEmpToCustomer),
     path("addCommentToEmployeedReqTable/<int:reqIdPK>/<str:source>/<str:sourceId>", views.addCommentToEmployeedReqTable),
 

@@ -87,29 +87,6 @@ class Customer_Requirements(models.Model):
     def __str__(self):
         return str(self.customers)
     
-
-
-class EmployeeReqMapping(models.Model):
-    # req_id=models.IntegerField(default=0) #Model name change: Employee requirement 
-
-    req_id=models.ForeignKey(Customer_Requirements, on_delete = models.CASCADE) #Model name change: Employee requirement 
-    eFname = models.CharField(max_length=100,null=True)
-    eLname = models.CharField(max_length=100, null=True)
-    eskills = models.CharField(max_length=100,null=True)
-    estatus = models.CharField(max_length=100,null=True)
-    empstatus = models.CharField(max_length=100,null=True, default='')
-    added_date = models.DateField(null=True)
-    source = models.CharField(max_length=100,null=True, default='LEADSOC')
-    sourceId = models.CharField(max_length=100,null=True,default='') # Can We  give foriegn key from 3 different table, like VM,TA, employee
-    history = models.TextField(default="")
-
-    class Meta:
-        db_table = "employeereqmapping"
-
-    def __str__(self):
-        return str(self.req_id)
-
-
 # model for VM candidates 
 class VmResource(models.Model):
     position_status = models.CharField(max_length=100) #whether active or closed
@@ -136,8 +113,7 @@ class VmResource(models.Model):
     phone_number = models.IntegerField()
     mode = models.CharField(max_length=500)
     vmIdPK = models.AutoField(primary_key=True,default=0)
-
-    # owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
+    owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
 
 
 
@@ -164,7 +140,7 @@ class Login(models.Model):
         db_table = "login"
 
 class TA_Resource(models.Model):
-    ta_id = models.CharField(max_length=10,unique=True)
+    ta_id = models.CharField(max_length=10,primary_key=True)
     archived = models.CharField(max_length=100)
     date = models.DateField()
     name = models.CharField(max_length=300)
@@ -181,12 +157,11 @@ class TA_Resource(models.Model):
     notice_period = models.IntegerField()
     current_loc = models.CharField(max_length=500)
     preferred_loc = models.CharField(max_length=500)
-    phone_number = models.CharField(max_length=15,primary_key=True)
+    phone_number = models.CharField(max_length=15,unique=True)
     email = models.EmailField()
     status = models.CharField(max_length=100)
     BU_comments = models.CharField(max_length=1000)
-    TA_comments = models.CharField(max_length=1000)
-    #comment_by_prerana = models.CharField(max_length=500)
+    TA_comments = models.CharField(max_length=1000)    
     T1_panel = models.CharField(max_length=100)
     T1_IW_date = models.DateField()
     T2_panel = models.CharField(max_length=100)
@@ -196,10 +171,34 @@ class TA_Resource(models.Model):
     Domain = models.CharField(max_length=100)
     T1 = models.CharField(max_length=100)
     T2 = models.CharField(max_length=100)
-    # owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
+    owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
 
     class Meta:
         db_table = "TA_Resource"
     def __str__(self):
         return str(self.name)
+
+
+
+class EmployeeReqMapping(models.Model):
+    # req_id=models.IntegerField(default=0) #Model name change: Employee requirement 
+
+    req_id=models.ForeignKey(Customer_Requirements, on_delete = models.CASCADE) #Model name change: Employee requirement 
+    name = models.CharField(max_length=100,null=True)
+    eskills = models.CharField(max_length=100,null=True)
+    estatus = models.CharField(max_length=100,null=True)
+    empstatus = models.CharField(max_length=100,null=True, default='')
+    added_date = models.DateField(null=True)
+    source = models.CharField(max_length=100,null=True, default='LEADSOC')
+    sourceid_1 = models.CharField(max_length=10,null=True) # Can We  give foriegn key from 3 different table, like VM,TA, employee
+    sourceid_2=models.CharField(max_length=10,null=True)
+    sourceid_3=models.IntegerField(default=0)
+    history = models.TextField(default="")
+
+    class Meta:
+        db_table = "employeereqmapping"
+
+    def __str__(self):
+        return str(self.req_id)
+
 
