@@ -41,6 +41,7 @@ urlpatterns = [
    # customer requirements details
     path("listSalesReqs", views.listSalesReqs),
     path('filter/<str:bu>/<str:sales>/<str:st>',views.filteredSaleReqs),
+    path('filter/<str:bu>/<str:buh>/<str:manager>',views.filteredEmployees),
     path("addSalesReqComment/<int:reqIdPK>", views.addSalesReqComment),
 
     path("cust_req_dropdown/<str:ref>", views.cust_req_dropdown),
@@ -49,11 +50,11 @@ urlpatterns = [
     path('addSalesReqs',views.addSalesReqs),
     path('job_description',views.job_description),  
     path('show_candidate/<int:reqIdPK>',views.show_candidate),
-    path('mapEmpToReq/<int:reqIdPK>',views.mapEmpToReq),
+    path('mapEmpToReq/<int:reqIdPK>/<int:choice>',views.mapEmpToReq),
     path('showEmpToCustomer/<int:reqIdPK>',views.showEmpToCustomer),
     path("addCommentToEmployeedReqTable/<int:reqIdPK>/<str:source>/<str:sourceId>", views.addCommentToEmployeedReqTable),
-
-    # path('emp_remarks/<str:eFname>', views.emp_remarks),
+    path('show_talist/<int:reqIdPK>',views.show_talist),
+    path('show_vmlist/<int:reqIdPK>',views.show_vmlist),    
 
     path('selection_status/<str:status>/<int:reqIdPK>', views.selection_status),
 

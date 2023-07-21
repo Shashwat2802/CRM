@@ -114,12 +114,7 @@
             <label for="TA_comments">TA Comments</label>
             <br>
             <input type="text" name="TA_comments" id="TA_comments" class="form-control" placeholder=" TA Comments">
-        </div>
-        <div class="form-group">
-            <label for="comment_by_prerana">Comment By Prerana</label>
-            <br>
-            <input type="text" name="comment_by_prerana" id="comment_by_prerana" class="form-control" placeholder="Comment By Prerana">
-        </div>
+        </div>       
         <div class="form-group">
             <label for="T1_panel">T1 Panel</label>
             <br>
@@ -165,12 +160,17 @@
             <br>
             <input type="text" name="T2" id="T2" class="form-control" placeholder=" T2">
         </div>
-        <!-- <div class="form-group">
-                        <label for="resume">Resume:</label>
-                        <input type="file" name="resume" id="resume">
-                    </div> -->
+        <div class="form-group">
+            <label for="owner">Owner</label>
+            <select name="owner" id="owner">
+              {% for val in ownerList %}
+              <option value="{{val}}">{{val}}</option>
+              {% endfor %}
+            </select>
+          </div>
+       
         <br>
-        <input type="submit" value="Add Details">
+        <input type="submit" class="btn btn-info" value="Add Details">
         </form>
 
         </div>
