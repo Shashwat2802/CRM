@@ -120,7 +120,7 @@ def addSalesReqs(request):
 
     else:
         customerList=list(map(lambda x:x.cName ,Customer.objects.all()))
-        BUList=list(map(lambda x:x.eFname ,getBUList()))
+        BUList=list(map(lambda x:x.eFname ,getBUHList()))
         SalesList=list(map(lambda x:x.eFname ,getSalesTeam()))
 
         return render(request, 'addcustrequirements.html',{'customerlist': customerList, 'bulist': BUList, 'saleslist' : SalesList})
@@ -181,16 +181,16 @@ def deleteCustomer(request, cName):
    
     return redirect("/listCustomers")
 
-def getBuList():
-    return Employee.objects.filter(Q(eRole='EMBEDDED')|Q(eRole='HW_BACKEND')|Q(eRole='TA_STAFF')|Q(eRole='ASW'))
+def getDepartmentList():
+    return Department.objects.all()
 
 def getManager():
-    return Employee.objects.filter(Q(eRole='PM')|Q(eRole='TM')|Q(eRole='TA_HEAD')|Q(eRole='BUH')|Q(eRole='SALES_HEAD'))
+    return Employee.objects.filter(IsManager=True)
 
 def getSalesTeam():
     return Employee.objects.filter(Q(eRole='SALES_STAFF')| Q(eRole='SALES_HEAD'))
 
-def getBUList():
+def getBUHList():
     return Employee.objects.filter(eRole='BUH')
 
 def listSalesReqs(request):
@@ -200,7 +200,7 @@ def listSalesReqs(request):
         customer_requirements = Customer_Requirements.objects.all()  #RAGHU : To limit, Sort, select only Active
         current_user = request.user.username.title()
         sales_incharge = getSalesTeam()
-        bu_head = getBUList()
+        bu_head = getBUHList()
         return render(request,'show_cust_requirements.html',{'customer_requirements':customer_requirements, 
                                                              'sales_incharge': sales_incharge, 'bu_head': bu_head, 'current_user':current_user,
                                                              'bu_select':'Choose', "sales_select":'Choose', 'status_select':'Choose'})
@@ -219,7 +219,7 @@ def filteredSaleReqs(request,bu,sales,st):
     print("FIlter COndition",filter_conditions,bu,sales,st)
     customer_requirements=  Customer_Requirements.objects.filter(**filter_conditions)
 
-    bu_head = getBUList()
+    bu_head = getBUHList()
     current_user = request.user.username.title() 
     sales_incharge= getSalesTeam()
     return render(request,'show_cust_requirements.html',{'customer_requirements':customer_requirements,
@@ -240,13 +240,13 @@ def filteredEmployees(request,bu,buh,manager):
     print("FIlter COndition",filter_conditions,bu,buh,manager)
     employees_data=  Employee.objects.filter(**filter_conditions)
 
-    buh = getBUList()
-    bu = getBuList()
-    manager = getManager()
+    departments =getDepartmentList()
+    buhList= getBUHList()
+    Manager=getManager()
     current_user = request.user.username.title()     
     return render(request,'showemp.html',{'employees_data':employees_data,
                                             'manager': manager,'current_user':current_user, 
-                                            "bu_select": bu,  'buh_select': buh,'manager_select': manager})    
+                                            "bu_select": bu,  'buh_select': buh,'manager_select': manager,'departments':departments,'BUHList':buhList,'Manager':Manager})    
 
 
 def addSalesReqComment(request, reqIdPK):
@@ -280,7 +280,7 @@ def cust_req_dropdown(request, ref):
     
 
 def salesSummary(request):
-    first=getBUList()
+    first=getBUHList()
     second=getSalesTeam()
     saleslist=[]
     bulist=[]
@@ -621,13 +621,13 @@ def listEmployees(request):
     experiencelist=EmpExperienceHistory.objects.all()   #RAGHU: This has to be changed from here
     rolelist=Role.objects.all()
     add_exp_btn = True
-    Bu_head =getBuList()
-    Buh= getBUList()
+    departments =getDepartmentList()
+    buhList= getBUHList()
     Manager=getManager()
     return render(request, "showemp.html", {'employees':employees,'customerlist':customerlist,
                                             'experiencelist':experiencelist,'rolelist':rolelist,
                                             'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp,
-                                              'add_exp_btn': add_exp_btn,'Bu':Bu_head,'BUH':Buh,'Manager':Manager})
+                                              'add_exp_btn': add_exp_btn,'departments':departments,'BUHList':buhList,'Manager':Manager})
 
 # To delete employee details
 def deleteLeadSocEmployee(request, e_id):
@@ -723,7 +723,8 @@ def bulkUploadEmployee(request):
                 newDept.save()
                
             isManager=False  
-            if data[14]=='TRUE':
+            print('Managre',data[14])
+            if data[14]==True:
                 isManager=True 
 
             value = Employee(

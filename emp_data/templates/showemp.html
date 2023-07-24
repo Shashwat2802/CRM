@@ -32,20 +32,21 @@
     <div class="d-inline-block">
         
         <span class="btn">
-            BU
-            <select class="btn" name="Bulist" id="Bu" style="border-radius: 30px;">
-                <option value="{{bu_select}}" selected hidden disabled>{{bu_select}}</option>
-                {% for val in Bu %}
-                <option value="{{val.eFname}}">{{val.eFname}}</option>
+            DEPT
+            <select class="btn" name="deptList" id="Bu" style="border-radius: 30px;">
+                <!-- <option value="{{bu_select}}" selected hidden disabled>{{bu_select}}</option> -->
+                {% for val in departments %}
+                <option value="{{val.department}}">{{val.department}}</option>
                 {% endfor %}
                 <option value="All">All</option>
             </select>
         </span>
+
         <span style="margin-left: 30;" class="btn">
             BUH
             <select name="Buhlist" id="buhead" class="btn" style="border-radius: 30px;">
                 <option value="{{buh_select}}" selected disabled hidden>{{buh_select}}</option>
-                {% for val in Buh %}
+                {% for val in BUHList %}
                 <option value="{{val.eFname}}">{{val.eFname}}</option>
                 {% endfor %}
                 <option value="All">All</option>
@@ -94,7 +95,7 @@
         <th>Employee ID.</th>
         <th>Name</th>
         <th>Customer</th>
-        <th>BU</th>
+        <th>DEPT</th>
         <th>BUH</th>
         <th>Manager</th>
         <th>Email</th>
@@ -113,7 +114,7 @@
         <td>{{employee.e_id}}</td>
         <td>{{employee.eFname}} {{employee.eLname}}</td>
         <td>{{employee.refer_Customer}}</td>
-        <td>{{employee.BU}}</td>
+        <td>{{employee.department}}</td>
         <td>{{employee.BUH}}</td>
         <td>{{employee.Manager}}</td>
         <td>{{employee.eEmail}}</td>

@@ -16,8 +16,8 @@ class CustomerAdmin(ImportExportModelAdmin):
 
 @admin.register(models.Employee)
 class EmployeeAdmin(ImportExportModelAdmin):
-    list_display = ('e_id','eFname','eLname','refer_Customer','eEmail','ePhone','eExperience','eskills','eRole','estatus','leadsoc_joining_date','customer_start_date')
-    search_fields = ['eFname','eLname','eEmail','ePhone','eMP_Type','eRole','estatus','eskills']
+    list_display = ('e_id','eFname','eLname','refer_Customer','eEmail','ePhone','eExperience','eskills','eRole','estatus','leadsoc_joining_date','customer_start_date','Manager','IsManager','BUH')
+    search_fields = ['eFname','eLname','eEmail','ePhone','eMP_Type','eRole','estatus','eskills','Manager','BUH']
 
     filter_horizontal = ()
     list_filter = ()
