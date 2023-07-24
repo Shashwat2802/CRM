@@ -283,7 +283,7 @@ def cust_req_dropdown(request, ref):
     return redirect('/listSalesReqs')
     
 
-def summary(request):
+def salesSummary(request):
     first=getBUList()
     second=getSalesTeam()
     saleslist=[]
@@ -318,32 +318,32 @@ def addCommentToEmployeedReqTable(request, reqIdPK,source,sourceId):
         print("Existing mapping",mapping.req_id,mapping.eFname,mapping.sourceId)
         mapping.history=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+mapping.history
         mapping.save()
-        return redirect(f'/showEmpToCustomer/{reqIdPK}')
+        return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
 def getOwnerList():
     return Employee.objects.filter(Q(eRole='TA_HEAD')|Q(eRole='TA_STAFF'))
 
-def add_ta(request):
+def addTa(request):
     form=TA_Form()
     if request.method=='POST':
         form=TA_Form(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/show_ta')
+            return redirect('/showTa')
         else:
             return HttpResponse(form.errors)
     else:
         ownerList = list(map(lambda x:x.eFname,getOwnerList()))        
         return render(request,'addTA.html',{'ownerList':ownerList})
 
-def show_ta(request):
+def showTa(request):
     ta_instance=TA_Resource.objects.all()
     return render(request,'showTA.html',{'ta_instance':ta_instance})
 
-def delete_ta(request,phone_number):
+def deleteTa(request,phone_number):
     instance=TA_Resource.objects.get(pk=phone_number)
     instance.delete()
-    return redirect('/show_ta')
+    return redirect('/showTa')
 
 
 
@@ -355,7 +355,7 @@ def job_description(request):
 
 
 
-def show_candidate(request,reqIdPK):
+def freeFromAllSource(request,reqIdPK):
     form = Employee.objects.filter(Q(estatus ='Free')|Q(estatus='pendingProcessing') ).values()
     if request.method == "GET":   
         skills = request.GET.get('searchskill')      
@@ -378,12 +378,12 @@ def checkbox(request):
                 savedata.save()         
             
 
-        return redirect('/showEmpToCustomer')
+        return redirect('/mappedEmployeeToCustomer')
     else:
-        return redirect('/showEmpToCustomer')
+        return redirect('/mappedEmployeeToCustomer')
 
 
-
+'''
 def mapEmpToReq(request,reqIdPK):   
     if request.method == 'POST':
         selectedEmpList = request.POST.getlist('empId')
@@ -401,10 +401,11 @@ def mapEmpToReq(request,reqIdPK):
             final.save()
             # newval2=EmployeeReqMapping.objects.filter(eFname=i)
             # emp1.append(newval2)
-    return redirect(f'/showEmpToCustomer/{reqIdPK}')
+    return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
+    '''
 
 #show added employe to customer
-def showEmpToCustomer(request,reqIdPK):  
+def mappedEmployeeToCustomer(request,reqIdPK):  
     if not request.user.is_authenticated:
         return redirect('home')
     emp_data = EmployeeReqMapping.objects.filter(req_id=reqIdPK)
@@ -415,50 +416,55 @@ def showEmpToCustomer(request,reqIdPK):
 
 
 
-def selection_status(request, status,reqIdPK): 
-    model_instance = EmployeeReqMapping.objects.get(eFname=status[2:])
+def selection_status(request, estatus,reqIdPK): 
+    model_instance = EmployeeReqMapping.objects.get(name=estatus[2:])
+    #model_instance = EmployeeReqMapping.objects.get(req=req_id)
     requirement_instance=Customer_Requirements.objects.get(pk=reqIdPK)
 
-    if status[:2] == 'SL':
+    if estatus[:2] == 'SL':
         model_instance.empstatus = 'Selected'
-
         requirement_instance.remain_positions-=1
         model_instance.save()
         requirement_instance.save()
-    elif status[:2] == 'RJ': 
+
+    elif estatus[:2] == 'RJ': 
         model_instance.empstatus = 'Rejected'
         model_instance.save()   
 
-    elif status[:2]=='BU':
+    elif estatus[:2]=='BU':
         model_instance.empstatus='Shortlisted by BU'
         model_instance.save()
-    elif status[:2]=='CL':
+
+    elif estatus[:2]=='CL':        
         model_instance.empstatus='Shortlisted by Client'
         model_instance.save()
-    elif status[:2]=='OP':
+
+    elif estatus[:2]=='OP':
         model_instance.empstatus='Onboarding Progress'
         model_instance.save()
-    elif status[:2]=='OB':
+
+    elif estatus[:2]=='OB':
         model_instance.empstatus='Onboarded'
         model_instance.save()
-    elif status[:2]=='RR':
+
+    elif estatus[:2]=='RR':
         model_instance.empstatus='Resume Rejected'
         model_instance.save()
-    return redirect(f'/showEmpToCustomer/{reqIdPK}')
+    return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
 # To display all the VM candidates 
-def show_vm(request):
+def showVm(request):
     all_vm_candidates = VmResource.objects.all()
     return render(request, "show_vm_candidates.html", {"candidate_list":all_vm_candidates})
 
 # Form to add only one VM candidate 
-def add_vm(request): 
+def addVm(request): 
     if request.method == "POST":
         form=VmCandidateForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request,"Details Saved !")
-            return redirect("/show_vm")
+            return redirect("/showVm")
     else:
         ownerList = list(map(lambda x:x.eFname,getOwnerList()))  
         return render(request, "add_vm_candidates.html",{'ownerList':ownerList})
@@ -466,7 +472,7 @@ def add_vm(request):
 def update_vm_candidates(request): 
     pass
 
-def show_talist(request,reqIdPK):
+def showTaList(request,reqIdPK):
     form=TA_Resource.objects.filter(status='Selected').values()
     if request.method=='GET':
         skills=request.GET.get('searchskill')
@@ -475,7 +481,7 @@ def show_talist(request,reqIdPK):
     
     return render(request,'selected_ta_list.html',{'form':form,"reqIdPK":reqIdPK})
 
-def show_vmlist(request,reqIdPK):
+def showVmList(request,reqIdPK):
     form=VmResource.objects.filter(interview_status='Selected').values()
     if request.method=='GET':
         skills=request.GET.get('searchskill')
@@ -512,16 +518,17 @@ def mapEmpToReq(request,reqIdPK,choice):
         if choice=='VM':
             selectedvmList = request.POST.getlist('candidate_name')
             print("Selected VM  list",selectedvmList)
-            for i in selectedvmList:
-                vm=VmResource.objects.get(candidate_name=i)
+            for vm_name in selectedvmList:
+                vm=VmResource.objects.get(candidate_name=vm_name)
                 vm.interview_status='Selected and Mapped'
                 vm.save()
                 final=EmployeeReqMapping(req_id=salesReq,name=vm.candidate_name,eskills=vm.skillset,  added_date=today,source='VM',empstatus='Selected',sourceid_3=vm.vmIdPK)
                 final.save()
+    return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
 
 # To upload data containing VM candidates
-def vm_data_upload(request): 
+def vmDataUpload(request): 
     if request.method == "POST":
         dataset = Dataset()
         new_vm = request.FILES['myfile']
@@ -558,7 +565,7 @@ def vm_data_upload(request):
                 owner = Employee(e_id=data[24])
             )
             value.save()
-        return redirect("/show_vm")
+        return redirect("/showVm")
     return render(request, "upload_vm_candidates.html")
 
 
@@ -571,10 +578,10 @@ def dropDownCustomer(request):
             savevalue.refer_Customer = request.POST.get('cName')
             savevalue.save()
             messages.success(request,'The Selected customer' +savevalue.refer_Customer+ 'is saved successfully')
-            return redirect('/showEmpToCustomer')
+            return redirect('/mappedEmployeeToCustomer')
         
         else:
-            return render(request,'showEmpToCustomer')
+            return render(request,'mappedEmployeeToCustomer')
         
 def showDropDown(request):
     display_cust = EmployeeReqMapping.objects.all()
@@ -582,22 +589,22 @@ def showDropDown(request):
     return render(request,'showEmpToCustomer.html',{'display_cust':display_cust})
 
 
-def delete_Emp_Customer(request,eFname,reqIdPK):   
+def deleteAppliedCandidates(request,e_id,reqIdPK):   
     req=Customer_Requirements.objects.get(pk=reqIdPK)
     if not request.user.is_authenticated:
         return redirect('home') 
     try:
-        emp = EmployeeReqMapping.objects.get(eFname=eFname)
-        status_instance=Employee.objects.get(eFname=eFname)
+        emp = EmployeeReqMapping.objects.get(e_id=e_id)
+        status_instance=Employee.objects.get(eFname=e_id)
         status_instance.estatus='Free'
         status_instance.save()
         emp.delete()
         req.remain_positions+=1
         req.save()
     except EmployeeReqMapping.MultipleObjectsReturned:
-        emp = EmployeeReqMapping.objects.filter(eFname=eFname)[0]
+        emp = EmployeeReqMapping.objects.filter(e_id=e_id)[0]
         emp.delete()
-        status_instance=Employee.objects.get(eFname=eFname)[0]
+        status_instance=Employee.objects.get(e_id=e_id)[0]
         status_instance.estatus='Free'
         status_instance.save()
         req=Customer_Requirements.objects.get(pk=reqIdPK)
@@ -606,7 +613,7 @@ def delete_Emp_Customer(request,eFname,reqIdPK):
 
     messages.success(request,'The Selected Employee'  + emp.eFname +  'is deleted successfully')
     company=req.customers
-    return redirect(f'/showEmpToCustomer/{company}/{reqIdPK}')
+    return redirect(f'/mappedEmployeeToCustomer/{company}/{reqIdPK}')
 
 # To show employee details
 def listEmployees(request):
@@ -629,7 +636,7 @@ def listEmployees(request):
                                               'add_exp_btn': add_exp_btn,'Bu':Bu_head,'BUH':Buh,'Manager':Manager})
 
 # To delete employee details
-def deleteEmp(request, e_id):
+def deleteLeadSocEmployee(request, e_id):
     if not request.user.is_authenticated:
         return redirect('home')
     employee = Employee.objects.get(pk=e_id)
@@ -638,7 +645,7 @@ def deleteEmp(request, e_id):
 
 
 # To update employee details
-def updateEmp(request, e_id):
+def updateLeadSocEmployee(request, e_id):
     if not request.user.is_authenticated:
         return redirect('home')
     employee = Employee.objects.get(pk=e_id)
@@ -664,7 +671,7 @@ def save_emp_details(request):
         selected_employees = request.POST.getlist('employee_checkbox')
         for employee_id in selected_employees:
             employee = Employee.objects.get(id=employee_id)
-            add_emp = EmployeeReqMappingAdmin(
+            add_emp = EmployeeReqMapping(
                 eFname=employee.eFname,
                 eLname=employee.eLname,
                 refer_Customer=request.user.customer,  # Assuming you have a logged-in user with a related customer
@@ -732,7 +739,7 @@ def bulkUploadEmployee(request):
     return render(request,'upload.html')
 
 # upload customer data to model
-def customer_data_upload(request):
+def customerDataUpload(request):
     if not request.user.is_authenticated:
         return redirect('home')
     
@@ -760,7 +767,7 @@ def customer_data_upload(request):
     return render(request,'upload.html')
 
 # upload customer requirement data the model
-def customer_requirement_file(request):
+def salesDataUpload(request):
     if not request.user.is_authenticated:
         return redirect('home')
     
@@ -795,7 +802,7 @@ def customer_requirement_file(request):
     return render(request,'customer_requirement_data.html')
 
 #TA Upload Excel File Option
-def ta_upload(request):
+def taDataUpload(request):
     if not request.user.is_authenticated:
         return redirect('home')
     if request.method=='POST':
@@ -843,7 +850,7 @@ def ta_upload(request):
                 owner=Employee(e_id=data[31])                
                 )
             value.save()
-        return redirect('/show_ta')   
+        return redirect('/showTa')   
 
     return render(request,'TA_upload.html')
 

@@ -125,7 +125,7 @@
 
         <td>
 
-          <button class="btn-danger btn-sm" onclick="location.href='/deleteEmp/{{employee.e_id}}'"><i
+          <button class="btn-danger btn-sm" onclick="location.href='/deleteLeadSocEmployee/{{employee.e_id}}'"><i
               class="fa-solid fa-trash"></i></button>
           {% if current_emp.eRole.role_name == 'HR' or current_emp.eRole.role_name == 'BUH' %}
           <button class="btn-success btn-sm" data-toggle="modal" data-target="#modalForm{{employee.ePhone}}"><i
@@ -231,7 +231,7 @@
                 <div class="modal-body">
                   <!-- <nav class="navbar bg-body-tertiary"> -->
                   <div class="container-fluid">
-                    <form action="/updateEmp/{{employee.e_id}}" method="POST">
+                    <form action="/updateLeadSocEmployee/{{employee.e_id}}" method="POST">
                       {% csrf_token %}
                       <div class="form-group">
                         <label for="Required_skills">Update First Name :</label>
