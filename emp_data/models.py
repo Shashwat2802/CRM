@@ -31,15 +31,17 @@ class Role(models.Model):
     def __str__(self):
         return self.role_name
     
+class Department(models.Model):
+    department=models.CharField(max_length=100,primary_key=True)
+
+    def __str__(self):
+        return self.department
 
 class Employee(models.Model):
     e_id=models.CharField(max_length=100,primary_key=True)
     eFname = models.CharField(max_length=50,null=True)
     eLname = models.CharField(max_length=50,null=True)
     refer_Customer = models.ForeignKey(Customer, on_delete = models.CASCADE)
-    BU = models.CharField(max_length=50,null=True)
-    BUH= models.CharField(max_length=50,null=True)
-    Manager = models.CharField(max_length=100,null=True)
     eEmail = models.EmailField(max_length=200,null=True)
     ePhone = models.CharField(max_length=50,unique=True)
     eExperience = models.IntegerField(default=0,null=True)
@@ -48,6 +50,12 @@ class Employee(models.Model):
     estatus = models.CharField(max_length=100,null=True) # either free or deployed
     leadsoc_joining_date = models.DateField(null=True)
     customer_start_date = models.DateField(null=True)
+    department = models.ForeignKey(Department,on_delete=models.CASCADE) # designation
+    Manager = models.CharField(max_length=100,null=True)
+    IsManager = models.BooleanField(default=False)
+    BUH= models.CharField(max_length=50,null=True)
+
+
 
     class Meta:
         db_table = "employee"

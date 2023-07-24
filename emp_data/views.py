@@ -75,6 +75,7 @@ def addEmployee(request):
     else:
         list=Customer.objects.all()
         role=Role.objects.all()
+        departments=Department.objects.all()
         list1=[]
         rolelist=[]
         for item in list:
@@ -83,7 +84,7 @@ def addEmployee(request):
             rolelist.append(item.role_name)
 
 
-        return render(request, 'addemp.html',{'zipped_lists': list1,'rolelist':rolelist,'status':['Free','Deployed','Support Team']})
+        return render(request, 'addemp.html',{'departments':departments,'zipped_lists': list1,'rolelist':rolelist,'status':['Free','Deployed','Support Team']})
 
 
 def addEmployeeExperience(request, e_id):
@@ -218,12 +219,6 @@ def filteredSaleReqs(request,bu,sales,st):
     print("FIlter COndition",filter_conditions,bu,sales,st)
     customer_requirements=  Customer_Requirements.objects.filter(**filter_conditions)
 
-    # if bu=='All':
-    #     customer_requirements=Customer_Requirements.objects.filter(Sales_Incharge=sales,Position_Status=st)
-    # elif sales=='All':
-    #     customer_requirements=Customer_Requirements.objects.filter(Bu_head=bu,Position_Status=st)
-    # else:
-    #     customer_requirements=Customer_Requirements.objects.filter(Bu_head=bu,Sales_Incharge=sales,Position_Status=st)
     bu_head = getBUList()
     current_user = request.user.username.title() 
     sales_incharge= getSalesTeam()
@@ -345,8 +340,6 @@ def deleteTa(request,phone_number):
     instance=TA_Resource.objects.get(pk=phone_number)
     instance.delete()
     return redirect('/showTa')
-
-
 
 
 def job_description(request):
@@ -702,6 +695,7 @@ def bulkUploadEmployee(request):
             print("Customer name",data)
             roleName=data[8]
             custName=data[3]
+            dept=data[12]
             cust=Customer.objects.filter(cName=custName)
 
             if cust.exists():
@@ -718,7 +712,20 @@ def bulkUploadEmployee(request):
                 print("role does not exists")
                 newRole=Role(role_name=roleName)
                 newRole.save()
+
+
+            deptment=Department.objects.filter(department=dept)
+            if deptment.exists():
+                print("Extsing dept",deptment)
+            else :
+                print("dept does not exists")
+                newDept=Department(department=dept)
+                newDept.save()
                
+            isManager=False  
+            if data[14]=='TRUE':
+                isManager=True 
+
             value = Employee(
                 data[0],
                 data[1],
@@ -731,7 +738,13 @@ def bulkUploadEmployee(request):
                 data[8],
                 data[9],
                 data[10],
-                data[11]
+                data[11],
+                data[12],
+                data[13],
+                isManager,
+                data[15],
+
+
                 )
             value.save()
  

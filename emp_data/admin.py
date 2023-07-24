@@ -56,4 +56,7 @@ class Ta_ResourceAdmin(ImportExportModelAdmin):
 admin.site.register(models.VmResource)
 
 admin.site.register(models.Role)
+admin.site.register(models.Department)
+
+
 
