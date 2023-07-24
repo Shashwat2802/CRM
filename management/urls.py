@@ -34,13 +34,14 @@ admin.site.index_title = "Welcome to LeadSoc Technologies PVT LTD."
 urlpatterns = [        
     path('admin/', admin.site.urls),
     path("bulkUploadEmployee",views.bulkUploadEmployee),
-    path("customer_data_upload",views.customer_data_upload),
-    path('requirement_upload',views.customer_requirement_file),
+    path("customerDataUpload",views.customerDataUpload),
+    path('salesDataUpload',views.salesDataUpload),
     path("home",views.home),
     
    # customer requirements details
     path("listSalesReqs", views.listSalesReqs),
     path('filter/<str:bu>/<str:sales>/<str:st>',views.filteredSaleReqs),
+    path('filter/<str:bu>/<str:buh>/<str:manager>',views.filteredEmployees),
     path("addSalesReqComment/<int:reqIdPK>", views.addSalesReqComment),
 
     path("cust_req_dropdown/<str:ref>", views.cust_req_dropdown),
@@ -48,14 +49,14 @@ urlpatterns = [
     path("save_emp_details", views.save_emp_details, name="save_emp_details"),
     path('addSalesReqs',views.addSalesReqs),
     path('job_description',views.job_description),  
-    path('show_candidate/<int:reqIdPK>',views.show_candidate),
-    path('mapEmpToReq/<int:reqIdPK>',views.mapEmpToReq),
-    path('showEmpToCustomer/<int:reqIdPK>',views.showEmpToCustomer),
+    path('freeFromAllSource/<int:reqIdPK>',views.freeFromAllSource),
+    path('mapEmpToReq/<int:reqIdPK>/<str:choice>',views.mapEmpToReq),
+    path('mappedEmployeeToCustomer/<int:reqIdPK>',views.mappedEmployeeToCustomer),
     path("addCommentToEmployeedReqTable/<int:reqIdPK>/<str:source>/<str:sourceId>", views.addCommentToEmployeedReqTable),
+    path('showTaList/<int:reqIdPK>',views.showTaList),
+    path('showVmList/<int:reqIdPK>',views.showVmList),    
 
-    # path('emp_remarks/<str:eFname>', views.emp_remarks),
-
-    path('selection_status/<str:status>/<int:reqIdPK>', views.selection_status),
+    path('selection_status/<str:estatus>/<int:reqIdPK>', views.selection_status),
 
     path('checkbox',views.checkbox),
     path('dropDownCustomer',views.dropDownCustomer),
@@ -71,29 +72,29 @@ urlpatterns = [
     #employee paths
     path('addEmployee', views.addEmployee),
     path('listEmployees', views.listEmployees),
-    path('deleteEmp/<str:e_id>', views.deleteEmp),
-    path('updateEmp/<str:e_id>', views.updateEmp),
+    path('deleteLeadSocEmployee/<str:e_id>', views.deleteLeadSocEmployee),
+    path('updateLeadSocEmployee/<str:e_id>', views.updateLeadSocEmployee),
 
 
 
     #TA Path
-    path('add_ta',views.add_ta),
-    path('show_ta',views.show_ta),
-    path('ta_upload',views.ta_upload),
-    path('delete_ta/<int:phone_number>',views.delete_ta),
+    path('addTa',views.addTa),
+    path('showTa',views.showTa),
+    path('taDataUpload',views.taDataUpload),
+    path('deleteTa/<int:phone_number>',views.deleteTa),
 
 
     path('addEmployeeExperience/<str:e_id>',views.addEmployeeExperience),
     path('deleteEmployeeExperience/<int:exp_id>', views.deleteEmployeeExperience),
     
     # employee deleted from customer
-    path('delete_Emp_Customer/<str:eFname>/<int:reqIdPK>', views.delete_Emp_Customer),
-    path('summary',views.summary),
+    path('deleteAppliedCandidates/<str:name>/<int:reqIdPK>', views.deleteAppliedCandidates),
+    path('salesSummary',views.salesSummary),
 
     #For VM page
-    path("show_vm", views.show_vm),
-    path("add_vm", views.add_vm),
-    path("vm_data_upload", views.vm_data_upload),
+    path("showVm", views.showVm),
+    path("addVm", views.addVm),
+    path("vmDataUpload", views.vmDataUpload),
     path("update_vm_candidates", views.update_vm_candidates),
     #Homepage path
     path('', TemplateView.as_view(template_name='home.html'), name='home'),

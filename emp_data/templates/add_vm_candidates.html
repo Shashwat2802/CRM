@@ -96,7 +96,15 @@
             <label for="mode">Mode</label>
             <input type="text" id="mode" name="mode" class="form-control">
         </div>
-        <button type="submit" class="btn btn-success">Submit</button><br><br><br>
+        <div class="form-group">
+            <label for="owner">Owner</label>
+            <select name="owner" id="owner">
+              {% for val in ownerList %}
+              <option value="{{val}}">{{val}}</option>
+              {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-info">Add Details</button><br><br><br>
 
     </form>
 </div>
