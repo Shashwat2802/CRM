@@ -50,7 +50,7 @@
                         <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Details for {{val.vmIdPK}}</h5>
+                            <h5 class="modal-title" id="exampleModalLongTitle">Details for {{val.ta_id}}</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -146,53 +146,43 @@
                                 <hr>
                                 <div class="form-group">
                                     <h5 for="mode">T1_panel</h5> {{value.T1_panel}}
-                                </div>
-                                <hr>     
+                                </div>   
                                 <hr>
                                 <div class="form-group">
                                     <h5 for="mode">T1_IW_date </h5> {{value.T1_IW_date }}
-                                </div>
-                                <hr> 
+                                </div>                                
                                 <hr>
                                 <div class="form-group">
                                     <h5 for="mode">T1_panel</h5> {{value.T1_panel}}
-                                </div>
-                                <hr> 
+                                </div>                                
                                 <hr>
                                 <div class="form-group">
                                     <h5 for="mode">T2_panel</h5> {{value.T2_panel}}
-                                </div>
-                                <hr> 
+                                </div>                                
                                 <hr>
                                 <div class="form-group">
                                     <h5 for="mode">T2_IW_date</h5> {{value.T2_IW_date}}
-                                </div>
-                                <hr> 
+                                </div>                                 
                                 <hr>
                                 <div class="form-group">
                                     <h5 for="mode">source</h5> {{value.source}}
-                                </div>
-                                <hr>
+                                </div>                                
                                 <hr>
                                 <div class="form-group">
                                     <h5 for="mode">Rec_prime</h5> {{value.Rec_prime}}
-                                </div>
-                                <hr> 
+                                </div>                                 
                                 <hr>
                                 <div class="form-group">
                                     <h5 for="mode">Domain</h5> {{value.Domain}}
-                                </div>
-                                <hr> 
+                                </div>                                
                                 <hr>
                                 <div class="form-group">
                                     <h5 for="mode">T1 </h5> {{value.T1}}
-                                </div>
-                                <hr> 
+                                </div>                                
                                 <hr>
                                 <div class="form-group">
                                     <h5 for="mode">T2</h5> {{value.T2}}
-                                </div>
-                                <hr>  
+                                </div>                                
                                 <hr>
                                 <div class="form-group">
                                     <h5 for="mode">owner</h5> {{value.owner}}
@@ -200,8 +190,7 @@
                                 <hr>                                                                                                                         
                             </div>
                             <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                            <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>                            
                             </div>
                         </div>
                         </div>
@@ -212,7 +201,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title fs-5" id="staticBackdropLabel">Update Details</h5>
+                <h5 class="modal-title fs-5" id="staticBackdropLabel">Update TA Details</h5>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -324,12 +313,6 @@
                         <label for="TA_comments">Update TA Comments</label>
                         <br>
                         <input type="text" name="TA_comments" id="TA_comments" class="form-control" placeholder="{{value.TA_comments}}">
-                    </div>
-                    <div class="form-group">
-                        <label for="comment_by_prerana">Update Comment By Prerana</label>
-                        <br>
-                        <input type="text" name="comment_by_prerana" id="comment_by_prerana" class="form-control"
-                            placeholder="{{value.comment_by_prerana}}">
                     </div>
                     <div class="form-group">
                         <label for="T1_panel">Update T1 Panel</label>

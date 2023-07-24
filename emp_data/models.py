@@ -31,6 +31,11 @@ class Role(models.Model):
     def __str__(self):
         return self.role_name
     
+class Department(models.Model):
+    department=models.CharField(max_length=100,primary_key=True)
+
+    def __str__(self):
+        return self.department
 
 class Employee(models.Model):
     e_id=models.CharField(max_length=100,primary_key=True)
@@ -45,6 +50,12 @@ class Employee(models.Model):
     estatus = models.CharField(max_length=100,null=True) # either free or deployed
     leadsoc_joining_date = models.DateField(null=True)
     customer_start_date = models.DateField(null=True)
+    department = models.ForeignKey(Department,on_delete=models.CASCADE) # designation
+    Manager = models.CharField(max_length=100,null=True)
+    IsManager = models.BooleanField(default=False)
+    BUH= models.CharField(max_length=50,null=True)
+
+
 
     class Meta:
         db_table = "employee"
@@ -79,6 +90,7 @@ class Customer_Requirements(models.Model):
     Bu_head=models.CharField(max_length=50,null=True)
     history = models.TextField(default="")
     reqIdPK = models.AutoField(primary_key=True)
+    priority = models.IntegerField(default=1)
 
 
     class Meta:
@@ -88,7 +100,7 @@ class Customer_Requirements(models.Model):
         return str(self.customers)
     
 
-
+'''
 class EmployeeReqMapping(models.Model):
     # req_id=models.IntegerField(default=0) #Model name change: Employee requirement 
 
@@ -108,6 +120,28 @@ class EmployeeReqMapping(models.Model):
 
     def __str__(self):
         return str(self.req_id)
+        '''
+
+class EmployeeReqMapping(models.Model):
+    # req_id=models.IntegerField(default=0) #Model name change: Employee requirement 
+
+    req_id=models.ForeignKey(Customer_Requirements, on_delete = models.CASCADE) #Model name change: Employee requirement 
+    name = models.CharField(max_length=100,null=True)
+    eskills = models.CharField(max_length=100,null=True)
+    estatus = models.CharField(max_length=100,null=True)
+    empstatus = models.CharField(max_length=100,null=True, default='')
+    added_date = models.DateField(null=True)
+    source = models.CharField(max_length=100,null=True, default='LEADSOC')
+    sourceid_1 = models.CharField(max_length=10,null=True) # Can We  give foriegn key from 3 different table, like VM,TA, employee
+    sourceid_2=models.CharField(max_length=10,null=True)
+    sourceid_3=models.IntegerField(default=0)
+    history = models.TextField(default="")
+
+    class Meta:
+        db_table = "employeereqmapping"
+
+    def __str__(self):
+        return str(self.req_id)
 
 
 # model for VM candidates 
@@ -117,6 +151,7 @@ class VmResource(models.Model):
     vendor_name = models.CharField(max_length=100)
     candidate_source = models.CharField(max_length=100) #whether from bench or market
     candidate_name = models.CharField(max_length=300)
+    resume = models.CharField(max_length=1000)
     skillset = models.CharField(max_length=500)
     experience = models.FloatField()
     education = models.CharField(max_length=500)
@@ -136,8 +171,7 @@ class VmResource(models.Model):
     phone_number = models.IntegerField()
     mode = models.CharField(max_length=500)
     vmIdPK = models.AutoField(primary_key=True,default=0)
-
-    # owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
+    owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
 
 
 
@@ -164,10 +198,11 @@ class Login(models.Model):
         db_table = "login"
 
 class TA_Resource(models.Model):
-    ta_id = models.CharField(max_length=10,unique=True)
+    ta_id = models.CharField(max_length=10,primary_key=True)
     archived = models.CharField(max_length=100)
     date = models.DateField()
     name = models.CharField(max_length=300)
+    resume = models.CharField(max_length=1000)
     BU = models.CharField(max_length=100)
     Position = models.CharField(max_length=100)
     skillset = models.CharField(max_length=500)
@@ -181,12 +216,11 @@ class TA_Resource(models.Model):
     notice_period = models.IntegerField()
     current_loc = models.CharField(max_length=500)
     preferred_loc = models.CharField(max_length=500)
-    phone_number = models.CharField(max_length=15,primary_key=True)
+    phone_number = models.CharField(max_length=15,unique=True)
     email = models.EmailField()
     status = models.CharField(max_length=100)
     BU_comments = models.CharField(max_length=1000)
-    TA_comments = models.CharField(max_length=1000)
-    #comment_by_prerana = models.CharField(max_length=500)
+    TA_comments = models.CharField(max_length=1000)    
     T1_panel = models.CharField(max_length=100)
     T1_IW_date = models.DateField()
     T2_panel = models.CharField(max_length=100)
@@ -196,7 +230,7 @@ class TA_Resource(models.Model):
     Domain = models.CharField(max_length=100)
     T1 = models.CharField(max_length=100)
     T2 = models.CharField(max_length=100)
-    # owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
+    owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
 
     class Meta:
         db_table = "TA_Resource"

@@ -26,7 +26,7 @@
             {% for values in form %}
             <tr>
                 <td>{{forloop.counter}}</td>
-                <td>{{values.eFname}} {{values.eLname}}</td>
+                <td>{{values.name}}</td>
 
                 <td>
                     <p class="btn-sm" data-toggle="modal" data-target="#hist{{reqIdPK}}">
@@ -72,13 +72,13 @@
 
                 
                 <td>
-                    {{values.empstatus}}
-                </td>
-                <td>
                     {{values.source}}
                 </td>
+                <td>
+                    
+                </td>
                  <td>
-                    {{values.sourceId}}
+                    {{values.empstatus}}
                 </td>
                 <td>
 
@@ -132,7 +132,7 @@
                       </div>
                     {% endif %}
                     <!--Delete button-->
-                    <button class="btn-danger btn-sm" onclick="location.href='/delete_Emp_Customer/{{values.eFname}}/{{reqIdPK}}'">
+                    <button class="btn-danger btn-sm" onclick="location.href='/deleteAppliedCandidates/{{values.e_id}}/{{reqIdPK}}'">
 
                         <i class="fa-solid fa-trash"></i>
                     </button>
