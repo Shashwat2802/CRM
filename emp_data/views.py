@@ -218,10 +218,13 @@ def filteredSaleReqs(request,bu,sales,st):
                                                         'sales_incharge': sales_incharge, 'bu_head': bu_head, 
                                                         'current_user':current_user,'bu_select': bu, "sales_select": sales, 'status_select': st})
 
-def filteredEmployees(request,bu,buh,manager):
+def listEmployeeFiltered(request,department,buh,manager):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    
     filter_conditions={}
-    if bu != 'All' and bu != 'Choose':
-        filter_conditions['Bu'] = bu
+    if department != 'All' and department != 'Choose':
+        filter_conditions['department'] = department
 
     if buh != 'All' and buh != 'Choose':
         filter_conditions['BUH'] = buh
@@ -229,16 +232,16 @@ def filteredEmployees(request,bu,buh,manager):
     if manager != 'All' and manager != 'Choose':
         filter_conditions['Manager'] = manager
 
-    print("FIlter COndition",filter_conditions,bu,buh,manager)
-    employees_data=  Employee.objects.filter(**filter_conditions)
-
+    print("FIlter COndition",filter_conditions,department,buh,manager)
+    employees=  Employee.objects.filter(**filter_conditions)
+    print("Employee list",employees)
     departments =getDepartmentList()
     buhList= getBUHList()
-    managers=getManagers()
-    current_user = request.user.username.title()     
-    return render(request,'showemp.html',{'employees_data':employees_data,
-                                            'manager': manager,'current_user':current_user, 
-                                            "bu_select": bu,  'buh_select': buh,'manager_select': manager,'departments':departments,'BUHList':buhList,'Manager':managers})    
+    Manager=getManagers()
+    current_user = request.user.username.title()       
+    return render(request, "showemp.html", {'employees':employees,
+                                            'statuslist':['Free','Deployed','Support Team'], 
+                                              'departments':departments,'BUHList':buhList,'Manager':Manager}) 
 
 
 def addSalesReqComment(request, reqIdPK):
@@ -609,17 +612,16 @@ def listEmployees(request):
     current_user = request.user.username
     current_emp = Employee.objects.get(eFname__icontains=current_user)
 
-    customerlist=Customer.objects.all()
-    experiencelist=EmpExperienceHistory.objects.all()   #RAGHU: This has to be changed from here
-    rolelist=Role.objects.all()
-    add_exp_btn = True
     departments =getDepartmentList()
     buhList= getBUHList()
     Manager=getManagers()
-    return render(request, "showemp.html", {'employees':employees,'customerlist':customerlist,
-                                            'experiencelist':experiencelist,'rolelist':rolelist,
-                                            'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp,
-                                              'add_exp_btn': add_exp_btn,'departments':departments,'BUHList':buhList,'Manager':Manager})
+    return render(request, "showemp.html", {'employees':employees,
+                                        'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp,
+                                            'departments':departments,'BUHList':buhList,'Manager':Manager})
+    # return render(request, "showemp.html", {'employees':employees,'customerlist':customerlist,
+    #                                         'experiencelist':experiencelist,'rolelist':rolelist,
+    #                                         'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp,
+    #                                           'add_exp_btn': add_exp_btn,'departments':departments,'BUHList':buhList,'Manager':Manager})
 
 # To delete employee details
 def deleteLeadSocEmployee(request, e_id):
