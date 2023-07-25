@@ -39,7 +39,6 @@ urlpatterns = [
     path("home",views.home),
     
    # customer requirements details
-    path("listSalesReqs", views.listSalesReqs),
     path('listSalesReqsFiltered/<str:bu>/<str:sales>/<str:st>',views.filteredSaleReqs),
     path('listEmployeeFiltered/<str:bu>/<str:buh>/<str:manager>',views.filteredEmployees),
     path("addSalesReqComment/<int:reqIdPK>", views.addSalesReqComment),

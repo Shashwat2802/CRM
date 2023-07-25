@@ -108,7 +108,7 @@ def addSalesReqs(request):
         if form.is_valid():
             form.save()
             messages.success(request,'Details Saved !')
-            return redirect('/listSalesReqs')
+            return redirect('/listSalesReqsFiltered/Choose/Choose/Choose')
         else:
             return HttpResponse(form.errors)
 
@@ -147,7 +147,7 @@ def updateSaleReqs(request,reqIdPK):
     # model_instance.history = request.POST['history']
 
     model_instance.save()
-    return redirect('/listSalesReqs')  
+    return redirect('/listSalesReqsFiltered/Choose/Choose/Choose')  
         
 
 def listCustomers(request):
@@ -193,19 +193,11 @@ def getSalesTeam():
 def getBUHList():
     return Employee.objects.filter(eRole='BUH')
 
-def listSalesReqs(request):
-    if not request.user.is_authenticated:
-        return redirect('home')
-    else :
-        customer_requirements = Customer_Requirements.objects.all()  #RAGHU : To limit, Sort, select only Active
-        current_user = request.user.username.title()
-        sales_incharge = getSalesTeam()
-        bu_head = getBUHList()
-        return render(request,'show_cust_requirements.html',{'customer_requirements':customer_requirements, 
-                                                             'sales_incharge': sales_incharge, 'bu_head': bu_head, 'current_user':current_user,
-                                                             'bu_select':'Choose', "sales_select":'Choose', 'status_select':'Choose'})
 
 def filteredSaleReqs(request,bu,sales,st):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    
     filter_conditions={}
     if bu != 'All' and bu != 'Choose':
         filter_conditions['Bu_head'] = bu
@@ -258,7 +250,7 @@ def addSalesReqComment(request, reqIdPK):
         print("Existing Comment",salesReq.history)
         salesReq.history=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+salesReq.history
         salesReq.save()
-        return redirect('/listSalesReqs')
+        return redirect('/listSalesReqsFiltered/Choose/Choose/Choose')
 
 def cust_req_dropdown(request, ref): 
     if ref[:1] == 'P':
@@ -276,7 +268,7 @@ def cust_req_dropdown(request, ref):
         cust = Customer_Requirements.objects.get(pk=ref[1:2])
         cust.Bu_head = ref[2:]
     cust.save()
-    return redirect('/listSalesReqs')
+    return redirect('/listSalesReqsFiltered/Choose/Choose/Choose')
     
 
 def salesSummary(request):
@@ -672,7 +664,7 @@ def save_emp_details(request):
                 eskills=employee.eskills
             )
             add_emp.save()
-    return redirect("/listSalesReqs")
+    return redirect("/listEmployees")
 
 
 # this is working upload employee data to model
@@ -823,7 +815,7 @@ def salesDataUpload(request):
                 data[11],                                                    
                 )
             value.save()
-        return redirect("/listSalesReqs")
+        return redirect("/listSalesReqsFiltered/Choose/Choose/Choose")
         
     return render(request,'customer_requirement_data.html')
 
