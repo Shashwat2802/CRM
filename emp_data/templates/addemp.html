@@ -1,91 +1,160 @@
 {% extends 'basic.html' %}
 
-    <!--{% load static %}
+<!--{% load static %}
     <link rel="stylesheet" type="text/css" href="{% static '/styles.css' %}">-->
-    
+
 {% block body %}
-  <div>
-    <div class="container">
-          <h3 style="color: rgba(16, 4, 33, 0.926);padding-top: 5%;">Add Employee Details</h3>
+<div>
+  <div class="container">
+    <h3 style="color: rgba(16, 4, 33, 0.926); padding-top: 5%">Add Employee Details</h3>
     <form action="/addEmployee" method="POST">
       {% csrf_token %}
 
-     <div class="form-group">
+      <div class="form-group">
         <label for="e_id">Employee Id</label>
-        <input type="text" class="form-control" id="e_id" name="e_id" placeholder="Enter Employee ID">
+        <input
+          type="text"
+          class="form-control"
+          id="e_id"
+          name="e_id"
+          placeholder="Enter Employee ID"
+        />
       </div>
       <div class="form-group">
         <label for="eFname">First Name:</label>
-        <input type="text" class="form-control" id="eFname" name="eFname" placeholder="Enter First Name">
+        <input
+          type="text"
+          class="form-control"
+          id="eFname"
+          name="eFname"
+          placeholder="Enter First Name"
+        />
       </div>
-        <div class="form-group">
-          <label for="eLname">Last Name:</label>
-          <input type="text" class="form-control" id="eLname" name="eLname" placeholder="enter Last name">
-        </div>
-        <div class="form-group">
-          <label for="refer_Customer">Select Customer</label>
-          <select name="refer_Customer" id="refer_Customer">
-            {% for val in zipped_lists %}
-            <option value="{{val}}">{{val}}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="BU">BU</label>
-          <input type="text" class="form-control" id="BU" name="BU" placeholder="Enter Bu name">
-        </div>
-        <div class="form-group">
-          <label for="BUH">BUH</label>
-          <input type="text" class="form-control" id="BUH" name="BUH" placeholder="Enter BUH">
-        </div>
-        <div class="form-group">
-          <label for="BU">Manager</label>
-          <input type="text" class="form-control" id="Manager" name="Manager" placeholder="Enter Manager">
-        </div>
-        <div class="form-group">
-          <label for="eEmail">Email:</label>
-          <input type="eEmail" class="form-control" id="eEmail" name="eEmail" placeholder="enter email">
-        </div>
-        <div class="form-group">
-          <label for="ePhone">Phone Number:</label>
-          <input type="Phone" class="form-control" id="ePhone" name="ePhone" placeholder="enter phone number">
-        </div>
-        <div class="form-group">
-          <label for="eExperience">Experience:</label>
-          <input type="number" class="form-control" id="eExperience" name="eExperience" placeholder="enter experience">
-        </div>
-        <div class="form-group">
-          <label for="eskills">Skills:</label>
-          <input type="text" class="form-control" id="eskills" name="eskills" placeholder="Like C Python Enter multiple skills">
-        </div>
-        <div class="form-group">
-          <label for="eRole">Select Role</label>
-          <select name="eRole" id="eRole">
-            {% for val in rolelist %}
-            <option value="{{val}}">{{val}}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="estatus">Employee status:</label>
-          <select name="estatus" id="estatus">
-            {% for val in status %}
-            <option value="{{val}}">{{val}}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="leadsoc_joining_date">Joining Date to LeadSoc:</label>
-          <input type="date" class="form-control" id="leadsoc_joining_date" name="leadsoc_joining_date" placeholder="enter joining date to leadsoc">
-        </div>
-        <div class="form-group">
-          <label for="customer_start_date">Customer Start Date:</label>
-          <input type="date" class="form-control" id="customer_start_date" name="customer_start_date" placeholder="enter customer deployed date">
-        </div>
+      <div class="form-group">
+        <label for="eLname">Last Name:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="eLname"
+          name="eLname"
+          placeholder="enter Last name"
+        />
+      </div>
+      <div class="form-group">
+        <label for="refer_Customer">Select Customer</label>
+        <select name="refer_Customer" id="refer_Customer">
+          {% for val in customerList %}
+          <option value="{{val}}">{{val}}</option>
+          {% endfor %}
+        </select>
+      </div>
 
-        <button type="submit" class="btn btn-success">Submit</button><br><br><br>
+      <div class="form-group">
+        <label for="department">Department</label>
+        <select name="department" id="department">
+          {% for val in departments %}
+          <option value="{{val}}">{{val}}</option>
+          {% endfor %}
+        </select>
+      </div>
 
-      
-      </form>
-  </div></div>
+      <div class="form-group">
+        <label for="department">BUH</label>
+        <select name="BUH" id="BUH">
+          {% for val in buhList %}
+          <option value="{{val}}">{{val}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="Manager">Manager</label>
+        <select name="Manager" id="Manager">
+          {% for val in managerList %}
+          <option value="{{val}}">{{val}}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="eEmail">Email:</label>
+        <input
+          type="eEmail"
+          class="form-control"
+          id="eEmail"
+          name="eEmail"
+          placeholder="enter email"
+        />
+      </div>
+      <div class="form-group">
+        <label for="ePhone">Phone Number:</label>
+        <input
+          type="Phone"
+          class="form-control"
+          id="ePhone"
+          name="ePhone"
+          placeholder="enter phone number"
+        />
+      </div>
+      <div class="form-group">
+        <label for="eExperience">Experience:</label>
+        <input
+          type="number"
+          class="form-control"
+          id="eExperience"
+          name="eExperience"
+          placeholder="enter experience"
+        />
+      </div>
+      <div class="form-group">
+        <label for="eskills">Skills:</label>
+        <input
+          type="text"
+          class="form-control"
+          id="eskills"
+          name="eskills"
+          placeholder="Like C Python Enter multiple skills"
+        />
+      </div>
+      <div class="form-group">
+        <label for="eRole">Select Role</label>
+        <select name="eRole" id="eRole">
+          {% for val in rolelist %}
+          <option value="{{val}}">{{val}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="estatus">Employee status:</label>
+        <select name="estatus" id="estatus">
+          {% for val in status %}
+          <option value="{{val}}">{{val}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="leadsoc_joining_date">Joining Date to LeadSoc:</label>
+        <input
+          type="date"
+          class="form-control"
+          id="leadsoc_joining_date"
+          name="leadsoc_joining_date"
+          placeholder="enter joining date to leadsoc"
+        />
+      </div>
+      <div class="form-group">
+        <label for="customer_start_date">Customer Start Date:</label>
+        <input
+          type="date"
+          class="form-control"
+          id="customer_start_date"
+          name="customer_start_date"
+          placeholder="enter customer deployed date"
+        />
+      </div>
+
+      <button type="submit" class="btn btn-success">Submit</button><br /><br /><br />
+    </form>
+  </div>
+</div>
 {% endblock %}

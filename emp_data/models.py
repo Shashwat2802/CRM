@@ -43,7 +43,7 @@ class Employee(models.Model):
     eLname = models.CharField(max_length=50,null=True)
     refer_Customer = models.ForeignKey(Customer, on_delete = models.CASCADE)
     eEmail = models.EmailField(max_length=200,null=True)
-    ePhone = models.CharField(max_length=50,unique=True)
+    ePhone = models.CharField(max_length=50)
     eExperience = models.IntegerField(default=0,null=True)
     eskills = models.CharField(max_length=100,null=True)
     eRole = models.ForeignKey(Role,on_delete=models.CASCADE) # designation
