@@ -58,7 +58,7 @@
             <select name="statuslist" id="status" class="btn" style="border-radius: 30px;">
                 <option value="{{status_select}}" selected disabled hidden>{{status_select}}</option>
                 <option value="Active">Active</option>
-                <option value="Inactive">Closed</option>
+                <option value="Closed">Closed</option>
                 <option value="All">Both</option>
             </select>
         </span>
@@ -79,7 +79,7 @@
         var buhead = document.querySelector("#buhead").value;
         var salesincharge = document.querySelector("#sales").value;
         var status = document.querySelector("#status").value;
-        var url = '/filter/' + encodeURIComponent(buhead) + '/' + encodeURIComponent(salesincharge) + '/' + encodeURIComponent(status);
+        var url = '/listSalesReqsFiltered/' + encodeURIComponent(buhead) + '/' + encodeURIComponent(salesincharge) + '/' + encodeURIComponent(status);
         return url;
     }
 </script>
