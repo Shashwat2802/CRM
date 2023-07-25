@@ -33,7 +33,7 @@
 
     <span class="btn">
       DEPT
-      <select class="btn" name="deptList" id="Bu" style="border-radius: 30px;">
+      <select class="btn" name="department" id="Bu" style="border-radius: 30px;">
         <!-- <option value="{{bu_select}}" selected hidden disabled>{{bu_select}}</option> -->
         {% for val in departments %}
         <option value="{{val.department}}">{{val.department}}</option>
@@ -77,10 +77,11 @@
 </div>
 <script>
   function getLink() {
-    var Bu = document.querySelector("#Bu").value;
+    var department = document.querySelector("#department").value;
     var buhead = document.querySelector("#buhead").value;
     var manager = document.querySelector("#manager").value;
-    var url = '/listEmployeeFiltered/' + encodeURIComponent(Bu) + '/' + encodeURIComponent(buhead) + '/' + encodeURIComponent(manager);
+    var url = '/listEmployeeFiltered/' + encodeURIComponent(department) + '/' + encodeURIComponent(buhead) + '/' + encodeURIComponent(manager);
+
     return url;
   }
 </script>

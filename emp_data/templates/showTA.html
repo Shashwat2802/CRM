@@ -6,6 +6,48 @@
 {% endblock %}
 
 {% block body %}
+<div class="form-inline">
+    <div class="d-inline-block">
+        <span style="margin-left: 30;" class="btn">
+            BUH
+            <select name="buhead" id="buhead" class="btn" style="border-radius: 30px;">
+                <option value="{{bu_select}}" selected disabled hidden>{{bu_select}}</option>
+                {% for val in Bu_head %}
+                <option value="{{val.eFname}}">{{val.eFname}}</option>
+                {% endfor %}
+                <option value="All">All</option>
+            </select>
+        </span>
+
+        <span style="margin-left: 30;" class="btn">
+            Status
+            <select name="archivestatus" id="archivestatus" class="btn" style="border-radius: 30px;">
+                <option value="{{status_select}}" selected disabled hidden>{{status_select}}</option>
+                <option value="Archived">Archived</option>
+                <option value="Not Archived">Not Archived</option>
+                <option value="Both">Both</option>
+            </select>
+        </span>
+        <span style="margin-left: 30;">
+            <button class="go-btn" style="border-radius: 30px;" type="submit"
+                onClick="location.href = getLink()">Search</button>
+
+        </span>
+        <script>
+            function getLink() {
+                var buhead = document.querySelector("#buhead").value;
+                var status = document.querySelector("#archivestatus").value;
+                var url = '/filterTa/' + encodeURIComponent(buhead) + '/' + encodeURIComponent(status);
+                return url;
+            }
+        </script>
+        <span style="margin-left: 10;">
+            <button class="go-btn" style="border-radius: 30px;" type="submit"
+                onclick="location.href='/showTa'">Refresh</button>
+        </span>
+
+    </div>
+</div>
 <center>
     <div>
         <h2 class="bg-info text-white">List of TA</h2>
@@ -20,8 +62,11 @@
                 <th>Archive Status</th>
                 <th>Position</th>
                 <th>Skill Set</th>
+                <th>Remarks</th>
                 <th>Phone Number</th>
                 <th>Email Id</th>
+                <th>Owner</th>
+                <th>Resume</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -33,8 +78,11 @@
                 <td>{{value.archived}}</td>
                 <td>{{value.Position}}</td>
                 <td>{{value.skillset}}</td>
+                <td></td>
                 <td>{{value.phone_number}}</td>
                 <td>{{value.email}}</td>
+                <td>{{value.owner}}</td>
+                <td></td>
                 <td>
                     <button class="btn-success btn-sm" data-toggle="modal"
                         data-target="#modalupdate{{value.phone_number}}"><i class="fa-solid fa-pen-to-square"></i>
@@ -205,13 +253,16 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form action="#" method="POST">
+                <form action="/updateTaDetails{{value.ta_id}}" method="POST">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="archived">Update Archived</label>
-                        <br>
-                        <input type="text" name="archived" id="archived" class="form-control" placeholder="{{value.archived}}">
-                    </div>
+                        <label for="estatus">Archived:</label>
+                        <select name="estatus" id="estatus">
+                          {% for val in status %}
+                          <option value="{{val}}">{{val}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
                     <div class="form-group">
                         <label for="date">Update Date</label>
                         <br>
@@ -223,10 +274,14 @@
                         <input type="text" name="name" id="name" class="form-control" placeholder="{{value.name}}">
                     </div>
                     <div class="form-group">
-                        <label for="BU">Update BU</label>
-                        <br>
-                        <input type="text" name="BU" id="BU" class="form-control" placeholder="{{value.BU}}">
-                    </div>
+                        <label for="Bu_head">Select BU</label>
+                        <select name="Bu_head" id="Bu_head">
+                            <option value="{{ value.owner }}">Select{{ value.owner }}</option>
+                          {% for val in BUList %}
+                          <option value="{{val}}">{{val}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
                     <div class="form-group">
                         <label for="Position">Update Position</label>
                         <br>
@@ -303,17 +358,8 @@
                         <label for="status">Update Status</label>
                         <br>
                         <input type="text" name="status" id="status" class="form-control" placeholder="{{value.status}}">
-                    </div>
-                    <div class="form-group">
-                        <label for="BU_comments">Update BU Comments</label>
-                        <br>
-                        <input type="text" name="BU_comments" id="BU_comments" class="form-control" placeholder="{{value.BU_comments}}">
-                    </div>
-                    <div class="form-group">
-                        <label for="TA_comments">Update TA Comments</label>
-                        <br>
-                        <input type="text" name="TA_comments" id="TA_comments" class="form-control" placeholder="{{value.TA_comments}}">
-                    </div>
+                    </div>                  
+                   
                     <div class="form-group">
                         <label for="T1_panel">Update T1 Panel</label>
                         <br>
@@ -358,13 +404,22 @@
                         <label for="T2">Update T2</label>
                         <br>
                         <input type="text" name="T2" id="T2" class="form-control" placeholder="{{value.T2}}">
-                    </div>
+                    </div>    
+                    <div class="form-group">
+                        <label for="owner">Owner</label>
+                        <select name="owner" id="owner">
+                            <option value="{{ value.owner }}">Select{{ value.owner }}</option>
+                          {% for val in ownerList %}
+                          <option value="{{val}}">{{val}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>              
                     <!-- <div class="form-group">
                                     <label for="resume">Resume:</label>
                                     <input type="file" name="resume" id="resume">
                                 </div> -->
                     <br>
-                    <input type="submit" value="Update Details">
+                    <input type="submit" class="btn btn-info" value="Update Details">
                 </form>
 
             </div>

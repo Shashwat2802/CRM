@@ -10,10 +10,13 @@
             <input type="text" name="ta_id" id="ta_id" class="form-control" placeholder="TA ID">
         </div>
         <div class="form-group">
-            <label for="archived">Archived</label>
-            <br>
-            <input type="text" name="archived" id="archived" class="form-control" placeholder="Archived / closed">
-        </div>
+            <label for="estatus">Archived:</label>
+            <select name="estatus" id="estatus">
+              {% for val in status %}
+              <option value="{{val}}">{{val}}</option>
+              {% endfor %}
+            </select>
+          </div>
         <div class="form-group">
             <label for="date">Date</label>
             <br>
@@ -24,11 +27,15 @@
             <br>
             <input type="text" name="name" id="name" class="form-control" placeholder="Name">
         </div>
-         <div class="form-group">
-        <label for="BU">BU</label>
-        <br>
-        <input type="text" name="BU" id="BU" class="form-control" placeholder=" BU">
-        </div>
+        <div class="form-group">
+            <label for="Bu_head">Select BU</label>
+            <select name="Bu_head" id="Bu_head">
+                <option value="{{ value.owner }}">Select{{ value.owner }}</option>
+              {% for val in BUList %}
+              <option value="{{val}}">{{val}}</option>
+              {% endfor %}
+            </select>
+          </div>
         <div class="form-group">
             <label for="Position">Position</label>
             <br>
@@ -163,6 +170,7 @@
         <div class="form-group">
             <label for="owner">Owner</label>
             <select name="owner" id="owner">
+                <option value="{{ value.owner }}">Select{{ value.owner }}</option>
               {% for val in ownerList %}
               <option value="{{val}}">{{val}}</option>
               {% endfor %}

@@ -218,10 +218,13 @@ def filteredSaleReqs(request,bu,sales,st):
                                                         'sales_incharge': sales_incharge, 'bu_head': bu_head, 
                                                         'current_user':current_user,'bu_select': bu, "sales_select": sales, 'status_select': st})
 
-def filteredEmployees(request,bu,buh,manager):
+def listEmployeeFiltered(request,department,buh,manager):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    
     filter_conditions={}
-    if bu != 'All' and bu != 'Choose':
-        filter_conditions['Bu'] = bu
+    if department != 'All' and department != 'Choose':
+        filter_conditions['department'] = department
 
     if buh != 'All' and buh != 'Choose':
         filter_conditions['BUH'] = buh
@@ -229,16 +232,18 @@ def filteredEmployees(request,bu,buh,manager):
     if manager != 'All' and manager != 'Choose':
         filter_conditions['Manager'] = manager
 
-    print("FIlter COndition",filter_conditions,bu,buh,manager)
-    employees_data=  Employee.objects.filter(**filter_conditions)
-
+    print("FIlter COndition",filter_conditions,department,buh,manager)
+    employees=  Employee.objects.filter(**filter_conditions)
+    print("Employee list",employees)
     departments =getDepartmentList()
     buhList= getBUHList()
-    managers=getManagers()
-    current_user = request.user.username.title()     
-    return render(request,'showemp.html',{'employees_data':employees_data,
-                                            'manager': manager,'current_user':current_user, 
-                                            "bu_select": bu,  'buh_select': buh,'manager_select': manager,'departments':departments,'BUHList':buhList,'Manager':managers})    
+
+    Manager=getManagers()
+    current_user = request.user.username.title()       
+    return render(request, "showemp.html", {'employees':employees,
+                                            'statuslist':['Free','Deployed','Support Team'], 
+                                              'departments':departments,'BUHList':buhList,'Manager':Manager}) 
+
 
 
 def addSalesReqComment(request, reqIdPK):
@@ -309,7 +314,7 @@ def addCommentToEmployeedReqTable(request, reqIdPK,source,sourceId):
         return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
 def getOwnerList():
-    return Employee.objects.filter(Q(eRole='TA_HEAD')|Q(eRole='TA_STAFF'))
+    return Employee.objects.filter(Q(eRole='TA_HEAD')|Q(eRole='TA_STAFF')|Q(eRole='VM_STAFF'))
 
 def addTa(request):
     form=TA_Form()
@@ -321,12 +326,26 @@ def addTa(request):
         else:
             return HttpResponse(form.errors)
     else:
+        BUList=list(map(lambda x:x.eFname ,getBUHList()))
         ownerList = list(map(lambda x:x.eFname,getOwnerList()))        
-        return render(request,'addTA.html',{'ownerList':ownerList})
+        return render(request,'addTA.html',{'BUList':BUList,'ownerList':ownerList,'status':['Select','Archived','Closed']})
 
 def showTa(request):
     ta_instance=TA_Resource.objects.all()
-    return render(request,'showTA.html',{'ta_instance':ta_instance})
+    Bu_head=getBUHList()
+    return render(request,'showTA.html',{'ta_instance':ta_instance,'Bu_head':Bu_head})
+
+def filterTa(request,buhead,archive):
+    filtered={}
+    if buhead != 'All' :
+        filtered['BU']=buhead
+    if archive !='Both':
+        filtered['archived']=archive
+    print("Filtered Condition",filtered)
+    ta_instance=TA_Resource.objects.filter(**filtered)
+    Bu_head=getBUHList()
+    return render(request,'showTA.html',{'ta_instance':ta_instance,'Bu_head':Bu_head,
+                                         'status_select':archive,'bu_select':buhead})
 
 def deleteTa(request,phone_number):
     instance=TA_Resource.objects.get(pk=phone_number)
@@ -441,7 +460,8 @@ def selection_status(request, estatus,reqIdPK):
 # To display all the VM candidates 
 def showVm(request):
     all_vm_candidates = VmResource.objects.all()
-    return render(request, "show_vm_candidates.html", {"candidate_list":all_vm_candidates})
+    ownerList = list(map(lambda x:x.eFname,getOwnerList()))  
+    return render(request, "show_vm_candidates.html", {"candidate_list":all_vm_candidates,'ownerList':ownerList})
 
 # Form to add only one VM candidate 
 def addVm(request): 
@@ -475,6 +495,45 @@ def showVmList(request,reqIdPK):
             form=VmResource.objects.filter(skillset__icontains=skills)
     
     return render(request,'selected_vm_list.html',{'form':form,'reqIdPK':reqIdPK})
+
+def updateTaDetails(request,ta_id):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    ta_instance = TA_Resource.objects.get(pk=ta_id)
+    if request.method=='POST':      
+
+        ta_instance.archived=request.POST['archived']
+        ta_instance.date=request.POST['date']
+        ta_instance.name=request.POST['name']
+        ta_instance.BU=request.POST['BU']
+        ta_instance.Position=request.POST['Position']
+        ta_instance.skillset=request.POST['skillset']
+        ta_instance.education=request.POST['education']
+        ta_instance.experience=request.POST['experience']
+        ta_instance.relevant_exp=request.POST['relevant_exp']
+        ta_instance.current_org=request.POST['current_org']
+        ta_instance.current_ctc=request.POST['current_ctc']
+        ta_instance.expected_ctc=request.POST['expected_ctc']
+        ta_instance.actual_notice_period=request.POST['actual_notice_period']
+        ta_instance.notice_period=request.POST['notice_period']
+        ta_instance.current_loc=request.POST['current_loc']
+        ta_instance.preferred_loc=request.POST['preferred_loc']
+        ta_instance.phone_number=request.POST['phone_number']
+        ta_instance.email=request.POST['email']
+        ta_instance.status=request.POST['status']
+        ta_instance.T1_panel=request.POST['T1_panel']
+        ta_instance.T1_IW_date=request.POST['T1_IW_date']
+        ta_instance.T2_panel=request.POST['T2_panel']
+        ta_instance.T2_IW_date=request.POST['T2_IW_date']
+        ta_instance.source=request.POST['source']
+        ta_instance.Rec_prime=request.POST['Rec_prime']
+        ta_instance.Domain=request.POST['Domain']
+        ta_instance.T1=request.POST['T1']
+        ta_instance.T2=request.POST['T2']
+        ta_instance.owner=request.POST['owner']
+        ta_instance.save()
+
+    return redirect("/showTa")
 
 def mapEmpToReq(request,reqIdPK,choice):
     
@@ -523,6 +582,7 @@ def vmDataUpload(request):
             return render(request, 'upload_vm_candidates.html')
         imported_data = dataset.load(new_vm.read(), format='xlsx')
         for data in imported_data:
+            print(":VM Onwer",data[24] )
             value = VmResource(
                 position_status=data[0],
                 pr_date=data[1],
@@ -548,7 +608,7 @@ def vmDataUpload(request):
                 phone_number=data[21],
                 mode=data[22],
                 vmIdPK = data[23],
-                owner = Employee(e_id=data[24])
+                owner = Employee.objects.get(eFname=data[24])
             )
             value.save()
         return redirect("/showVm")
@@ -609,17 +669,18 @@ def listEmployees(request):
     current_user = request.user.username
     current_emp = Employee.objects.get(eFname__icontains=current_user)
 
-    customerlist=Customer.objects.all()
-    experiencelist=EmpExperienceHistory.objects.all()   #RAGHU: This has to be changed from here
-    rolelist=Role.objects.all()
-    add_exp_btn = True
     departments =getDepartmentList()
     buhList= getBUHList()
     Manager=getManagers()
-    return render(request, "showemp.html", {'employees':employees,'customerlist':customerlist,
-                                            'experiencelist':experiencelist,'rolelist':rolelist,
-                                            'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp,
-                                              'add_exp_btn': add_exp_btn,'departments':departments,'BUHList':buhList,'Manager':Manager})
+
+    return render(request, "showemp.html", {'employees':employees,
+                                        'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp,
+                                            'departments':departments,'BUHList':buhList,'Manager':Manager})
+    # return render(request, "showemp.html", {'employees':employees,'customerlist':customerlist,
+    #                                         'experiencelist':experiencelist,'rolelist':rolelist,
+    #                                         'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp,
+    #                                           'add_exp_btn': add_exp_btn,'departments':departments,'BUHList':buhList,'Manager':Manager})
+
 
 # To delete employee details
 def deleteLeadSocEmployee(request, e_id):
@@ -832,11 +893,13 @@ def taDataUpload(request):
             return render(request,'showTA.html')
         imported_data = dataset.load(new_details.read(), format='xlsx')
         for data in imported_data:
+            print("TA DATA",data)
+            print("Onwer", data[31],Employee.objects.get(eFname=data[31]),)
             value=TA_Resource(
                 ta_id=data[0],
                 archived=data[1],
                 date=data[2],
-                name=data[3],
+                name=data[3],                
                 BU=data[4],
                 Position=data[5],
                 skillset=data[6],
@@ -863,9 +926,9 @@ def taDataUpload(request):
                 Rec_prime=data[27],
                 Domain=data[28],
                 T1=data[29],
-                T2=data[30],
-                
-                owner=Employee(e_id=data[31])                
+                T2=data[30],                
+                owner=Employee.objects.get(eFname=data[31]),  
+                resume=data[32]              
                 )
             value.save()
         return redirect('/showTa')   
