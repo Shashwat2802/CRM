@@ -150,8 +150,7 @@ class VmResource(models.Model):
     pr_date = models.DateField()
     vendor_name = models.CharField(max_length=100)
     candidate_source = models.CharField(max_length=100) #whether from bench or market
-    candidate_name = models.CharField(max_length=300)
-    resume = models.CharField(max_length=1000)
+    candidate_name = models.CharField(max_length=300)    
     skillset = models.CharField(max_length=500)
     experience = models.FloatField()
     education = models.CharField(max_length=500)
@@ -172,18 +171,13 @@ class VmResource(models.Model):
     mode = models.CharField(max_length=500)
     vmIdPK = models.AutoField(primary_key=True,default=0)
     owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
-
-
-
+    resume = models.CharField(max_length=1000)
 
     class Meta:
         db_table = "VmResource"
     def __str__(self):
         return str(self.candidate_name)
    
-
-
-
 class Employee_Details(models.Model):
     pass
 
@@ -197,12 +191,11 @@ class Login(models.Model):
     class Meta:
         db_table = "login"
 
-class TA_Resource(models.Model):
+class TA_Resource(models.Model): # TA_resource contain 33 records
     ta_id = models.CharField(max_length=10,primary_key=True)
     archived = models.CharField(max_length=100)
     date = models.DateField()
-    name = models.CharField(max_length=300)
-    resume = models.CharField(max_length=1000)
+    name = models.CharField(max_length=300)    
     BU = models.CharField(max_length=100)
     Position = models.CharField(max_length=100)
     skillset = models.CharField(max_length=500)
@@ -231,6 +224,7 @@ class TA_Resource(models.Model):
     T1 = models.CharField(max_length=100)
     T2 = models.CharField(max_length=100)
     owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
+    resume = models.CharField(max_length=1000)
 
     class Meta:
         db_table = "TA_Resource"
