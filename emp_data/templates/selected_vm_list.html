@@ -24,11 +24,16 @@
                 </div>
             </td>
             <td style="padding : 15px; margin-top: 30px;">
-                <div onclick="location.href='showTaList/{{reqIdPK}}';">
+                <div onclick="location.href=getlink()">
                     <input type="radio">
                     <p>TA Resources</p>
                 </div>
             </td>
+            <script>
+                function getlink(){
+                    return '/showTaList/{{reqIdPK}}'
+                }
+            </script>
 
             <td style="padding : 15px; margin-top: 30px;">
                 <div onclick="location.href='';">

@@ -197,7 +197,7 @@ class Login(models.Model):
     class Meta:
         db_table = "login"
 
-class TA_Resource(models.Model):
+class TA_Resource(models.Model): # TA_resource contain 33 records
     ta_id = models.CharField(max_length=10,primary_key=True)
     archived = models.CharField(max_length=100)
     date = models.DateField()

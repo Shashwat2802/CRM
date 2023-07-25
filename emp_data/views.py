@@ -216,8 +216,9 @@ def filteredSaleReqs(request,bu,sales,st):
     if st != 'All' and st != 'Choose':
         filter_conditions['Position_Status'] = st
 
-    print("FIlter COndition",filter_conditions,bu,sales,st)
+    print("FIlter Condition",filter_conditions,bu,sales,st)
     customer_requirements=  Customer_Requirements.objects.filter(**filter_conditions)
+    
 
     bu_head = getBUHList()
     current_user = request.user.username.title() 
@@ -329,12 +330,29 @@ def addTa(request):
         else:
             return HttpResponse(form.errors)
     else:
+        BUList=list(map(lambda x:x.eFname ,getBUHList()))
         ownerList = list(map(lambda x:x.eFname,getOwnerList()))        
-        return render(request,'addTA.html',{'ownerList':ownerList})
+        return render(request,'addTA.html',{'BUList':BUList,'ownerList':ownerList,'status':['Select','Archived','Closed']})
 
 def showTa(request):
     ta_instance=TA_Resource.objects.all()
-    return render(request,'showTA.html',{'ta_instance':ta_instance})
+    Bu_head=getBUHList()
+    return render(request,'showTA.html',{'ta_instance':ta_instance,'Bu_head':Bu_head})
+
+def filterTa(request,buhead,archive):
+    filtered={}
+    if buhead != 'All' :
+        filtered['BU']=buhead
+    if archive !='Both':
+        filtered['archived']=archive
+    print("Filtered Condition",filtered)
+    ta_instance=TA_Resource.objects.filter(**filtered)
+    Bu_head=getBUHList()
+    return render(request,'showTA.html',{'ta_instance':ta_instance,'Bu_head':Bu_head,'status_select':archive,'bu_select':buhead})
+    
+    
+
+
 
 def deleteTa(request,phone_number):
     instance=TA_Resource.objects.get(pk=phone_number)
@@ -449,7 +467,8 @@ def selection_status(request, estatus,reqIdPK):
 # To display all the VM candidates 
 def showVm(request):
     all_vm_candidates = VmResource.objects.all()
-    return render(request, "show_vm_candidates.html", {"candidate_list":all_vm_candidates})
+    ownerList = list(map(lambda x:x.eFname,getOwnerList()))  
+    return render(request, "show_vm_candidates.html", {"candidate_list":all_vm_candidates,'ownerList':ownerList})
 
 # Form to add only one VM candidate 
 def addVm(request): 
@@ -860,8 +879,7 @@ def taDataUpload(request):
                 Rec_prime=data[27],
                 Domain=data[28],
                 T1=data[29],
-                T2=data[30],
-                
+                T2=data[30],                
                 owner=Employee(e_id=data[31])                
                 )
             value.save()

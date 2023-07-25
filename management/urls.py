@@ -80,6 +80,7 @@ urlpatterns = [
     #TA Path
     path('addTa',views.addTa),
     path('showTa',views.showTa),
+    path('filterTa/<str:buhead>/<str:archive>',views.filterTa),
     path('taDataUpload',views.taDataUpload),
     path('deleteTa/<int:phone_number>',views.deleteTa),
 
