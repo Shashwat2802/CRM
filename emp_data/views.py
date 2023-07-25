@@ -368,12 +368,19 @@ def job_description(request):
 
 
 def freeFromAllSource(request,reqIdPK):
-    form = Employee.objects.filter(Q(estatus ='Free')|Q(estatus='pendingProcessing') ).values()
+    selected_employee=EmployeeReqMapping.objects.filter(req_id=reqIdPK)
+    fnamelist=[]
+    lnamelist=[]
+    for item in selected_employee:
+        namelist=item.name.split(' ',1)
+        fnamelist.append(namelist[0])
+        lnamelist.append(namelist[1])
+    form = Employee.objects.filter(Q(estatus ='Free')|Q(estatus='pendingProcessing')).exclude(eFname__in=fnamelist,eLname__in=lnamelist).values()
     if request.method == "GET":   
         skills = request.GET.get('searchskill')      
         if skills != None: 
-            form = Employee.objects.filter(eskills__icontains= skills)
-    return render(request,'show_candidate.html',{'form':form ,'reqIdPK':reqIdPK})
+            form = Employee.objects.filter(Q(estaus='Free')|Q(estatus='pendingProcessing'),eskills__icontains= skills).exclude(eFname__in=fnamelist,eLname__in=lnamelist).values()
+    return render(request,'show_candidate.html',{'form':form ,'reqIdPK':reqIdPK,'selected_employee':selected_employee})
 
 def checkbox(request):
     if not request.user.is_authenticated:
@@ -428,8 +435,10 @@ def mappedEmployeeToCustomer(request,reqIdPK):
 
 
 
-def selection_status(request, estatus,reqIdPK): 
+def selection_status(request, estatus,reqIdPK):
     model_instance = EmployeeReqMapping.objects.get(name=estatus[2:])
+    name=estatus[2:]
+    namelist=name.split(' ',1)
     #model_instance = EmployeeReqMapping.objects.get(req=req_id)
     requirement_instance=Customer_Requirements.objects.get(pk=reqIdPK)
 
@@ -438,6 +447,9 @@ def selection_status(request, estatus,reqIdPK):
         requirement_instance.remain_positions-=1
         model_instance.save()
         requirement_instance.save()
+        emp_instance=Employee.objects.get(eFname=namelist[0],eLname=namelist[1])
+        emp_instance.estatus='Selected'
+        emp_instance.save()
 
     elif estatus[:2] == 'RJ': 
         model_instance.empstatus = 'Rejected'
@@ -486,20 +498,28 @@ def update_vm_candidates(request):
     pass
 
 def showTaList(request,reqIdPK):
-    form=TA_Resource.objects.filter(status='Selected').values()
+    selected=EmployeeReqMapping.objects.filter(req_id=reqIdPK)
+    namelist=[]
+    for item in selected:
+        namelist.append(item.name)
+    form=TA_Resource.objects.filter(status='Selected').exclude(name__in=namelist).values()
     if request.method=='GET':
         skills=request.GET.get('searchskill')
         if skills != None:
-            form=TA_Resource.objects.filter(skillset__icontains=skills)
+            form=TA_Resource.objects.filter(skillset__icontains=skills,status='Selected').exclude(name__in=namelist).values()
     
     return render(request,'selected_ta_list.html',{'form':form,"reqIdPK":reqIdPK})
 
 def showVmList(request,reqIdPK):
-    form=VmResource.objects.filter(interview_status='Selected').values()
+    selected=EmployeeReqMapping.objects.filter(req_id=reqIdPK)
+    namelist=[]
+    for item in selected:
+        namelist.append(item.name)
+    form=VmResource.objects.filter(interview_status='Selected').exclude(candidate_name__in=namelist).values()
     if request.method=='GET':
         skills=request.GET.get('searchskill')
         if skills!=None:
-            form=VmResource.objects.filter(skillset__icontains=skills)
+            form=VmResource.objects.filter(skillset__icontains=skills,interview_status='Selected').exclude(candidate_name__in=namelist).values()
     
     return render(request,'selected_vm_list.html',{'form':form,'reqIdPK':reqIdPK})
 
@@ -602,31 +622,62 @@ def showDropDown(request):
     return render(request,'showEmpToCustomer.html',{'display_cust':display_cust})
 
 
-def deleteAppliedCandidates(request,e_id,reqIdPK):   
+def deleteAppliedCandidates(request,source,namearg,reqIdPK):   
     req=Customer_Requirements.objects.get(pk=reqIdPK)
     if not request.user.is_authenticated:
         return redirect('home') 
-    try:
-        emp = EmployeeReqMapping.objects.get(e_id=e_id)
-        status_instance=Employee.objects.get(eFname=e_id)
-        status_instance.estatus='Free'
-        status_instance.save()
-        emp.delete()
-        req.remain_positions+=1
-        req.save()
-    except EmployeeReqMapping.MultipleObjectsReturned:
-        emp = EmployeeReqMapping.objects.filter(e_id=e_id)[0]
-        emp.delete()
-        status_instance=Employee.objects.get(e_id=e_id)[0]
-        status_instance.estatus='Free'
-        status_instance.save()
-        req=Customer_Requirements.objects.get(pk=reqIdPK)
-        req.remain_positions+=1
-        req.save()
+    customer_req=Customer_Requirements.objects.get(pk=reqIdPK)
+    delete_instance=EmployeeReqMapping.objects.get(req_id=reqIdPK,name=namearg)
+    # try:
+    #     emp = EmployeeReqMapping.objects.get(e_id=e_id)
+    #     status_instance=Employee.objects.get(eFname=e_id)
+    #     status_instance.estatus='Free'
+    #     status_instance.save()
+    #     emp.delete()
+    #     req.remain_positions+=1
+    #     req.save()
+    # except EmployeeReqMapping.MultipleObjectsReturned:
+    #     emp = EmployeeReqMapping.objects.filter(e_id=e_id)[0]
+    #     emp.delete()
+    #     status_instance=Employee.objects.get(e_id=e_id)[0]
+    #     status_instance.estatus='Free'
+    #     status_instance.save()
+    #     req=Customer_Requirements.objects.get(pk=reqIdPK)
+    #     req.remain_positions+=1
+    #     req.save()
+    if source=='LEADSOC':
+        namelist=namearg.split(' ',1)
+        emp_instance=Employee.objects.get(eFname=namelist[0],eLname=namelist[1])
+        emp_instance.estatus='Free'
+        emp_instance.save()
+        customer_req.remain_positions+=1
+        customer_req.save()
+        messages.success(request,'The Selected Employee'  + delete_instance.name +  'is deleted successfully')
+        delete_instance.delete()
+    if source=='TA':
+        ta_instance=TA_Resource.objects.get(name=namearg)
+        ta_instance.status='Selected'
+        ta_instance.save()
+        customer_req.remain_positions+=1
+        customer_req.save()
+        messages.success(request,'The Selected TA resource'  + delete_instance.name +  'is deleted successfully')
+        delete_instance.delete()
+    if source=='VM':
+        vm_instance=VmResource.objects.get(candidate_name=namearg)
+        vm_instance.interview_status='Selected'
+        vm_instance.save()
+        customer_req.remain_positions+=1
+        customer_req.save()
+        messages.success(request,'The Selected VM resource'  + delete_instance.name +  'is deleted successfully')
+        delete_instance.delete()
+        
 
-    messages.success(request,'The Selected Employee'  + emp.eFname +  'is deleted successfully')
+
+
+
+    
     company=req.customers
-    return redirect(f'/mappedEmployeeToCustomer/{company}/{reqIdPK}')
+    return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
 # To show employee details
 def listEmployees(request):
