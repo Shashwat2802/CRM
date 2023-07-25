@@ -312,7 +312,7 @@ def addCommentToEmployeedReqTable(request, reqIdPK,source,sourceId):
         return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
 def getOwnerList():
-    return Employee.objects.filter(Q(eRole='TA_HEAD')|Q(eRole='TA_STAFF'))
+    return Employee.objects.filter(Q(eRole='TA_HEAD')|Q(eRole='TA_STAFF')|Q(eRole='VM_STAFF'))
 
 def addTa(request):
     form=TA_Form()
