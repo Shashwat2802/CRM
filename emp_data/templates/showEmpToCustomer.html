@@ -85,54 +85,54 @@
                       {% if position > 0 %}
                       {% if values.empstatus != 'Selected' %} 
                       <div class="dropdown">
-                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="DropDown{{values.eFname}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="DropDown{{values.name}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           Select/Reject
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="menu{{values.eFname}}">
-                          <a class="dropdown-item" href="/selection_status/SL{{values.eFname}}/{{reqIdPK}}">Selected</a>
-                          <a class="dropdown-item" href="/selection_status/RJ{{values.eFname}}/{{reqIdPK}}">Rejected</a>
-                          <a  class="dropdown-item" href="/selection_status/BU{{values.eFname}}/{{reqIdPK}}">Shorlisted by BU</a>
-                          <a  class="dropdown-item" href="/selection_status/CL{{values.eFname}}/{{reqIdPK}}">Shortlisted by Client</a>
-                          <a  class="dropdown-item" href="/selection_status/OP{{values.eFname}}/{{reqIdPK}}">Onboarding Progress</a>
-                          <a  class="dropdown-item" href="/selection_status/OB{{values.eFname}}/{{reqIdPK}}">Onboarded</a>
-                          <a class="dropdown-item" href="/selection_status/RR{{values.eFname}}/{{reqIdPK}}">Resume Rejected</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="menu{{values.name}}">
+                          <a class="dropdown-item" href="/selection_status/SL{{values.name}}/{{reqIdPK}}">Selected</a>
+                          <a class="dropdown-item" href="/selection_status/RJ{{values.name}}/{{reqIdPK}}">Rejected</a>
+                          <a  class="dropdown-item" href="/selection_status/BU{{values.name}}/{{reqIdPK}}">Shorlisted by BU</a>
+                          <a  class="dropdown-item" href="/selection_status/CL{{values.name}}/{{reqIdPK}}">Shortlisted by Client</a>
+                          <a  class="dropdown-item" href="/selection_status/OP{{values.name}}/{{reqIdPK}}">Onboarding Progress</a>
+                          <a  class="dropdown-item" href="/selection_status/OB{{values.name}}/{{reqIdPK}}">Onboarded</a>
+                          <a class="dropdown-item" href="/selection_status/RR{{values.name}}/{{reqIdPK}}">Resume Rejected</a>
                         </div>
                       </div>
                       {% else %}
                       <div class="dropdown">
-                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="DropDown{{values.eFname}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
+                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="DropDown{{values.name}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
                           Select/Reject
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="menu{{values.eFname}}">
-                          <a class="dropdown-item" href="/selection_status/SL{{values.eFname}}/{{reqIdPK}}">Selected</a>
-                          <a class="dropdown-item" href="/selection_status/RJ{{values.eFname}}/{{reqIdPK}}">Rejected</a>
-                          <a  class="dropdown-item" href="/selection_status/BU{{values.eFname}}/{{reqIdPK}}">Shorlisted by BU</a>
-                          <a  class="dropdown-item" href="/selection_status/CL{{values.eFname}}/{{reqIdPK}}">Shortlisted by Client</a>
-                          <a  class="dropdown-item" href="/selection_status/OP{{values.eFname}}/{{reqIdPK}}">Onboarding Progress</a>
-                          <a  class="dropdown-item" href="/selection_status/OB{{values.eFname}}/{{reqIdPK}}">Onboarded</a>
-                          <a class="dropdown-item" href="/selection_status/RR{{values.eFname}}/{{reqIdPK}}">Resume Rejected</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="menu{{values.name}}">
+                          <a class="dropdown-item" href="/selection_status/SL{{values.name}}/{{reqIdPK}}">Selected</a>
+                          <a class="dropdown-item" href="/selection_status/RJ{{values.name}}/{{reqIdPK}}">Rejected</a>
+                          <a  class="dropdown-item" href="/selection_status/BU{{values.name}}/{{reqIdPK}}">Shorlisted by BU</a>
+                          <a  class="dropdown-item" href="/selection_status/CL{{values.name}}/{{reqIdPK}}">Shortlisted by Client</a>
+                          <a  class="dropdown-item" href="/selection_status/OP{{values.name}}/{{reqIdPK}}">Onboarding Progress</a>
+                          <a  class="dropdown-item" href="/selection_status/OB{{values.name}}/{{reqIdPK}}">Onboarded</a>
+                          <a class="dropdown-item" href="/selection_status/RR{{values.name}}/{{reqIdPK}}">Resume Rejected</a>
                         </div>
                       </div>
                       {% endif %}
                       {% else %}
                       <div class="dropdown">
-                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="DropDown{{values.eFname}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button class="btn btn-sm btn-info dropdown-toggle" type="button" id="DropDown{{values.name}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           Select/Reject
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                          <a class="dropdown-item" href="/selection_status/SL{{values.eFname}}/{{reqIdPK}}">Selected</a>
-                          <a class="dropdown-item" href="/selection_status/RJ{{values.eFname}}/{{reqIdPK}}">Rejected</a>
-                          <a  class="dropdown-item" href="/selection_status/BU{{values.eFname}}/{{reqIdPK}}">Shorlisted by BU</a>
-                          <a  class="dropdown-item" href="/selection_status/CL{{values.eFname}}/{{reqIdPK}}">Shortlisted by Client</a>
-                          <a  class="dropdown-item" href="/selection_status/OP{{values.eFname}}/{{reqIdPK}}">Onboarding Progress</a>
-                          <a  class="dropdown-item" href="/selection_status/OB{{values.eFname}}/{{reqIdPK}}">Onboarded</a>
-                          <a class="dropdown-item" href="/selection_status/RR{{values.eFname}}/{{reqIdPK}}">Resume Rejected</a>
+                          <a class="dropdown-item" href="/selection_status/SL{{values.name}}/{{reqIdPK}}">Selected</a>
+                          <a class="dropdown-item" href="/selection_status/RJ{{values.name}}/{{reqIdPK}}">Rejected</a>
+                          <a  class="dropdown-item" href="/selection_status/BU{{values.name}}/{{reqIdPK}}">Shorlisted by BU</a>
+                          <a  class="dropdown-item" href="/selection_status/CL{{values.name}}/{{reqIdPK}}">Shortlisted by Client</a>
+                          <a  class="dropdown-item" href="/selection_status/OP{{values.name}}/{{reqIdPK}}">Onboarding Progress</a>
+                          <a  class="dropdown-item" href="/selection_status/OB{{values.name}}/{{reqIdPK}}">Onboarded</a>
+                          <a class="dropdown-item" href="/selection_status/RR{{values.name}}/{{reqIdPK}}">Resume Rejected</a>
                         </div>
                       </div>
                     {% endif %}
                     <!--Delete button-->
-                    <button class="btn-danger btn-sm" onclick="location.href='/deleteAppliedCandidates/{{values.e_id}}/{{reqIdPK}}'">
+                    <button class="btn-danger btn-sm" onclick="location.href='/deleteAppliedCandidates/{{values.source}}/{{values.name}}/{{reqIdPK}}'">
 
                         <i class="fa-solid fa-trash"></i>
                     </button>

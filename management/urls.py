@@ -89,7 +89,7 @@ urlpatterns = [
     path('deleteEmployeeExperience/<int:exp_id>', views.deleteEmployeeExperience),
     
     # employee deleted from customer
-    path('deleteAppliedCandidates/<str:name>/<int:reqIdPK>', views.deleteAppliedCandidates),
+    path('deleteAppliedCandidates/<str:source>/<str:namearg>/<int:reqIdPK>', views.deleteAppliedCandidates),
     path('salesSummary',views.salesSummary),
 
     #For VM page
