@@ -1,6 +1,6 @@
 {% extends 'basic.html' %}
 {% block extra %}    
-        <form method="post" action='/ta_upload' enctype="multipart/form-data">
+        <form method="post" action='/taDataUpload' enctype="multipart/form-data">
         {% csrf_token %}
         <input type="file" name="file">
         <button type="submit">Upload</button>

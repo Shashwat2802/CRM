@@ -81,6 +81,7 @@ urlpatterns = [
     path('showTa',views.showTa),
     path('taDataUpload',views.taDataUpload),
     path('deleteTa/<int:phone_number>',views.deleteTa),
+    path('filterTa/<str:buhead>/<str:archive>',views.filterTa),
 
 
     path('addEmployeeExperience/<str:e_id>',views.addEmployeeExperience),
