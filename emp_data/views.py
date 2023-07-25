@@ -580,6 +580,7 @@ def vmDataUpload(request):
             return render(request, 'upload_vm_candidates.html')
         imported_data = dataset.load(new_vm.read(), format='xlsx')
         for data in imported_data:
+            print(":VM Onwer",data[24] )
             value = VmResource(
                 position_status=data[0],
                 pr_date=data[1],
@@ -605,7 +606,7 @@ def vmDataUpload(request):
                 phone_number=data[21],
                 mode=data[22],
                 vmIdPK = data[23],
-                owner = Employee(e_id=data[24])
+                owner = Employee.objects.get(eFname=data[24])
             )
             value.save()
         return redirect("/showVm")
@@ -888,6 +889,8 @@ def taDataUpload(request):
             return render(request,'showTA.html')
         imported_data = dataset.load(new_details.read(), format='xlsx')
         for data in imported_data:
+            print("TA DATA",data)
+            print("Onwer", data[31],Employee.objects.get(eFname=data[31]),)
             value=TA_Resource(
                 ta_id=data[0],
                 archived=data[1],
@@ -920,7 +923,7 @@ def taDataUpload(request):
                 Domain=data[28],
                 T1=data[29],
                 T2=data[30],                
-                owner=Employee(e_id=data[31]),  
+                owner=Employee.objects.get(eFname=data[31]),  
                 resume=data[32]              
                 )
             value.save()
