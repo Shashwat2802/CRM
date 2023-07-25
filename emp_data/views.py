@@ -73,18 +73,12 @@ def addEmployee(request):
 
     
     else:
-        list=Customer.objects.all()
-        role=Role.objects.all()
-        departments=Department.objects.all()
-        list1=[]
-        rolelist=[]
-        for item in list:
-            list1.append(item.cName)
-        for item in role:
-            rolelist.append(item.role_name)
-
-
-        return render(request, 'addemp.html',{'departments':departments,'zipped_lists': list1,'rolelist':rolelist,'status':['Free','Deployed','Support Team']})
+        customerList=getCustomerList()
+        rolelist=getRoleList()
+        departments=getDepartmentList()
+        buhList=getBUHList()
+        managerList=getManagers()
+        return render(request, 'addemp.html',{'departments':departments,'customerList': customerList,'rolelist':rolelist,'status':['Free','Deployed','Support Team'],"buhList":buhList,"managerList":managerList})
 
 
 def addEmployeeExperience(request, e_id):
@@ -119,12 +113,18 @@ def addSalesReqs(request):
             return HttpResponse(form.errors)
 
     else:
-        customerList=list(map(lambda x:x.cName ,Customer.objects.all()))
+        customerList=getCustomerList()
         BUList=list(map(lambda x:x.eFname ,getBUHList()))
         SalesList=list(map(lambda x:x.eFname ,getSalesTeam()))
 
         return render(request, 'addcustrequirements.html',{'customerlist': customerList, 'bulist': BUList, 'saleslist' : SalesList})
 
+
+def getCustomerList () :
+        return list(map(lambda x:x.cName ,Customer.objects.all()))
+
+def getRoleList () :
+    return list(map(lambda x:x.role_name ,Role.objects.all()))
 # To retrieve Customer details
 
 def updateSaleReqs(request,reqIdPK):
@@ -184,7 +184,7 @@ def deleteCustomer(request, cName):
 def getDepartmentList():
     return Department.objects.all()
 
-def getManager():
+def getManagers():
     return Employee.objects.filter(IsManager=True)
 
 def getSalesTeam():
@@ -242,11 +242,11 @@ def filteredEmployees(request,bu,buh,manager):
 
     departments =getDepartmentList()
     buhList= getBUHList()
-    Manager=getManager()
+    managers=getManagers()
     current_user = request.user.username.title()     
     return render(request,'showemp.html',{'employees_data':employees_data,
                                             'manager': manager,'current_user':current_user, 
-                                            "bu_select": bu,  'buh_select': buh,'manager_select': manager,'departments':departments,'BUHList':buhList,'Manager':Manager})    
+                                            "bu_select": bu,  'buh_select': buh,'manager_select': manager,'departments':departments,'BUHList':buhList,'managers':managers})    
 
 
 def addSalesReqComment(request, reqIdPK):
@@ -623,11 +623,11 @@ def listEmployees(request):
     add_exp_btn = True
     departments =getDepartmentList()
     buhList= getBUHList()
-    Manager=getManager()
+    Manager=getManagers()
     return render(request, "showemp.html", {'employees':employees,'customerlist':customerlist,
                                             'experiencelist':experiencelist,'rolelist':rolelist,
                                             'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp,
-                                              'add_exp_btn': add_exp_btn,'departments':departments,'BUHList':buhList,'Manager':Manager})
+                                              'add_exp_btn': add_exp_btn,'departments':departments,'BUHList':buhList,'managers':Manager})
 
 # To delete employee details
 def deleteLeadSocEmployee(request, e_id):

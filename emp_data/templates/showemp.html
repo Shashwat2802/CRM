@@ -29,60 +29,60 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 <div class="form-inline">
-    <div class="d-inline-block">
-        
-        <span class="btn">
-            DEPT
-            <select class="btn" name="deptList" id="Bu" style="border-radius: 30px;">
-                <!-- <option value="{{bu_select}}" selected hidden disabled>{{bu_select}}</option> -->
-                {% for val in departments %}
-                <option value="{{val.department}}">{{val.department}}</option>
-                {% endfor %}
-                <option value="All">All</option>
-            </select>
-        </span>
+  <div class="d-inline-block">
 
-        <span style="margin-left: 30;" class="btn">
-            BUH
-            <select name="Buhlist" id="buhead" class="btn" style="border-radius: 30px;">
-                <option value="{{buh_select}}" selected disabled hidden>{{buh_select}}</option>
-                {% for val in BUHList %}
-                <option value="{{val.eFname}}">{{val.eFname}}</option>
-                {% endfor %}
-                <option value="All">All</option>
-            </select>
-        </span>
+    <span class="btn">
+      DEPT
+      <select class="btn" name="deptList" id="Bu" style="border-radius: 30px;">
+        <!-- <option value="{{bu_select}}" selected hidden disabled>{{bu_select}}</option> -->
+        {% for val in departments %}
+        <option value="{{val.department}}">{{val.department}}</option>
+        {% endfor %}
+        <option value="All">All</option>
+      </select>
+    </span>
 
-        <span style="margin-left: 30;" class="btn">
-            Manager
-            <select name="managerlist" id="manager" class="btn" style="border-radius: 30px;">
-                <option value="{{manager_select}}" selected disabled hidden>{{manager_select}}</option>
-                {% for val in Manager %}
-                <option value="{{val.eFname}}">{{val.eFname}}</option>
-                {% endfor %}
-                <option value="All">All</option>
-            </select>
-        </span>
-        <span style="margin-left: 30;">
-            <button class="go-btn" style="border-radius: 30px;" type="submit"
-                onClick="window.location.href = getLink()">Search</button>
+    <span style="margin-left: 30;" class="btn">
+      BUH
+      <select name="Buhlist" id="buhead" class="btn" style="border-radius: 30px;">
+        <option value="{{buh_select}}" selected disabled hidden>{{buh_select}}</option>
+        {% for val in BUHList %}
+        <option value="{{val.eFname}}">{{val.eFname}}</option>
+        {% endfor %}
+        <option value="All">All</option>
+      </select>
+    </span>
 
-        </span>
-        <span style="margin-left: 10;">
-            <button class="go-btn" style="border-radius: 30px;" type="submit"
-                onclick="location.href='/listEmployees'">Refresh</button>
-        </span>
+    <span style="margin-left: 30;" class="btn">
+      Manager
+      <select name="managerlist" id="manager" class="btn" style="border-radius: 30px;">
+        <option value="{{manager_select}}" selected disabled hidden>{{manager_select}}</option>
+        {% for val in Manager %}
+        <option value="{{val.eFname}}">{{val.eFname}}</option>
+        {% endfor %}
+        <option value="All">All</option>
+      </select>
+    </span>
+    <span style="margin-left: 30;">
+      <button class="go-btn" style="border-radius: 30px;" type="submit"
+        onClick="window.location.href = getLink()">Search</button>
 
-    </div>
+    </span>
+    <span style="margin-left: 10;">
+      <button class="go-btn" style="border-radius: 30px;" type="submit"
+        onclick="location.href='/listEmployees'">Refresh</button>
+    </span>
+
+  </div>
 </div>
 <script>
-    function getLink() {
-        var Bu = document.querySelector("#Bu").value;
-        var buhead = document.querySelector("#buhead").value;        
-        var manager = document.querySelector("#manager").value;
-        var url = '/filter/' + encodeURIComponent(Bu) + '/' + encodeURIComponent(buhead) + '/' + encodeURIComponent(manager);
-        return url;
-    }
+  function getLink() {
+    var Bu = document.querySelector("#Bu").value;
+    var buhead = document.querySelector("#buhead").value;
+    var manager = document.querySelector("#manager").value;
+    var url = '/filter/' + encodeURIComponent(Bu) + '/' + encodeURIComponent(buhead) + '/' + encodeURIComponent(manager);
+    return url;
+  }
 </script>
 
 </div>
@@ -183,7 +183,8 @@
                           <button class="btn-success btn-sm">
                             <i class="fa-solid fa-pen-to-square"></i>
                           </button>
-                          <button onclick="location.href='/deleteEmployeeExperience/{{val.id}}'" class="btn-danger btn-sm">
+                          <button onclick="location.href='/deleteEmployeeExperience/{{val.id}}'"
+                            class="btn-danger btn-sm">
                             <i class="fa-solid fa-trash"></i>
                           </button>
                         </td>
@@ -254,8 +255,13 @@
                       </div>
                       <div class="form-group">
                         <label for="eEmail">Update Email Id :</label>
-                        <input type="email" class="form-control" id="eEmail" name="eEmail"
-                          placeholder="Enter opened positions" value="{{employee.eEmail}}">
+                        <input type="email" class="form-control" id="eEmail" name="eEmail" placeholder="Email"
+                          value="{{employee.eEmail}}">
+                      </div>
+                      <div class="form-group">
+                        <label for="ePhone">Phone :</label>
+                        <input type="email" class="form-control" id="ePhone" name="ePhone" placeholder="Phone"
+                          value="{{employee.ePhone}}">
                       </div>
                       <div class="form-group">
 
@@ -267,6 +273,32 @@
                         </select>
 
                       </div>
+                      <!-- <div class="form-group">
+                        <label for="Manager">Update Manager</label>
+                        <select name="Manager" id="Manager">
+                          {% for val in managers %}
+                          <option value="{{val}}">{{val}}</option>
+                          {% endfor %}
+                        </select>
+                      </div> -->
+
+<div class="form-group">
+  <label for="Manager">Update Manager {{ employee.Manager }}</label>
+  <select name="Manager" id="Manager">
+    {% for val in managers %}
+      <option value="{{ val }}" {% if val ==  employee.Manager %}selected{% endif %}>{{ val }}</option>
+    {% endfor %}
+  </select>
+</div>
+
+                      <div class="form-group">
+                        <label for="department">Update department</label>
+                        <select name="department" id="department">
+                          {% for val in departments %}
+                          <option value="{{val}}">{{val}}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
                       <div class="form-group">
                         <label for="estatus">Update status:</label>
                         <select name="estatus" id="estatus">
@@ -276,24 +308,9 @@
                         </select>
                       </div>
 
-                      <!-- <div class="form-group">
-
-                                              <label for="customer_start_date">Update Customer Start Date:</label>
-                                                <input type="date" class="form-control" id="customer_start_date"
-                                                    name="customer_start_date" value="{{employee.customer_start_date}}">
-                                                    
-
-                                            </div> -->
 
                   </div>
-                  <!-- <div class="form-group">
-                                        <label for="Sales_Incharge">Sales Incharge</label>
-                                        <select name="Sales_Incharge" id="Sales_Incharge">
-                                          {% for val in saleslist %}
-                                          <option value="{{val}}">{{val}}</option>
-                                          {% endfor %}
-                                        </select>
-                                      </div> -->
+
                   <button type="submit" class="btn btn-primary">Update</button>
                   </form>
                 </div>
