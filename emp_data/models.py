@@ -89,8 +89,8 @@ class Customer_Requirements(models.Model):
     Sales_Incharge = models.CharField(max_length=50,null=True)# name of the person
     Bu_head=models.CharField(max_length=50,null=True)
     history = models.TextField(default="")
-    reqIdPK = models.AutoField(primary_key=True)
     priority = models.IntegerField(default=1)
+    reqIdPK = models.AutoField(primary_key=True)
 
 
     class Meta:
