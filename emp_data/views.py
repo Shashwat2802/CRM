@@ -341,9 +341,9 @@ def showTa(request):
 
 def filterTa(request,buhead,archive):
     filtered={}
-    if buhead != 'All' :
+    if buhead != 'All' and archive=='Both':
         filtered['BU']=buhead
-    if archive !='Both':
+    if archive !='Both' and buhead=='All':
         filtered['archived']=archive
     print("Filtered Condition",filtered)
     ta_instance=TA_Resource.objects.filter(**filtered)

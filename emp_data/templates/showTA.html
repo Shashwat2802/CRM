@@ -24,7 +24,7 @@
             <select name="archivestatus" id="archivestatus" class="btn" style="border-radius: 30px;">
                 <option value="{{status_select}}" selected disabled hidden>{{status_select}}</option>
                 <option value="Archived">Archived</option>
-                <option value="Not Archived">Not Archived</option>
+                <option value="Closed">Closed</option>
                 <option value="Both">Both</option>
             </select>
         </span>
@@ -86,12 +86,12 @@
                     </button>
                     
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModalLong">
+                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModal{{value.phone_number}}">
                         <i class="fa-regular fa-eye"></i>
                     </button>
   
                     <!-- Modal -->
-                    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal fade" id="exampleModal{{value.phone_number}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
