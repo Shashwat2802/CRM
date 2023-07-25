@@ -237,11 +237,13 @@ def listEmployeeFiltered(request,department,buh,manager):
     print("Employee list",employees)
     departments =getDepartmentList()
     buhList= getBUHList()
+
     Manager=getManagers()
     current_user = request.user.username.title()       
     return render(request, "showemp.html", {'employees':employees,
                                             'statuslist':['Free','Deployed','Support Team'], 
                                               'departments':departments,'BUHList':buhList,'Manager':Manager}) 
+
 
 
 def addSalesReqComment(request, reqIdPK):
@@ -670,6 +672,7 @@ def listEmployees(request):
     departments =getDepartmentList()
     buhList= getBUHList()
     Manager=getManagers()
+
     return render(request, "showemp.html", {'employees':employees,
                                         'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp,
                                             'departments':departments,'BUHList':buhList,'Manager':Manager})
@@ -677,6 +680,7 @@ def listEmployees(request):
     #                                         'experiencelist':experiencelist,'rolelist':rolelist,
     #                                         'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp,
     #                                           'add_exp_btn': add_exp_btn,'departments':departments,'BUHList':buhList,'Manager':Manager})
+
 
 # To delete employee details
 def deleteLeadSocEmployee(request, e_id):
