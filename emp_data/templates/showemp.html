@@ -286,7 +286,7 @@
   <label for="Manager">Update Manager {{ employee.Manager }}</label>
   <select name="Manager" id="Manager">
     {% for val in managers %}
-      <option value="{{ val }}" {% if val ==  employee.Manager %}selected{% endif %}>{{ val }}</option>
+      <option value="{{ val }}" {% if val == employee.Manager %}selected{% endif %}>{{ val }}</option>
     {% endfor %}
   </select>
 </div>
