@@ -53,7 +53,11 @@ class Emp_ExperienceAdmin(ImportExportModelAdmin):
 class Ta_ResourceAdmin(ImportExportModelAdmin):
     list_display=('ta_id','name','skillset','education','phone_number','email')
 
-admin.site.register(models.VmResource)
+#admin.site.register(models.VmResource)
+@admin.register(models.VmResource)
+class VmResourceAdmin(ImportExportModelAdmin):
+    list_display=('vmIdPK','candidate_name','skillset','education','phone_number','email')
+
 
 admin.site.register(models.Role)
 admin.site.register(models.Department)
