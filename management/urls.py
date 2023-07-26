@@ -52,6 +52,7 @@ urlpatterns = [
     path('freeFromAllSource/<int:reqIdPK>',views.freeFromAllSource),
     path('mapEmpToReq/<int:reqIdPK>/<str:choice>',views.mapEmpToReq),
     path('mappedEmployeeToCustomer/<int:reqIdPK>',views.mappedEmployeeToCustomer),
+    path('addremark/<int:pk>/<int:reqIdPK>',views.addremark),
     path("addCommentToEmployeedReqTable/<int:reqIdPK>/<str:source>/<str:sourceId>", views.addCommentToEmployeedReqTable),
     path('showTaList/<int:reqIdPK>',views.showTaList),
     path('showVmList/<int:reqIdPK>',views.showVmList),    

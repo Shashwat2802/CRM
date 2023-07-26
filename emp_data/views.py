@@ -430,10 +430,15 @@ def mappedEmployeeToCustomer(request,reqIdPK):
     emp_data = EmployeeReqMapping.objects.filter(req_id=reqIdPK)
     req_instance=Customer_Requirements.objects.get(pk=reqIdPK)
     position=req_instance.remain_positions
+    remarks=Mappedempremarks.objects.all()
     return render(request, "showEmpToCustomer.html", {'form':emp_data,'reqIdPK':reqIdPK,'position':position,
-    })
+                                                      'remarks':remarks})
 
-
+def addremark(request,pk,reqIdPK):
+    newremark=request.POST.get('remark')
+    remark_instance=Mappedempremarks(remark_id=EmployeeReqMapping(pk=pk),remark=newremark)
+    remark_instance.save()
+    return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
 def selection_status(request, estatus,reqIdPK):
     model_instance = EmployeeReqMapping.objects.get(name=estatus[2:])

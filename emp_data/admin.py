@@ -34,7 +34,7 @@ class Customer_RequirementsAdmin(ImportExportModelAdmin):
 
 @admin.register(models.EmployeeReqMapping)
 class EmployeeReqMappingAdmin(ImportExportModelAdmin):
-    list_display = ('req_id','name','eskills')
+    list_display = ('id','req_id','name','eskills')
     search_fields = ['eFname','eLname','eskills']
     filter_horizontal = ()
     list_filter = ()
@@ -58,5 +58,7 @@ admin.site.register(models.VmResource)
 admin.site.register(models.Role)
 admin.site.register(models.Department)
 
-
+@admin.register(models.Mappedempremarks)
+class Mappedremarksadmin(ImportExportModelAdmin):
+    list_display=('remark_id','remark')
 

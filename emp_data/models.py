@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from django.contrib.postgres.fields import ArrayField
 
 class Customer(models.Model):
     cName = models.CharField(max_length=50,primary_key=True)
@@ -135,14 +136,16 @@ class EmployeeReqMapping(models.Model):
     sourceid_1 = models.CharField(max_length=10,null=True) # Can We  give foriegn key from 3 different table, like VM,TA, employee
     sourceid_2=models.CharField(max_length=10,null=True)
     sourceid_3=models.IntegerField(default=0)
-    history = models.TextField(default="")
 
     class Meta:
         db_table = "employeereqmapping"
 
     def __str__(self):
         return str(self.req_id)
-
+    
+class Mappedempremarks(models.Model):
+    remark_id=models.ForeignKey(EmployeeReqMapping,on_delete=models.CASCADE,to_field='id')
+    remark=models.TextField(max_length=1000)
 
 # model for VM candidates 
 class VmResource(models.Model):
