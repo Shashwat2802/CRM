@@ -54,9 +54,7 @@ class Employee(models.Model):
     Manager = models.CharField(max_length=100,null=True)
     IsManager = models.BooleanField(default=False)
     BUH= models.CharField(max_length=50,null=True)
-
-
-
+    isDeleted=models.BooleanField(default=False)
     class Meta:
         db_table = "employee"
 
