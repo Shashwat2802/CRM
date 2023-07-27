@@ -2,8 +2,13 @@
 {% block body %}
 <div class="container">
     <h3 style="color: rgba(16, 4, 33, 0.926);padding-top: 5%;">Add VM candidate</h3>
-    <form method="POST">
+    <form action="/add_vm" method="POST">
         {% csrf_token %}
+        <div class="form-group">
+            <label for="vmIdPK">vmId</label>
+            <br>
+            <input type="text" name="vmIdPK" id="vmIdPK" class="form-control" placeholder="vmIdPK">
+        </div>
         <div class="form-group">
             <label for="position_status">Position Status</label>
             <select name="position status" id="position status">
@@ -44,10 +49,12 @@
             <input type="number" id="billing_rate" name="billing_rate" class="form-control">
         </div>
         <div class="form-group">
+
             <label for="bu_head">BU Head</label>
             <input type="text" id="bu_head" name="bu_head" class="form-control">
             
         </div>
+
         <div class="form-group">
             <label for="location">Location</label>
             <input type="text" id="location" name="location" class="form-control">
@@ -99,6 +106,10 @@
         <div class="form-group">
             <label for="mode">Mode</label>
             <input type="text" id="mode" name="mode" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="resume">Resume</label>
+            <input type="text" id="resume" name="resume" class="form-control">
         </div>
         <div class="form-group">
             <label for="owner">Owner</label>
