@@ -186,13 +186,13 @@ def getDepartmentList():
     return Department.objects.all()
 
 def getManagers():
-    return Employee.objects.filter(IsManager=True)
+    return Employee.objects.filter(IsManager=True, isDeleted=False)
 
 def getSalesTeam():
-    return Employee.objects.filter(Q(eRole='SALES_STAFF')| Q(eRole='SALES_HEAD'))
+    return Employee.objects.filter((Q(eRole='SALES_STAFF')| Q(eRole='SALES_HEAD')),isDeleted=False)
 
 def getBUHList():
-    return Employee.objects.filter(eRole='BUH')
+    return Employee.objects.filter(eRole='BUH',isDeleted=False)
 
 
 def filteredSaleReqs(request,bu,sales,st):
@@ -234,14 +234,14 @@ def listEmployeeFiltered(request,department,buh,manager):
         filter_conditions['Manager'] = manager
 
     print("FIlter COndition",filter_conditions,department,buh,manager)
-    employees=  Employee.objects.filter(**filter_conditions)
+    employees=  Employee.objects.filter(**filter_conditions,isDeleted=False)
     print("Employee list",employees)
     departments =getDepartmentList()
     buhList= getBUHList()
 
     managerList=getManagers()
     current_user = request.user.username  
-    current_emp = Employee.objects.get(eFname__icontains=current_user)     
+    current_emp = Employee.objects.get(eFname__icontains=current_user,isDeleted=False)     
     return render(request, "showemp.html", {'employees':employees,"department":department,"buh":buh,
                                              "manager":manager,"current_emp":current_emp,
                                               'departments':departments,'BUHList':buhList,'managerList':managerList}) 
@@ -249,7 +249,7 @@ def listEmployeeFiltered(request,department,buh,manager):
 
 def getEmployeeExperiances(request, employee_id):
     print("Emp id from model", employee_id)
-    employee=  Employee.objects.get(e_id=employee_id)
+    employee=  Employee.objects.get(e_id=employee_id,isDeleted=False)
     experiencelist = EmpExperienceHistory.objects.filter(e_id=employee_id)
     customerlist=getCustomerList()
     context = {'employee':employee,"experiencelist":experiencelist,"customerlist":customerlist}
@@ -324,7 +324,7 @@ def addCommentToEmployeedReqTable(request, reqIdPK,source,sourceId):
         return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
 def getOwnerList():
-    return Employee.objects.filter(Q(eRole='TA_HEAD')|Q(eRole='TA_STAFF')|Q(eRole='VM_STAFF'))
+    return Employee.objects.filter((Q(eRole='TA_HEAD')|Q(eRole='TA_STAFF')|Q(eRole='VM_STAFF')),isDeleted=False)
 
 def addTa(request):
     form=TA_Form()
@@ -371,11 +371,11 @@ def job_description(request):
 
 
 def freeFromAllSource(request,reqIdPK):
-    form = Employee.objects.filter(Q(estatus ='Free')|Q(estatus='pendingProcessing') ).values()
+    form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='pendingProcessing')),isDeleted=False ).values()
     if request.method == "GET":   
         skills = request.GET.get('searchskill')      
         if skills != None: 
-            form = Employee.objects.filter(eskills__icontains= skills)
+            form = Employee.objects.filter(eskills__icontains= skills,isDeleted=False)
     return render(request,'show_candidate.html',{'form':form ,'reqIdPK':reqIdPK})
 
 def checkbox(request):
@@ -397,27 +397,6 @@ def checkbox(request):
     else:
         return redirect('/mappedEmployeeToCustomer')
 
-
-'''
-def mapEmpToReq(request,reqIdPK):   
-    if request.method == 'POST':
-        selectedEmpList = request.POST.getlist('empId')
-        print("employee list",selectedEmpList)
-        # emp1=[]
-        today = date.today()
-        salesReq=Customer_Requirements.objects.get(pk=reqIdPK)
-        print("Req",salesReq, salesReq.Bu_head)
-        for i in selectedEmpList:
-            emp=Employee.objects.get(e_id=i)
-            emp.estatus='pendingProcessing'
-            emp.save()
-            print("Employee status upated",emp)
-            final=EmployeeReqMapping(req_id=salesReq,eFname=emp.eFname,eLname=emp.eLname,eskills=emp.eskills,  added_date=today,source='LEADSOC',sourceId=emp.e_id)
-            final.save()
-            # newval2=EmployeeReqMapping.objects.filter(eFname=i)
-            # emp1.append(newval2)
-    return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
-    '''
 
 #show added employe to customer
 def mappedEmployeeToCustomer(request,reqIdPK):  
@@ -600,7 +579,7 @@ def mapEmpToReq(request,reqIdPK,choice):
              selectedEmpList = request.POST.getlist('empId')
              print("employee list",selectedEmpList)
              for i in selectedEmpList:
-                emp=Employee.objects.get(e_id=i)
+                emp=Employee.objects.get(e_id=i,isDeleted=False)
                 emp.estatus='pendingProcessing'
                 emp.save()
                 print("Employee status updated",emp)
@@ -664,7 +643,7 @@ def vmDataUpload(request):
                 phone_number=data[21],
                 mode=data[22],
                 vmIdPK = data[23],
-                owner = Employee.objects.get(eFname=data[24])
+                owner = Employee.objects.get(eFname=data[24],isDeleted=False)
             )
             value.save()
         return redirect("/showVm")
@@ -696,7 +675,7 @@ def deleteAppliedCandidates(request,e_id,reqIdPK):
         return redirect('home') 
     try:
         emp = EmployeeReqMapping.objects.get(e_id=e_id)
-        status_instance=Employee.objects.get(eFname=e_id)
+        status_instance=Employee.objects.get(eFname=e_id,isDeleted=False)
         status_instance.estatus='Free'
         status_instance.save()
         emp.delete()
@@ -705,7 +684,7 @@ def deleteAppliedCandidates(request,e_id,reqIdPK):
     except EmployeeReqMapping.MultipleObjectsReturned:
         emp = EmployeeReqMapping.objects.filter(e_id=e_id)[0]
         emp.delete()
-        status_instance=Employee.objects.get(e_id=e_id)[0]
+        status_instance=Employee.objects.get(e_id=e_id,isDeleted=False)[0]
         status_instance.estatus='Free'
         status_instance.save()
         req=Customer_Requirements.objects.get(pk=reqIdPK)
@@ -721,8 +700,10 @@ def deleteAppliedCandidates(request,e_id,reqIdPK):
 def deleteLeadSocEmployee(request, e_id):
     if not request.user.is_authenticated:
         return redirect('home')
-    employee = Employee.objects.get(pk=e_id)
-    employee.delete()
+    employee = Employee.objects.get(pk=e_id,isDeleted=False)
+    employee.isDeleted=True
+    employee.save()
+    # employee.delete()
     return redirect("/listEmployeeFiltered/All/All/All")
 
 
@@ -730,7 +711,7 @@ def deleteLeadSocEmployee(request, e_id):
 def updateLeadSocEmployee(request, e_id):
     if not request.user.is_authenticated:
         return redirect('home')
-    employee = Employee.objects.get(pk=e_id)
+    employee = Employee.objects.get(pk=e_id,isDeleted=False)
     if request.method=='POST':
         ref_name=employee.eFname
 
@@ -752,7 +733,7 @@ def save_emp_details(request):
     if request.method == 'POST':
         selected_employees = request.POST.getlist('employee_checkbox')
         for employee_id in selected_employees:
-            employee = Employee.objects.get(id=employee_id)
+            employee = Employee.objects.get(id=employee_id,isDeleted=False)
             add_emp = EmployeeReqMapping(
                 eFname=employee.eFname,
                 eLname=employee.eLname,
@@ -928,8 +909,6 @@ def taDataUpload(request):
             return render(request,'showTA.html')
         imported_data = dataset.load(new_details.read(), format='xlsx')
         for data in imported_data:
-            print("TA DATA",data)
-            print("Onwer", data[31],Employee.objects.get(eFname=data[31]),)
             value=TA_Resource(
                 ta_id=data[0],
                 archived=data[1],
@@ -962,7 +941,7 @@ def taDataUpload(request):
                 Domain=data[28],
                 T1=data[29],
                 T2=data[30],                
-                owner=Employee.objects.get(eFname=data[31]),  
+                owner=Employee.objects.get(eFname=data[31],isDeleted=False),  
                 resume=data[32]              
                 )
             value.save()
