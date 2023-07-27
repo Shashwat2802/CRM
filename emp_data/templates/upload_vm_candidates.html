@@ -1,4 +1,5 @@
 {% extends 'basic.html' %}
+
 {% block extra %}    
         <form method="post" action='/vmDataUpload' enctype="multipart/form-data">
         {% csrf_token %}
@@ -12,3 +13,4 @@
     <h4>Please Upload VM Excel File File</h4>
     </p>
 {% endblock %}
+

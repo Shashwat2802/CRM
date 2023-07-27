@@ -473,7 +473,8 @@ def showVm(request):
     return render(request, "show_vm_candidates.html", {"candidate_list":all_vm_candidates,'ownerList':ownerList})
 
 # Form to add only one VM candidate 
-def addVm(request): 
+def addVm(request):
+    form=VmCandidateForm()
     if request.method == "POST":
         form=VmCandidateForm(request.POST)
         if form.is_valid():
@@ -483,12 +484,53 @@ def addVm(request):
         else:
             return HttpResponse(form.errors)
     else:
+
         ownerList = list(map(lambda x:x.eFname,getOwnerList()))
         BUList=list(map(lambda x:x.eFname ,getBUHList())) 
         return render(request, "add_vm_candidates.html",{'ownerList':ownerList,'BUList':BUList})
 
-def update_vm_candidates(request): 
-    pass
+
+def update_vm_candidates(request, vmIdPK): 
+    if not request.user.is_authenticated:
+        return redirect('home')
+    VmResource = VmResource.objects.get(pk=vmIdPK)
+    if request.method =='POST':
+        ref_name= VmResource.candidate_name
+
+        VmResource=VmResource.objects.get('pk=vmIdPK')
+        VmResource.position_status=request.POST['position_status']
+        VmResource.pr_date=request.POST['pr_date']
+        VmResource.vendor_name=request.POST['vendor_name']
+        VmResource.candidate_source=request.POST['candidate_source']
+        VmResource.candidate_name=request.POST['candidate_name']
+        VmResource.skillset=request.POST['skillset']
+        VmResource.experience=request.POST['experience']
+        VmResource.education = request.POST['education']
+        VmResource.billing_rate=request.POST['billing_rate']
+        VmResource.bu_head = request.POST['bu_head']
+        VmResource.location= request.POST['location']
+        VmResource.notice_period = request.POST['notice_period']
+        VmResource.reviewer_name = request.POST['reviewer_name']
+        VmResource.remarks_panel = request.POST['remarks_panel']
+        VmResource.vm_comment = request.POST['vm_comment']
+        VmResource.client_name = request.POST['client_name']
+        VmResource.interview_schedule = request.POST['interview_schedule']
+        VmResource.interview_status = request.POST['interview_status']
+        VmResource.comments = request.POST['comments']
+        VmResource.remarks = request.POST['remarks']
+        VmResource.email = request.POST['email']
+        VmResource.phone_number = request.POST['phone_number']
+        VmResource.mode = request.POST['mode']
+        VmResource.vmIdPK = request.POST['vmIdPK']
+        VmResource.owner = request.POST['owner']
+
+
+        if 'history' in request.POST:
+            hist=request.POST['history']
+            print("hist",hist)
+            VmResource.history = hist
+            VmResource.save()
+        return redirect('/update_vm_candidates')
 
 def showTaList(request,reqIdPK):
     form=TA_Resource.objects.filter(status='Selected').values()
@@ -626,7 +668,6 @@ def vmDataUpload(request):
             value.save()
         return redirect("/showVm")
     return render(request, "upload_vm_candidates.html")
-
 
 
 #dropdown customer names
