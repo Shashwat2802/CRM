@@ -630,40 +630,40 @@ def mapEmpToReq(request,reqIdPK,choice):
 def vmDataUpload(request): 
     if request.method == "POST":
         dataset = Dataset()
+        print("Input ",request)
         new_vm = request.FILES['myfile']
         if not new_vm.name.endswith('xlsx'):
             messages.info(request, 'Wrong format of file')
             return render(request, 'upload_vm_candidates.html')
         imported_data = dataset.load(new_vm.read(), format='xlsx')
         for data in imported_data:
-            print(":VM Owner",data[23] )
+            print(":VM Onwer",data[24] )
             value = VmResource(
-                vmIdPK=data[0],
-                position_status=data[1],
-                pr_date=data[2],
-                vendor_name=data[3],
-                candidate_source=data[4],
-                candidate_name=data[5],
-                skillset=data[6],
-                experience=data[7],
-                education=data[8],
-                billing_rate=data[9],
-                bu_head=data[10],
-                location=data[11],
-                notice_period=data[12],
-                reviewer_name=data[13],
-                remarks_panel=data[14],
-                vm_comment=data[15],
-                client_name=data[16],
-                interview_schedule=data[17],
-                interview_status=data[18],
-                comments=data[19],
-                remarks=data[20],
-                email=data[21],
-                phone_number=data[22],
-                owner = Employee.objects.get(eFname=data[23]),
-                resume=data[24],
-                mode=data[25],
+                position_status=data[0],
+                pr_date=data[1],
+                vendor_name=data[2],
+                candidate_source=data[3],
+                candidate_name=data[4],
+                skillset=data[5],
+                experience=data[6],
+                education=data[7],
+                billing_rate=data[8],
+                bu_head=data[9],
+                location=data[10],
+                notice_period=data[11],
+                reviewer_name=data[12],
+                remarks_panel=data[13],
+                vm_comment=data[14],
+                client_name=data[15],
+                interview_schedule=data[16],
+                interview_status=data[17],
+                comments=data[18],
+                remarks=data[19],
+                email=data[20],
+                phone_number=data[21],
+                mode=data[22],
+                vmIdPK = data[23],
+                owner = Employee.objects.get(eFname=data[24])
             )
             value.save()
         return redirect("/showVm")
