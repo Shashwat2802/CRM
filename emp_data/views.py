@@ -240,9 +240,10 @@ def listEmployeeFiltered(request,department,buh,manager):
     buhList= getBUHList()
 
     managerList=getManagers()
-    current_user = request.user.username.title()       
+    current_user = request.user.username  
+    current_emp = Employee.objects.get(eFname__icontains=current_user)     
     return render(request, "showemp.html", {'employees':employees,"department":department,"buh":buh,
-                                             "manager":manager,
+                                             "manager":manager,"current_emp":current_emp,
                                               'departments':departments,'BUHList':buhList,'managerList':managerList}) 
 
 
