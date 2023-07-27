@@ -43,10 +43,14 @@
                                 </button> -->
                                 </div>
                                 <div class="modal-body">
-                                    {% for remark in remarks reversed %}
+                                    {% for remark_id,remark in id_list|combined_list:remark_list reversed %}
                                     <div class="form-group">
-                                        {% if remark.remark_id.id == values.pk %}
-                                        <p>{{remark.remark}}</p>
+                                        {% if remark_id == values.pk %}
+                                            {% for item in remark reversed %}
+                                                {% if item != '' %}
+                                                -> : {{item}} <br>
+                                                {% endif %}
+                                            {% endfor %}
                                         {% endif %}
                                     </div>
                                     {% endfor %}

@@ -136,17 +136,22 @@ class EmployeeReqMapping(models.Model):
     sourceid_1 = models.CharField(max_length=10,null=True) # Can We  give foriegn key from 3 different table, like VM,TA, employee
     sourceid_2=models.CharField(max_length=10,null=True)
     sourceid_3=models.IntegerField(default=0)
+    history=models.TextField(max_length=10000,default='')
 
     class Meta:
         db_table = "employeereqmapping"
 
+    def set_string_list(self,stringlist):
+        self.history = self.history + ',' + stringlist
+    
+    def get_string_list(self):
+        list=self.history.split(',')
+        return list
+
+
     def __str__(self):
         return str(self.req_id)
     
-class Mappedempremarks(models.Model):
-    remark_id=models.ForeignKey(EmployeeReqMapping,on_delete=models.CASCADE,to_field='id')
-    remark=models.TextField(max_length=1000)
-
 # model for VM candidates 
 class VmResource(models.Model):
     position_status = models.CharField(max_length=100) #whether active or closed
@@ -154,7 +159,7 @@ class VmResource(models.Model):
     vendor_name = models.CharField(max_length=100)
     candidate_source = models.CharField(max_length=100) #whether from bench or market
     candidate_name = models.CharField(max_length=300)
-    resume = models.CharField(max_length=1000)
+    resume = models.URLField(null=True,blank=True)
     skillset = models.CharField(max_length=500)
     experience = models.FloatField()
     education = models.CharField(max_length=500)
@@ -205,7 +210,7 @@ class TA_Resource(models.Model): # TA_resource contain 33 records
     archived = models.CharField(max_length=100)
     date = models.DateField()
     name = models.CharField(max_length=300)
-    resume = models.CharField(max_length=1000)
+    resume = models.URLField(null=True,blank=True)
     BU = models.CharField(max_length=100)
     Position = models.CharField(max_length=100)
     skillset = models.CharField(max_length=500)

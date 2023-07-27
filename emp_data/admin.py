@@ -58,7 +58,3 @@ admin.site.register(models.VmResource)
 admin.site.register(models.Role)
 admin.site.register(models.Department)
 
-@admin.register(models.Mappedempremarks)
-class Mappedremarksadmin(ImportExportModelAdmin):
-    list_display=('remark_id','remark')
-

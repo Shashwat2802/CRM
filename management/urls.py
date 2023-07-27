@@ -82,9 +82,10 @@ urlpatterns = [
     path('addTa',views.addTa),
     path('showTa',views.showTa),
     path('filterTa/<str:buhead>/<str:archive>',views.filterTa),
+    path('taresume/<str:ta_id>',views.add_ta_resume),
     path('taDataUpload',views.taDataUpload),
     path('deleteTa/<int:phone_number>',views.deleteTa),
-
+    path('update_ta/<str:ta_id>',views.update_ta),
 
     path('addEmployeeExperience/<str:e_id>',views.addEmployeeExperience),
     path('deleteEmployeeExperience/<int:exp_id>', views.deleteEmployeeExperience),
@@ -97,7 +98,8 @@ urlpatterns = [
     path("showVm", views.showVm),
     path("addVm", views.addVm),
     path("vmDataUpload", views.vmDataUpload),
-    path("update_vm_candidates", views.update_vm_candidates),
+    path("update_vm/<int:vmIdPK>", views.update_vm),
+    path('vmresume/<int:vmIdPK>',views.add_vm_resume),
     #Homepage path
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 

@@ -350,7 +350,16 @@ def filterTa(request,buhead,archive):
     Bu_head=getBUHList()
     return render(request,'showTA.html',{'ta_instance':ta_instance,'Bu_head':Bu_head,'status_select':archive,'bu_select':buhead})
     
-    
+
+
+def add_ta_resume(request,ta_id):
+    ta_instance=TA_Resource.objects.get(pk=ta_id)
+    if request.method=='POST':
+        link=request.POST.get('resume')
+        ta_instance.resume=link
+        ta_instance.save()
+    return redirect ('/showTa')
+
 
 
 
@@ -430,13 +439,19 @@ def mappedEmployeeToCustomer(request,reqIdPK):
     emp_data = EmployeeReqMapping.objects.filter(req_id=reqIdPK)
     req_instance=Customer_Requirements.objects.get(pk=reqIdPK)
     position=req_instance.remain_positions
-    remarks=Mappedempremarks.objects.all()
+    id_list=[]
+    remark_list=[]
+    candidate_all=EmployeeReqMapping.objects.all()
+    for item in candidate_all:
+        id_list.append(item.id)
+        remark_list.append(item.get_string_list())
     return render(request, "showEmpToCustomer.html", {'form':emp_data,'reqIdPK':reqIdPK,'position':position,
-                                                      'remarks':remarks})
+                                                      'remark_list':remark_list,'id_list':id_list})
 
 def addremark(request,pk,reqIdPK):
     newremark=request.POST.get('remark')
-    remark_instance=Mappedempremarks(remark_id=EmployeeReqMapping(pk=pk),remark=newremark)
+    remark_instance=EmployeeReqMapping.objects.get(pk=pk)
+    remark_instance.set_string_list(newremark)
     remark_instance.save()
     return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
@@ -499,7 +514,80 @@ def addVm(request):
         ownerList = list(map(lambda x:x.eFname,getOwnerList()))  
         return render(request, "add_vm_candidates.html",{'ownerList':ownerList})
 
-def update_vm_candidates(request): 
+#function to upload resume file.
+def add_vm_resume(request,vmIdPK):
+    vm_instance=VmResource.objects.get(pk=vmIdPK)
+    if request.method=='POST':
+        vm_resume=request.POST.get('resume')
+        vm_instance.resume=vm_resume
+        vm_instance.save()
+    return redirect('/showVm')
+
+def update_ta(request,ta_id):
+    ta_instance=TA_Resource.objects.get(pk=ta_id)
+    if request.method=='POST':
+        ta_instance.archived=request.POST.get('archived')
+        ta_instance.date=request.POST.get('date')
+        ta_instance.name=request.POST.get('name')
+        ta_instance.BU=request.POST.get('BU')
+        ta_instance.Position=request.POST.get('Position')
+        ta_instance.skillset=request.POST.get('skillset')
+        ta_instance.education=request.POST.get('education')
+        ta_instance.experience=request.POST.get('experience')
+        ta_instance.relevant_exp=request.POST.get('relevant_exp')
+        ta_instance.current_org=request.POST.get('current_org')
+        ta_instance.current_ctc=request.POST.get('current_ctc')
+        ta_instance.expected_ctc=request.POST.get('expected_ctc')
+        ta_instance.actual_notice_period=request.POST.get('actual_notice_period')
+        ta_instance.notice_period=request.POST.get('notice_period')
+        ta_instance.current_loc=request.POST.get('current_loc')
+        ta_instance.email=request.POST.get('email')
+        ta_instance.status=request.POST.get('status')
+        ta_instance.BU_comments=request.POST.get('BU_comments')
+        ta_instance.TA_comments=request.POST.get('TA_comments')
+        ta_instance.T1_panel=request.POST.get('T1_panel')
+        ta_instance.T1_IW_date=request.POST.get('T1_IW_date')
+        ta_instance.T2_panel=request.POST.get('T2_panel')
+        ta_instance.T2_IW_date=request.POST.get('T2_IW_date')
+        ta_instance.source=request.POST.get('source')
+        ta_instance.Domain=request.POST.get('Domain')
+        ta_instance.T1=request.POST.get('T1')
+        ta_instance.T2=request.POST.get('T2')
+        ta_instance.save()
+    return redirect('/showTa')
+
+
+def update_vm(request,vmIdPK):
+    vm_instance=VmResource.objects.get(pk=vmIdPK)
+    if request.method=='POST':
+        vm_instance.position_status=request.POST.get('position_status')
+        vm_instance.pr_date=request.POST.get('pr_date')
+        vm_instance.vendor_name=request.POST.get('vendor_name')
+        vm_instance.candidate_source=request.POST.get('candidate_source')
+        vm_instance.candidate_name=request.POST.get('candidate_name')
+        vm_instance.resume=request.POST.get('resume')
+        vm_instance.skillset=request.POST.get('skillset')
+        vm_instance.experience=request.POST.get('experience')
+        vm_instance.education=request.POST.get('education')
+        vm_instance.billing_rate=request.POST.get('billing_rate')
+        vm_instance.bu_head=request.POST.get('bu_head')
+        vm_instance.location=request.POST.get('location')
+        vm_instance.notice_period=request.POST.get('notice_period')
+        vm_instance.reviewer_name=request.POST.get('reviewer_name')
+        vm_instance.remarks_panel=request.POST.get('remarks_panel')
+        vm_instance.vm_comment=request.POST.get('vm_comment')
+        vm_instance.client_name=request.POST.get('client_name')
+        vm_instance.interview_status=request.POST.get('interview_status')
+        vm_instance.interview_schedule=request.POST.get('interview_schedule')
+        vm_instance.comments=request.POST.get('comments')
+        vm_instance.remarks=request.POST.get('remarks')
+        vm_instance.email=request.POST.get('email')
+        vm_instance.phone_number=request.POST.get('phone_number')
+        vm_instance.mode=request.POST.get('mode')
+        vm_instance.save()
+    return redirect('/showVm')
+
+
     pass
 
 def showTaList(request,reqIdPK):
