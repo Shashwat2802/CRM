@@ -13,18 +13,6 @@ class Customer(models.Model):
         return str(self.cName)
     
 
-
-#Let this be default Roles
-# PE, PL,PM, ==> Project Engineer
-# TE,TL,TM  ==> Test Engineer
-# VPE,VPL  ==> Vendor Project engineers(on LeadSoc Roles)
-# VOS=> Vendor OutSourced( Vendor Candididate not on LeadSoc Rols)
-# BUH, 
-# TA_HEAD, TA_STAFF
-# SALES_HEAD, SALES_STAFF
-# HR_STAFF, HR_MGR
-# FIN_MGR, FIN_STAFF
-# OPS_HEAD, OPS_STAFF //Operation Staffs
 class Role(models.Model):
     role_name=models.CharField(max_length=100,primary_key=True)
 
@@ -109,7 +97,7 @@ class EmployeeReqMapping(models.Model):
     estatus = models.CharField(max_length=100,null=True)
     empstatus = models.CharField(max_length=100,null=True, default='')
     added_date = models.DateField(null=True)
-    source = models.CharField(max_length=100,null=True, default='LEADSOC')
+    source = models.CharField(max_length=100,null=True, default='BENCH')
     sourceId = models.CharField(max_length=100,null=True,default='') # Can We  give foriegn key from 3 different table, like VM,TA, employee
     history = models.TextField(default="")
 
@@ -129,7 +117,7 @@ class EmployeeReqMapping(models.Model):
     estatus = models.CharField(max_length=100,null=True)
     empstatus = models.CharField(max_length=100,null=True, default='')
     added_date = models.DateField(null=True)
-    source = models.CharField(max_length=100,null=True, default='LEADSOC')
+    source = models.CharField(max_length=100,null=True, default='BENCH')
     sourceid_1 = models.CharField(max_length=10,null=True) # Can We  give foriegn key from 3 different table, like VM,TA, employee
     sourceid_2=models.CharField(max_length=10,null=True)
     sourceid_3=models.IntegerField(default=0)
