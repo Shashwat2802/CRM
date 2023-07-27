@@ -238,6 +238,7 @@ def listEmployeeFiltered(request,department,buh,manager):
     print("Employee list",employees)
     departments =getDepartmentList()
     buhList= getBUHList()
+
     Manager=getManagers()
     current_user = request.user.username.title()       
     return render(request, "showemp.html", {'employees':employees,
@@ -245,24 +246,6 @@ def listEmployeeFiltered(request,department,buh,manager):
                                               'departments':departments,'BUHList':buhList,'Manager':Manager}) 
 
 
-# def getEmployeeExperiances(request, employee_id):
-#     print("Emp id from model", employee_id)
-
-#     try:
-#         experience_history = EmpExperienceHistory.objects.filter(e_id=employee_id).values()
-#         return JsonResponse(list(experience_history), safe=False)
-#     except Employee.DoesNotExist:
-#         print("Emp data NOT FOUND")
-#         return JsonResponse({'error': 'Employee not found'}, status=404)
-
-def getEmployeeExperiances(request, employee_id):
-    print("Emp id from model", employee_id)
-    employee=  Employee.objects.get(e_id=employee_id)
-    experiencelist = EmpExperienceHistory.objects.filter(e_id=employee_id)
-    customerlist=getCustomerList()
-    context = {'employee':employee,"experiencelist":experiencelist,"customerlist":customerlist}
-    print("emp exp Data in view",context)
-    return render(request, "empExpModal.html", context) 
 
 def addSalesReqComment(request, reqIdPK):
     if request.method == 'POST':
@@ -690,6 +673,7 @@ def listEmployees(request):
     departments =getDepartmentList()
     buhList= getBUHList()
     Manager=getManagers()
+
     return render(request, "showemp.html", {'employees':employees,
                                         'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp,'customerlist':customerlist,
                                             'departments':departments,'BUHList':buhList,'Manager':Manager})
@@ -697,6 +681,7 @@ def listEmployees(request):
     #                                         'experiencelist':experiencelist,'rolelist':rolelist,
     #                                         'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp,
     #                                           'add_exp_btn': add_exp_btn,'departments':departments,'BUHList':buhList,'Manager':Manager})
+
 
 # To delete employee details
 def deleteLeadSocEmployee(request, e_id):
