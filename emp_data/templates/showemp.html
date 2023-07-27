@@ -86,6 +86,39 @@
   }
 </script>
 
+<script>
+  $(document).ready(function () {
+
+    $('.modal').on('click', '.close', function () {
+      $(this).closest('.modal').modal('hide');
+    });
+
+    // Handle button click event
+    $('button[id^="openEmpExpModalBtn"]').click(function () {
+      var empid = $(this).data('e_id');
+      console.log("Emp Id", empid)
+      // Get the empid value from the button's data attribute
+
+      // Make an AJAX request to fetch the modal content with empid as a query parameter
+      $.ajax({
+        url: `/getEmployeeExperiances/${empid}/`, // Replace with the actual URL for the view
+        type: 'GET',
+        dataType: 'html',
+        success: function (data) {
+          console.log("Data inside query", data)
+          // On success, load the fetched content into the modal
+          $(`#modalExpTable${empid} .modal-content`).html(data);
+          // Show the modal
+          $(`#modalExpTable${empid}`).modal('show');
+        },
+        error: function (xhr, status, error) {
+          console.error(error);
+          // Handle error if needed
+        }
+      });
+    });
+  });
+</script>
 </div>
 
 
@@ -151,76 +184,15 @@
             <i class="fa-solid fa-eye"></i>
           </button>
 
-
-          <div class="modal" id="modalTable{{employee.ePhone}}" data-bs-backdrop="static" data-bs-keyboard="false"
+          <div class="modal" id="modalExpTable{{employee.e_id}}" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
               <div class="modal-content">
-                <div class="modal-header">
-                  <h5>Experience</h5>
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                  <h5>Employee Name: {{employee.eFname}} {{employee.eLname}} </h5>
-                  <table class="table table-striped" id="example1" name="example1">
-                    <thead>
-                      <tr>
-                        <th>Company</th>
-                        <th>Customer Start Date</th>
-                        <th>Customer End Date</th>
-                        <th>Duration (In Days)</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for val in experiencelist %}
-                      {% if val.e_id == employee.e_id %}
-                      <tr>
-                        <td>{{val.refer_customer}}</td>
-                        <td>{{val.customer_start_date}}</td>
-                        <td>{{val.customer_end_date}}</td>
-                        <td>{{val.duration}}</td>
-                        <td>
-                          <button class="btn-success btn-sm">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                          </button>
-                          <button onclick="location.href='/deleteEmployeeExperience/{{val.id}}'"
-                            class="btn-danger btn-sm">
-                            <i class="fa-solid fa-trash"></i>
-                          </button>
-                        </td>
-                      </tr>
-                      {% endif %}
-                      {% endfor %}
-                      <tr id="new_row">
-                        <form method="POST" action="/addEmployeeExperience/{{employee.e_id}}">
-                          {% csrf_token %}
-                          <td>
-                            <select name="refer_customer" id="refer_customer">
-                              {% for val in customerlist %}
-                              <option value="{{val}}">{{val}}</option>
-                              {% endfor %}
-                            </select>
-                          </td>
-                          <td>
-                            <input type='date' id='start_date' name="start_date">
-                          </td>
-                          <td>
-                            <input type='date' id='end_date' name="end_date">
-                          </td>
-                          <td>
-                            <button class='btn-info btn-sm' type='submit'>Add</button>
-                          </td>
-                        </form>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                </div>
-
+                <!-- The fetched content will be loaded here -->
               </div>
             </div>
           </div>
+
 
           <div class="modal" id="modalForm{{employee.ePhone}}" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -248,7 +220,7 @@
                       <div class="form-group">
                         <label for="refer_Customer">Customer</label>
                         <select name="refer_Customer" id="refer_Customer">
-                          <option value="{{ employee.refer_Customer }}" selected >{{ employee.refer_Customer }}</option>
+                          <option value="{{ employee.refer_Customer }}" selected>{{ employee.refer_Customer }}</option>
                           {% for val in customerlist %}
                           <option value="{{val}}">{{val}}</option>
                           {% endfor %}
@@ -267,7 +239,7 @@
                       <div class="form-group">
                         <label for="eRole">Update Role</label>
                         <select name="eRole" id="eRole">
-                          <option value="{{ employee.eRole }}" selected >{{ employee.eRole }}</option>
+                          <option value="{{ employee.eRole }}" selected>{{ employee.eRole }}</option>
                           {% for val in rolelist %}
                           <option value="{{val}}">{{val}}</option>
                           {% endfor %}
@@ -277,7 +249,7 @@
                       <div class="form-group">
                         <label for="Manager">Update Manager</label>
                         <select name="Manager" id="Manager">
-                          <option value="{{ employee.Manager }}" selected >{{ employee.Manager }}</option>
+                          <option value="{{ employee.Manager }}" selected>{{ employee.Manager }}</option>
                           {% for val in managers %}
                           <option value="{{val}}">{{val}}</option>
                           {% endfor %}
@@ -288,7 +260,7 @@
                       <div class="form-group">
                         <label for="department">Update department</label>
                         <select name="department" id="department">
-                          <option value="{{ employee.department }}" selected >{{ employee.department }}</option>
+                          <option value="{{ employee.department }}" selected>{{ employee.department }}</option>
                           {% for val in departments %}
                           <option value="{{val}}">{{val}}</option>
                           {% endfor %}
@@ -297,7 +269,7 @@
                       <div class="form-group">
                         <label for="estatus">Update status:</label>
                         <select name="estatus" id="estatus">
-                           <option value="{{ employee.estatus }}" selected >{{ employee.estatus }}</option>
+                          <option value="{{ employee.estatus }}" selected>{{ employee.estatus }}</option>
                           {% for val in statuslist %}
                           <option value="{{val}}">{{val}}</option>
                           {% endfor %}
@@ -313,6 +285,12 @@
               </div>
             </div>
           </div>
+
+          <!-- Button to open the Experiance modal -->
+          <button type="button" class="btn btn-primary" id="openEmpExpModalBtn{{employee.e_id}}"
+            data-e_id="{{ employee.e_id }}">Exp
+          </button>
+
         </td>
       </tr>
       {% endfor %}

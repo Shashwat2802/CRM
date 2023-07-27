@@ -18,6 +18,7 @@ from django.http import HttpResponse
 from django.db.models import Q
 from datetime import date
 from django.db.models import Func, F
+from django.http import JsonResponse
 
 def loginCheck(request):
     if request.method == 'POST':
@@ -245,6 +246,14 @@ def listEmployeeFiltered(request,department,buh,manager):
                                               'departments':departments,'BUHList':buhList,'Manager':Manager}) 
 
 
+def getEmployeeExperiances(request, employee_id):
+    print("Emp id from model", employee_id)
+    employee=  Employee.objects.get(e_id=employee_id)
+    experiencelist = EmpExperienceHistory.objects.filter(e_id=employee_id)
+    customerlist=getCustomerList()
+    context = {'employee':employee,"experiencelist":experiencelist,"customerlist":customerlist}
+    print("emp exp Data in view",context)
+    return render(request, "empExpModal.html", context) 
 
 def addSalesReqComment(request, reqIdPK):
     if request.method == 'POST':
@@ -672,13 +681,13 @@ def listEmployees(request):
     employees = Employee.objects.all()
     current_user = request.user.username
     current_emp = Employee.objects.get(eFname__icontains=current_user)
-
+    customerlist=getCustomerList()
     departments =getDepartmentList()
     buhList= getBUHList()
     Manager=getManagers()
 
     return render(request, "showemp.html", {'employees':employees,
-                                        'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp,
+                                        'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp,'customerlist':customerlist,
                                             'departments':departments,'BUHList':buhList,'Manager':Manager})
     # return render(request, "showemp.html", {'employees':employees,'customerlist':customerlist,
     #                                         'experiencelist':experiencelist,'rolelist':rolelist,
