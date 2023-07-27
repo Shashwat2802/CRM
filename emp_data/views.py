@@ -575,7 +575,7 @@ def mapEmpToReq(request,reqIdPK,choice):
         today = date.today()
         salesReq=Customer_Requirements.objects.get(pk=reqIdPK)
         print("Req",salesReq, salesReq.Bu_head)
-        if choice=='LeadSoc':
+        if choice=='bench':
              selectedEmpList = request.POST.getlist('empId')
              print("employee list",selectedEmpList)
              for i in selectedEmpList:
@@ -583,7 +583,7 @@ def mapEmpToReq(request,reqIdPK,choice):
                 emp.estatus='pendingProcessing'
                 emp.save()
                 print("Employee status updated",emp)
-                final=EmployeeReqMapping(req_id=salesReq,name=emp.eFname + " " +emp.eLname,eskills=emp.eskills,  added_date=today,source='LEADSOC',sourceid_1=emp.e_id)
+                final=EmployeeReqMapping(req_id=salesReq,name=emp.eFname + " " +emp.eLname,eskills=emp.eskills,  added_date=today,source='BENCH',sourceid_1=emp.e_id)
                 final.save()
         if choice=='TA':
             selectedtaList = request.POST.getlist('name')

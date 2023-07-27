@@ -1,97 +1,92 @@
-{%extends 'basic.html' %}
-{% block extra%}
-
-{% endblock %}
-{% block body %}
+{%extends 'basic.html' %} {% block extra%} {% endblock %} {% block body %}
 <table>
-    <tr>
-        <td style="padding : 15px; margin-top: 30px;">
-            <div class="container text-white" style="margin-top: 30px;">
-                <div class="col-xl-12">
-                    <form action="" method="get" class="form-inline">
-                        {% csrf_token %}
-                        <input type="text" class="form-control" placeholder="Search candidate skills.."
-                            name="searchskill">
-                        <button type="submit" class="btn btn-success" value="Search">Search</button>
-
-                    </form>
-                </div>
-            </div>
-        </td>
-        <div>
-            <td style="padding : 15px; margin-top: 30px;">
-                <div onclick="location.href='';">
-                    <input type="radio">
-                    <p>Leadsoc Employee List</p>
-                </div>
-            </td>
-            <td style="padding : 15px; margin-top: 30px;">
-                <div onclick="location.href='/showTaList/{{reqIdPK}}';">
-                    <input type="radio">
-                    <p>TA Resources</p>
-                </div>
-            </td>
-
-            <td style="padding : 15px; margin-top: 30px;">
-                <div onclick="location.href='/showVmList/{{reqIdPK}}';">
-                    <input type="radio">
-                    <p>VM Resources</p>
-                </div>
-            </td>
+  <tr>
+    <td style="padding: 15px; margin-top: 30px">
+      <div class="container text-white" style="margin-top: 30px">
+        <div class="col-xl-12">
+          <form action="" method="get" class="form-inline">
+            {% csrf_token %}
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Search candidate skills.."
+              name="searchskill"
+            />
+            <button type="submit" class="btn btn-success" value="Search">Search</button>
+          </form>
         </div>
-    </tr>
+      </div>
+    </td>
+    <div>
+      <td style="padding: 15px; margin-top: 30px">
+        <div onclick="location.href='';">
+          <input type="radio" />
+          <p>Bench Resource</p>
+        </div>
+      </td>
+      <td style="padding: 15px; margin-top: 30px">
+        <div onclick="location.href='/showTaList/{{reqIdPK}}';">
+          <input type="radio" />
+          <p>TA Resources</p>
+        </div>
+      </td>
+
+      <td style="padding: 15px; margin-top: 30px">
+        <div onclick="location.href='/showVmList/{{reqIdPK}}';">
+          <input type="radio" />
+          <p>VM Resources</p>
+        </div>
+      </td>
+    </div>
+  </tr>
 </table>
 
-<div class="container text-white" style="margin-top: 30px;">
-
-    <div class="col-xl-12">
-
-    </div>
+<div class="container text-white" style="margin-top: 30px">
+  <div class="col-xl-12"></div>
 </div>
 
 <center>
-    <div>
-        <h3 class="bg-info text-white">Candidate List</h3>
-
-    </div>
+  <div>
+    <h3 class="bg-info text-white">Candidate List</h3>
+  </div>
 </center>
-<form action="/mapEmpToReq/{{reqIdPK}}/LeadSoc" method="POST" class="form-inline">
+<form action="/mapEmpToReq/{{reqIdPK}}/bench" method="POST" class="form-inline">
+  {% csrf_token %}
 
-    {% csrf_token %}
+  <table class="table">
+    <thead class="badge-info text-white">
+      <tr>
+        <th>No.</th>
+        <th>select</th>
+        <th>Id</th>
+        <th>Candidate Fname</th>
+        <th>Candidate Lname</th>
+        <th>Candidate Skills</th>
+        <th>Candidate Status</th>
+      </tr>
+    </thead>
 
-    <table class="table">
-        <thead class="badge-info text-white">
-            <tr>
-                <th>No.</th>
-                <th>select</th>
-                <th>Id</th>
-                <th>Candidate Fname</th>
-                <th>Candidate Lname</th>
-                <th>Candidate Skills</th>
-                <th>Candidate Status</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            {% for candidate_list in form %}
-            <tr>
-                <td>{{forloop.counter}}</td>
-                <td><input type="checkbox" name="empId" id="empId" value="{{candidate_list.e_id}}">
-                    <label for="empId"></label>
-                </td>
-                <td>{{candidate_list.e_id}}</td>
-                <td>{{candidate_list.eFname}}</td>
-                <td>{{candidate_list.eLname}}</td>
-                <td>{{candidate_list.eskills}}</td>
-                <td>{{candidate_list.estatus}}</td>
-
-            </tr>
-            {% empty %}
-            <span class="text-center text-danger">No record found</span>
-            {% endfor %}
-        </tbody>
-    </table>
-    <button type="submit" class="btn btn-info" value="submit" style="float:right">Add LeadSoc Candidate</button>
-
+    <tbody>
+      {% for candidate_list in form %}
+      <tr>
+        <td>{{forloop.counter}}</td>
+        <td>
+          <input type="checkbox" name="empId" id="empId" value="{{candidate_list.e_id}}" />
+          <label for="empId"></label>
+        </td>
+        <td>{{candidate_list.e_id}}</td>
+        <td>{{candidate_list.eFname}}</td>
+        <td>{{candidate_list.eLname}}</td>
+        <td>{{candidate_list.eskills}}</td>
+        <td>{{candidate_list.estatus}}</td>
+      </tr>
+      {% empty %}
+      <span class="text-center text-danger">No record found</span>
+      {% endfor %}
+    </tbody>
+  </table>
+  <button type="submit" class="btn btn-info" value="submit" style="float: right">
+    Add  Candidate
+  </button>
 </form>
 {% endblock %}
