@@ -89,10 +89,10 @@
 <script>
   $(document).ready(function () {
 
-        $('.modal').on('click', '.close', function() {
+    $('.modal').on('click', '.close', function () {
       $(this).closest('.modal').modal('hide');
     });
-    
+
     // Handle button click event
     $('button[id^="openEmpExpModalBtn"]').click(function () {
       var empid = $(this).data('e_id');
@@ -183,8 +183,6 @@
           <button class="btn-info btn-sm data" data-toggle="modal" data-target="#modalTable{{employee.ePhone}}">
             <i class="fa-solid fa-eye"></i>
           </button>
-
-
 
           <div class="modal" id="modalExpTable{{employee.e_id}}" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -288,7 +286,7 @@
             </div>
           </div>
 
-          <!-- Button to open the modal -->
+          <!-- Button to open the Experiance modal -->
           <button type="button" class="btn btn-primary" id="openEmpExpModalBtn{{employee.e_id}}"
             data-e_id="{{ employee.e_id }}">Exp
           </button>
