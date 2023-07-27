@@ -32,6 +32,7 @@
             <th>Email</th>
             <th>Phone Number</th>
             <th>Actions</th>
+            <th>Resume Actions</th>
             <!-- <th>Skillset</th>
             <th>Experience</th>
             <th>Education</th>
@@ -63,12 +64,12 @@
                 <td>{{ val.phone_number }}</td>
                 <td>
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModalLong">
+                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModalLong{{val.vmIdPK}}">
                         <i class="fa-regular fa-eye"></i>
                     </button>
   
                     <!-- Modal -->
-                    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                    <div class="modal fade" id="exampleModalLong{{val.vmIdPK}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -179,12 +180,12 @@
                         </div>
                     </div>
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal1{{val.vmIdPK}}">
                         <i class="fa-regular fa-pen-to-square"></i>
                     </button>
                     
                     <!-- Modal -->
-                    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true">
+                    <div class="modal fade" id="exampleModal1{{val.vmIdPK}}" tabindex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-scrollable">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -192,7 +193,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form method="POST" action="/update_vm_candidates">
+                                <form method="POST" action="/update_vm/{{val.vmIdPK}}">
                                     {% csrf_token %}
                                     <div class="form-group">
                                         <label for="position_status">Position Status:</label>
@@ -295,6 +296,38 @@
                         </div>
                         </div>
                     </div>
+                </td>
+                <td>
+                    <button class=" btn-sm" data-toggle="modal" data-target="#modalupload{{value.ta_id}}"><i
+                        class="fa-solid fa-plus"></i></button>
+                <div class="modal" id="modalupload{{value.ta_id}}" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                  <div class=" modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            Upload Resume for : {{val.candidate_name}}
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/vmresume/{{val.vmIdPK}}" method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="resume">
+                                         <input type="url" name="resume" id="resume" placeholder="Upload Resume link">
+                                    </label>
+                                    <input type="submit" value="Upload Resume">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                <button class="button-sm">
+                <a href="{{val.resume}}"><i class="fa-solid fa-eye"></i></a>
+            </button>
+                
                 </td>
                 <!-- <td>{{ val.skillset }}</td>
                 <td>{{ val.experience }}</td>
