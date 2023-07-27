@@ -180,9 +180,7 @@
             })
           </script>
           {% endif %}
-          <button class="btn-info btn-sm data" data-toggle="modal" data-target="#modalTable{{employee.ePhone}}">
-            <i class="fa-solid fa-eye"></i>
-          </button>
+
 
           <div class="modal" id="modalExpTable{{employee.e_id}}" data-bs-backdrop="static" data-bs-keyboard="false"
             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -288,7 +286,7 @@
 
           <!-- Button to open the Experiance modal -->
           <button type="button" class="btn btn-primary" id="openEmpExpModalBtn{{employee.e_id}}"
-            data-e_id="{{ employee.e_id }}">Exp
+            data-e_id="{{ employee.e_id }}"><i class="fa-solid fa-eye"></i>
           </button>
 
         </td>
