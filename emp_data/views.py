@@ -246,6 +246,24 @@ def listEmployeeFiltered(request,department,buh,manager):
                                               'departments':departments,'BUHList':buhList,'Manager':Manager}) 
 
 
+# def getEmployeeExperiances(request, employee_id):
+#     print("Emp id from model", employee_id)
+
+#     try:
+#         experience_history = EmpExperienceHistory.objects.filter(e_id=employee_id).values()
+#         return JsonResponse(list(experience_history), safe=False)
+#     except Employee.DoesNotExist:
+#         print("Emp data NOT FOUND")
+#         return JsonResponse({'error': 'Employee not found'}, status=404)
+
+def getEmployeeExperiances(request, employee_id):
+    print("Emp id from model", employee_id)
+    employee=  Employee.objects.get(e_id=employee_id)
+    experiencelist = EmpExperienceHistory.objects.filter(e_id=employee_id)
+    customerlist=getCustomerList()
+    context = {'employee':employee,"experiencelist":experiencelist,"customerlist":customerlist}
+    print("emp exp Data in view",context)
+    return render(request, "empExpModal.html", context) 
 
 def addSalesReqComment(request, reqIdPK):
     if request.method == 'POST':
