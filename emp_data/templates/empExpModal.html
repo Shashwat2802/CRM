@@ -1,0 +1,59 @@
+<div class="modal-header">
+ <h5>Experience</h5>
+ <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+  <button type="button" class="close">&times;</button>
+
+</div>
+<div class="modal-body">
+  <h5>Employee Name: {{employee.eFname}} {{employee.eLname}} </h5>
+  <form method="POST" action="/addEmployeeExperience/{{employee.e_id}}">
+    {% csrf_token %}
+    <table class="table table-striped" id="example1" name="example1">
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Customer Start Date</th>
+          <th>Customer End Date</th>
+          <th>Duration (In Days)</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for val in experiencelist %}
+        <tr>
+          <td>{{val.refer_customer}}</td>
+          <td>{{val.customer_start_date}}</td>
+          <td>{{val.customer_end_date}}</td>
+          <td>{{val.duration}}</td>
+          <td>
+            <button class="btn-success btn-sm">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button onclick="location.href='/deleteEmployeeExperience/{{val.id}}'" class="btn-danger btn-sm">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+        <tr id="new_row">
+          <td>
+            <select name="refer_customer" id="refer_customer">
+              {% for val in customerlist %}
+              <option value="{{val}}">{{val}}</option>
+              {% endfor %}
+            </select>
+          </td>
+          <td>
+            <input type='date' id='start_date' name="start_date">
+          </td>
+          <td>
+            <input type='date' id='end_date' name="end_date">
+          </td>
+          <td>
+            <button class='btn-info btn-sm' type='submit'>Add</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>
