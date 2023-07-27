@@ -469,7 +469,8 @@ def selection_status(request, estatus,reqIdPK):
 # To display all the VM candidates 
 def showVm(request):
     all_vm_candidates = VmResource.objects.all()
-    return render(request, "show_vm_candidates.html", {"candidate_list":all_vm_candidates})
+    ownerList = list(map(lambda x:x.eFname,getOwnerList()))  
+    return render(request, "show_vm_candidates.html", {"candidate_list":all_vm_candidates,'ownerList':ownerList})
 
 # Form to add only one VM candidate 
 def addVm(request):
@@ -659,7 +660,7 @@ def vmDataUpload(request):
                 phone_number=data[21],
                 mode=data[22],
                 vmIdPK = data[23],
-                owner = Employee(e_id=data[24])
+                owner = Employee.objects.get(eFname=data[24])
             )
             value.save()
         return redirect("/showVm")
