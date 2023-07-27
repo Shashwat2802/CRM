@@ -72,7 +72,6 @@ urlpatterns = [
 
     #employee paths
     path('addEmployee', views.addEmployee),
-    path('listEmployees', views.listEmployees),
     path('deleteLeadSocEmployee/<str:e_id>', views.deleteLeadSocEmployee),
     path('updateLeadSocEmployee/<str:e_id>', views.updateLeadSocEmployee),
 

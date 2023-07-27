@@ -54,7 +54,34 @@
     </div>
 </center>
 <div class="container">
-    <table class="table table-bordered table-hover" id="example" name="example">
+    
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- DataTables core library -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
+<!-- DataTables Buttons extension library -->
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css"
+/>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#taTable').DataTable({
+      dom: 'Bfrtip',
+      buttons: ['copyHtml5', 'excelHtml5', 'csvHtml5'],
+    })
+  })
+</script>
+    <table class="table table-bordered table-hover" id="taTable" name="taTable">
         <thead class="bg-info text-white">
             <tr>
                 <th>TA ID.</th>
@@ -243,7 +270,8 @@
                         </div>
                         </div>
                     </div>
-</div>
+
+                </div>
 <div class="modal" id="modalupdate{{value.phone_number}}" data-bs-backdrop="static" data-bs-keyboard="false"
     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">

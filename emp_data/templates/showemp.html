@@ -2,22 +2,9 @@
 {% block extra %}
 {% load experience_filter %}
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
 
-  $(document).ready(function () {
-    $('#example').DataTable({
-      dom: 'Bfrtip',
-      buttons: [
-        'copyHtml5',
-        'excelHtml5',
-        'csvHtml5',
-        'pdfHtml5'
-      ]
-    });
-  });
-</script>
+
+
 {% endblock %}
 {% block body %}
 <center>
@@ -33,8 +20,8 @@
 
     <span class="btn">
       DEPT
-      <select class="btn" name="department" id="Bu" style="border-radius: 30px;">
-        <!-- <option value="{{bu_select}}" selected hidden disabled>{{bu_select}}</option> -->
+      <select class="btn" name="department" id="department" style="border-radius: 30px;">
+        <option value="{{department}}" selected hidden disabled>{{department}}</option>
         {% for val in departments %}
         <option value="{{val.department}}">{{val.department}}</option>
         {% endfor %}
@@ -44,8 +31,8 @@
 
     <span style="margin-left: 30;" class="btn">
       BUH
-      <select name="Buhlist" id="buhead" class="btn" style="border-radius: 30px;">
-        <option value="{{buh_select}}" selected disabled hidden>{{buh_select}}</option>
+      <select name="buhead" id="buhead" class="btn" style="border-radius: 30px;">
+        <option value="{{buh}}" selected disabled hidden>{{buh}}</option>
         {% for val in BUHList %}
         <option value="{{val.eFname}}">{{val.eFname}}</option>
         {% endfor %}
@@ -55,9 +42,9 @@
 
     <span style="margin-left: 30;" class="btn">
       Manager
-      <select name="managerlist" id="manager" class="btn" style="border-radius: 30px;">
-        <option value="{{manager_select}}" selected disabled hidden>{{manager_select}}</option>
-        {% for val in Manager %}
+      <select name="manager" id="manager" class="btn" style="border-radius: 30px;">
+        <option value="{{manager}}" selected disabled hidden>{{manager}}</option>
+        {% for val in managerList %}
         <option value="{{val.eFname}}">{{val.eFname}}</option>
         {% endfor %}
         <option value="All">All</option>
@@ -70,7 +57,7 @@
     </span>
     <span style="margin-left: 10;">
       <button class="go-btn" style="border-radius: 30px;" type="submit"
-        onclick="location.href='/listEmployees'">Refresh</button>
+        onclick="location.href='/listEmployeeFiltered/All/All/All'">Refresh</button>
     </span>
 
   </div>
@@ -86,44 +73,12 @@
   }
 </script>
 
-<script>
-  $(document).ready(function () {
 
-    $('.modal').on('click', '.close', function () {
-      $(this).closest('.modal').modal('hide');
-    });
 
-    // Handle button click event
-    $('button[id^="openEmpExpModalBtn"]').click(function () {
-      var empid = $(this).data('e_id');
-      console.log("Emp Id", empid)
-      // Get the empid value from the button's data attribute
-
-      // Make an AJAX request to fetch the modal content with empid as a query parameter
-      $.ajax({
-        url: `/getEmployeeExperiances/${empid}/`, // Replace with the actual URL for the view
-        type: 'GET',
-        dataType: 'html',
-        success: function (data) {
-          console.log("Data inside query", data)
-          // On success, load the fetched content into the modal
-          $(`#modalExpTable${empid} .modal-content`).html(data);
-          // Show the modal
-          $(`#modalExpTable${empid}`).modal('show');
-        },
-        error: function (xhr, status, error) {
-          console.error(error);
-          // Handle error if needed
-        }
-      });
-    });
-  });
-</script>
-</div>
 
 
 <div class="container-fluid">
-  <table class="table table-bordered table-hover" id="example" name="example">
+  <table class="table table-bordered table-hover" id="empTable" name="empTable">
     <thead class="bg-info text-white">
       <tr>
         <th>Employee ID.</th>
@@ -159,16 +114,15 @@
         <td>{{employee.customer_start_date}}</td>
 
         <td>
-
+          {% if current_emp.eRole.role_name == 'HR' or current_emp.eRole.role_name == 'BUH' %}
           <button class="btn-danger btn-sm" onclick="location.href='/deleteLeadSocEmployee/{{employee.e_id}}'"><i
               class="fa-solid fa-trash"></i></button>
-          {% if current_emp.eRole.role_name == 'HR' or current_emp.eRole.role_name == 'BUH' %}
           <button class="btn-success btn-sm" data-toggle="modal" data-target="#modalForm{{employee.ePhone}}"><i
               class="fa-solid fa-pen-to-square"></i>
           </button>
           {% else %}
           <span class="d-inline-block" tabindex="0" data-bs-toggle="popover{{employee.e_id}}"
-            data-bs-trigger="hover focus" data-bs-content="Authorized for HR or Bu-Head only" data-bs-placement="left">
+            data-bs-trigger="hover focus" data-bs-content="Authorized for HR or BUH only ${{current_emp.eRole.role_name}}" data-bs-placement="left">
             <button class="btn-outline-secondary btn-success" disabled>
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
@@ -231,7 +185,7 @@
                       </div>
                       <div class="form-group">
                         <label for="ePhone">Phone :</label>
-                        <input type="email" class="form-control" id="ePhone" name="ePhone" placeholder="Phone"
+                        <input type="text" class="form-control" id="ePhone" name="ePhone" placeholder="Phone"
                           value="{{employee.ePhone}}">
                       </div>
                       <div class="form-group">
@@ -268,9 +222,12 @@
                         <label for="estatus">Update status:</label>
                         <select name="estatus" id="estatus">
                           <option value="{{ employee.estatus }}" selected>{{ employee.estatus }}</option>
-                          {% for val in statuslist %}
-                          <option value="{{val}}">{{val}}</option>
-                          {% endfor %}
+                          <option value="Free">Free</option>
+                          <option value="PendingProcessing">PendingProcessing</option>
+                          <option value="Deployed">Deployed</option>
+                          <option value="NA">NA</option>
+
+
                         </select>
                       </div>
 
@@ -294,5 +251,61 @@
       {% endfor %}
     </tbody>
   </table>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- DataTables core library -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
+  <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
+  <!-- DataTables Buttons extension library -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+  <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
+  <script>
+    $(document).ready(function () {
+
+      $('#empTable').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+          'copyHtml5',
+          'excelHtml5',
+          'csvHtml5',
+          'pdfHtml5'
+        ]
+      });
+
+      $('.modal').on('click', '.close', function () {
+        $(this).closest('.modal').modal('hide');
+      });
+
+      // Handle button click event
+      $('button[id^="openEmpExpModalBtn"]').click(function () {
+        var empid = $(this).data('e_id');
+        console.log("Emp Id", empid)
+        // Get the empid value from the button's data attribute
+
+        // Make an AJAX request to fetch the modal content with empid as a query parameter
+        $.ajax({
+          url: `/getEmployeeExperiances/${empid}/`, // Replace with the actual URL for the view
+          type: 'GET',
+          dataType: 'html',
+          success: function (data) {
+            console.log("Data inside query", data)
+            // On success, load the fetched content into the modal
+            $(`#modalExpTable${empid} .modal-content`).html(data);
+            // Show the modal
+            $(`#modalExpTable${empid}`).modal('show');
+          },
+          error: function (xhr, status, error) {
+            console.error(error);
+            // Handle error if needed
+          }
+        });
+      });
+    });
+  </script>
 </div>
 {% endblock %}

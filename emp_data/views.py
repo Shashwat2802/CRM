@@ -66,7 +66,7 @@ def addEmployee(request):
         if form.is_valid():
             form.save()
             messages.success(request,"Details Saved !")
-            return redirect("/listEmployees")
+            return redirect("/listEmployeeFiltered/All/All/All")
 
         else:
             print("Error in data", form)
@@ -89,7 +89,7 @@ def addEmployeeExperience(request, e_id):
         end_date = request.POST.get('end_date')
         instance=EmpExperienceHistory(e_id=e_id,refer_customer=c_name,customer_start_date=start_date,customer_end_date=end_date)
         instance.save()
-        return redirect('/listEmployees')
+        return redirect('/listEmployeeFiltered/All/All/All')
     else:
         return HttpResponse("Error")
    
@@ -97,7 +97,7 @@ def addEmployeeExperience(request, e_id):
 def deleteEmployeeExperience(request, exp_id): 
     exp_instance = EmpExperienceHistory.objects.get(id=exp_id)
     exp_instance.delete()
-    return redirect('/listEmployees')
+    return redirect('/listEmployeeFiltered/All/All/All')
 
 
 def addSalesReqs(request):
@@ -239,11 +239,12 @@ def listEmployeeFiltered(request,department,buh,manager):
     departments =getDepartmentList()
     buhList= getBUHList()
 
-    Manager=getManagers()
-    current_user = request.user.username.title()       
-    return render(request, "showemp.html", {'employees':employees,
-                                            'statuslist':['Free','Deployed','Support Team'], 
-                                              'departments':departments,'BUHList':buhList,'Manager':Manager}) 
+    managerList=getManagers()
+    current_user = request.user.username  
+    current_emp = Employee.objects.get(eFname__icontains=current_user)     
+    return render(request, "showemp.html", {'employees':employees,"department":department,"buh":buh,
+                                             "manager":manager,"current_emp":current_emp,
+                                              'departments':departments,'BUHList':buhList,'managerList':managerList}) 
 
 
 def getEmployeeExperiances(request, employee_id):
@@ -715,26 +716,6 @@ def deleteAppliedCandidates(request,e_id,reqIdPK):
     company=req.customers
     return redirect(f'/mappedEmployeeToCustomer/{company}/{reqIdPK}')
 
-# To show employee details
-def listEmployees(request):
-    if not request.user.is_authenticated:
-        return redirect('home')
-    employees = Employee.objects.all()
-    current_user = request.user.username
-    current_emp = Employee.objects.get(eFname__icontains=current_user)
-    customerlist=getCustomerList()
-    departments =getDepartmentList()
-    buhList= getBUHList()
-    Manager=getManagers()
-
-    return render(request, "showemp.html", {'employees':employees,
-                                        'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp,'customerlist':customerlist,
-                                            'departments':departments,'BUHList':buhList,'Manager':Manager})
-    # return render(request, "showemp.html", {'employees':employees,'customerlist':customerlist,
-    #                                         'experiencelist':experiencelist,'rolelist':rolelist,
-    #                                         'statuslist':['Free','Deployed','Support Team'], 'current_emp': current_emp,
-    #                                           'add_exp_btn': add_exp_btn,'departments':departments,'BUHList':buhList,'Manager':Manager})
-
 
 # To delete employee details
 def deleteLeadSocEmployee(request, e_id):
@@ -742,7 +723,7 @@ def deleteLeadSocEmployee(request, e_id):
         return redirect('home')
     employee = Employee.objects.get(pk=e_id)
     employee.delete()
-    return redirect("/listEmployees")
+    return redirect("/listEmployeeFiltered/All/All/All")
 
 
 # To update employee details
@@ -762,7 +743,7 @@ def updateLeadSocEmployee(request, e_id):
         employee.estatus=request.POST['estatus']
         employee.save()
 
-    return redirect("/listEmployees")
+    return redirect("/listEmployeeFiltered/All/All/All")
 
         
 def save_emp_details(request): 
@@ -779,7 +760,7 @@ def save_emp_details(request):
                 eskills=employee.eskills
             )
             add_emp.save()
-    return redirect("/listEmployees")
+    return redirect("/listEmployeeFiltered/All/All/All")
 
 
 # this is working upload employee data to model
@@ -856,7 +837,7 @@ def bulkUploadEmployee(request):
                 )
             value.save()
  
-        return redirect("/listEmployees")
+        return redirect("/listEmployeeFiltered/All/All/All")
         
     return render(request,'upload.html')
 
