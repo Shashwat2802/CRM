@@ -1,18 +1,7 @@
 {% extends 'basic.html' %}
 {% block extra %}
 {% load custom_filters %}
-<script>
-    $(document).ready(function () {
-        $('#example').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copyHtml5',
-                'excelHtml5',
-                'csvHtml5'
-            ],
-        });
-    });
-</script>
+
 
 {% endblock %}
 {% block body %}
@@ -69,7 +58,7 @@
         </span>
         <span style="margin-left: 10;">
             <button class="go-btn" style="border-radius: 30px;" type="submit"
-                onclick="location.href=''/listSalesReqsFiltered/Choose/Choose/Choose'">Refresh</button>
+                onclick="location.href='/listSalesReqsFiltered/Choose/Choose/Choose'">Refresh</button>
         </span>
 
     </div>
@@ -85,7 +74,7 @@
 </script>
 
 </div>
-<table class="table relative-top" id="example">
+<table class="table relative-top" id="salesReqTable">
     <thead class="badge-info text-white">
         <tr>
         <tr>
@@ -308,6 +297,31 @@
     </tbody>
 
 </table>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- DataTables core library -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
+<!-- DataTables Buttons extension library -->
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#salesReqTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5'
+            ],
+        });
+    });
+</script>
 </div>
 {% endblock %}
 <!-- </nav> -->
