@@ -375,7 +375,7 @@ def freeFromAllSource(request,reqIdPK):
     if request.method == "GET":   
         skills = request.GET.get('searchskill')      
         if skills != None: 
-            form = Employee.objects.filter(eskills__icontains= skills,isDeleted=False)
+            form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='pendingProcessing')),eskills__icontains= skills,isDeleted=False)
     return render(request,'show_candidate.html',{'form':form ,'reqIdPK':reqIdPK})
 
 def checkbox(request):
