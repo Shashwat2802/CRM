@@ -209,9 +209,6 @@
                                         <form action="/updateSaleReqs/{{val.reqIdPK}}" method="POST">
                                             {% csrf_token %}
 
-                                            <div class="form-group">
-                                                <button type="submit" class="btn btn-primary">Update</button>
-
                                                 <br>
                                                 <label for="Position_Status">Position Status:</label>
 
@@ -239,7 +236,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="Job_Description">Updated Job Description:</label>
-                                                <textarea name="Job_Description" id="Job_Description" cols="50"
+                                                <textarea name="Job_Description" id="Job_Description" cols="40"
                                                     rows="20">{{val.Job_Description}}</textarea>
                                             </div>
 
@@ -261,28 +258,31 @@
 
                                             <div class="form-group">
                                                 <label for="Job_Description">Remarks</label>
-                                                <textarea name="history" id="history" cols="50"
+                                                <textarea name="history" id="history" cols="40"
                                                     rows="20">{{val.history}}</textarea>
                                             </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="Sales_Incharge">Sales Incharge</label>
-                                        <select name="Sales_Incharge" id="Sales_Incharge">
-                                            {% for val in sales_incharge %}
-                                            <option value="{{val}}">{{val}}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="Bu_Head">Bu Head:</label>
-                                        <select name="Bu_Head" id="Bu_Head">
-                                            {% for val in bu_head %}
-                                            <option value="{{val}}">{{val}}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="Sales_Incharge">Sales Incharge</label>
+                                                <select name="Sales_Incharge" id="Sales_Incharge">
+                                                {% for val in sales_incharge %}
+                                                <option value="{{val}}">{{val}}</option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="Bu_Head">Bu Head:</label>
+                                                <select name="Bu_Head" id="Bu_Head">
+                                                {% for val in bu_head %}
+                                                <option value="{{val}}">{{val}}</option>
+                                                {% endfor %}
+                                                </select>
+                                            </div>
+                                        <div>
+                                        <input type="submit" class="btn btn-info" value=" Update">
+                                        <br>
                                     </form>
+                                </div>
                                 </div>
                             </div>
                         </div>

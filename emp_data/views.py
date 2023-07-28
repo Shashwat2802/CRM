@@ -478,39 +478,40 @@ def update_vm_candidates(request, vmIdPK):
         ref_name= vmResource.candidate_name
 
         # vmResource=VmResource.objects.get(pk=vmIdPK)
-        vmResource.position_status=request.POST['position_status']
-        vmResource.pr_date=request.POST['pr_date']
-        vmResource.vendor_name=request.POST['vendor_name']
-        vmResource.candidate_source=request.POST['candidate_source']
-        vmResource.candidate_name=request.POST['candidate_name']
-        vmResource.skillset=request.POST['skillset']
-        vmResource.experience=request.POST['experience']
-        vmResource.education = request.POST['education']
-        vmResource.billing_rate=request.POST['billing_rate']
-        vmResource.bu_head = request.POST['bu_head']
-        vmResource.location= request.POST['location']
-        vmResource.notice_period = request.POST['notice_period']
-        vmResource.reviewer_name = request.POST['reviewer_name']
-        vmResource.remarks_panel = request.POST['remarks_panel']
-        vmResource.vm_comment = request.POST['vm_comment']
-        vmResource.client_name = request.POST['client_name']
-        vmResource.interview_schedule = request.POST['interview_schedule']
-        vmResource.interview_status = request.POST['interview_status']
-        vmResource.comments = request.POST['comments']
-        vmResource.remarks = request.POST['remarks']
-        vmResource.email = request.POST['email']
-        vmResource.phone_number = request.POST['phone_number']
-        vmResource.mode = request.POST['mode']
-        vmResource.resume = request.POST['resume']
+        vmResource.position_status=request.POST.get('position_status')
+        vmResource.pr_date=request.POST.get('pr_date')
+        vmResource.vendor_name=request.POST.get('vendor_name')
+        vmResource.candidate_source=request.POST.get('candidate_source')
+        vmResource.candidate_name=request.POST.get('candidate_name')
+        vmResource.skillset=request.POST.get('skillset')
+        vmResource.experience=request.POST.get('experience')
+        vmResource.education = request.POST.get('education')
+        vmResource.billing_rate=request.POST.get('billing_rate')
+        vmResource.bu_head = request.POST.get('bu_head')
+        vmResource.location= request.POST.get('location')
+        vmResource.notice_period = request.POST.get('notice_period')
+        vmResource.reviewer_name = request.POST.get('position_status')
+        vmResource.remarks_panel = request.POST.get('remarks_panel')
+        vmResource.vm_comment = request.POST.get('vm_comment')
+        vmResource.client_name = request.POST.get('client_name')
+        vmResource.interview_schedule = request.POST.get('interview_schedule')
+        vmResource.interview_status = request.POST.get('interview_status')
+        vmResource.comments = request.POST.get('comments')
+        vmResource.remarks = request.POST.get('remarks')
+        vmResource.email = request.POST.get('email')
+        vmResource.phone_number = request.POST.get('phone_number')
+        vmResource.mode = request.POST.get('mode')
+        vmResource.resume = request.POST.get('resume')
 
         # vmResource.vmIdPK = request.POST['vmIdPK']
-        vmResource.owner = request.POST['owner']
+        vmResource.owner = request.POST.get('owner')
 
 
         if 'history' in request.POST:
             hist=request.POST['history']
             print("hist",hist)
-            vmResource.history = hist
+            vmResource.history = hist 
+            
         vmResource.save()
         return redirect('/showVm')
 
