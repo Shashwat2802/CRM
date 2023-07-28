@@ -1,4 +1,6 @@
+import csv
 from ctypes import wstring_at
+from io import TextIOWrapper
 from pkgutil import get_data
 import queue
 import quopri
@@ -450,7 +452,9 @@ def selection_status(request, estatus,reqIdPK):
 def showVm(request):
     all_vm_candidates = VmResource.objects.all()
     ownerList = list(map(lambda x:x.eFname,getOwnerList()))  
-    return render(request, "show_vm_candidates.html", {"candidate_list":all_vm_candidates,'ownerList':ownerList})
+    departments =getDepartmentList()
+    buhList= getBUHList()
+    return render(request, "show_vm_candidates.html", {"candidate_list":all_vm_candidates,'ownerList':ownerList,'departments':departments,'BUHList':buhList})
 
 # Form to add only one VM candidate 
 def addVm(request):
@@ -469,48 +473,95 @@ def addVm(request):
         BUList=list(map(lambda x:x.eFname ,getBUHList())) 
         return render(request, "add_vm_candidates.html",{'ownerList':ownerList,'BUList':BUList})
 
+# To upload data containing VM candidates
+def vmDataUpload(request): 
+    if request.method == "POST":
+        dataset = Dataset()
+        print("Input ",request)
+        new_vm = request.FILES['myfile']
+        if not new_vm.name.endswith('xlsx'):
+            messages.info(request, 'Wrong format of file')
+            return render(request, 'upload_vm_candidates.html')
+        imported_data = dataset.load(new_vm.read(), format='xlsx')
+        for data in imported_data:
+            dept=data[19]
+            deptment=Department.objects.filter(department=dept)
+            if deptment.exists():
+                deptInstance=Department.objects.get(department=dept)
+            else :
+                deptInstance=Department(department=dept)
+                deptInstance.save()
+                print("dept does not exists",deptInstance)
+
+            value = VmResource(
+                vmIdPK=data[0],
+                archivalStatus=data[1],
+                reqDate=data[2],
+                providedDate=data[3],
+                vendorName=data[4],
+                resumeSource=data[5],
+                candidateName=data[6],
+                skillset=data[7],
+                experience=data[8],
+                education=data[9],
+                billingRate=data[10],
+                location=data[11],
+                noticePeriod=data[12],
+                clientName=data[13],
+                email=data[14],
+                mobile=data[15],
+                resumeURL=data[16],
+                owner=data[17],
+                buh=data[18],
+                department=deptInstance,
+                interviewSchedule=data[20],
+                resumeStatus=data[21],
+                remarks=data[22],
+            )
+     
+            print(":VM Onwer",data[16], data[5] )
+            value.save()
+        return redirect("/showVm")
+    return render(request, "upload_vm_candidates.html")
+
 
 def update_vm_candidates(request, vmIdPK): 
     if not request.user.is_authenticated:
         return redirect('home')
     vmResource = VmResource.objects.get(pk=vmIdPK)
     if request.method =='POST':
-        ref_name= vmResource.candidate_name
-
+        print("BUH***",request.POST)
         # vmResource=VmResource.objects.get(pk=vmIdPK)
-        vmResource.position_status=request.POST['position_status']
-        vmResource.pr_date=request.POST['pr_date']
-        vmResource.vendor_name=request.POST['vendor_name']
-        vmResource.candidate_source=request.POST['candidate_source']
-        vmResource.candidate_name=request.POST['candidate_name']
+        vmResource.archivalStatus=request.POST['archivalStatus']
+        vmResource.reqDate=request.POST['reqDate']
+        vmResource.providedDate=request.POST['providedDate']
+        vmResource.vendorName=request.POST['vendorName']
+        vmResource.resumeSource=request.POST['resumeSource']
+        vmResource.candidateName=request.POST['candidateName']
         vmResource.skillset=request.POST['skillset']
         vmResource.experience=request.POST['experience']
         vmResource.education = request.POST['education']
-        vmResource.billing_rate=request.POST['billing_rate']
-        vmResource.bu_head = request.POST['bu_head']
+        vmResource.billingRate=request.POST['billingRate']
+        vmResource.buh = request.POST['buh']
         vmResource.location= request.POST['location']
-        vmResource.notice_period = request.POST['notice_period']
-        vmResource.reviewer_name = request.POST['reviewer_name']
-        vmResource.remarks_panel = request.POST['remarks_panel']
-        vmResource.vm_comment = request.POST['vm_comment']
-        vmResource.client_name = request.POST['client_name']
-        vmResource.interview_schedule = request.POST['interview_schedule']
-        vmResource.interview_status = request.POST['interview_status']
-        vmResource.comments = request.POST['comments']
-        vmResource.remarks = request.POST['remarks']
-        vmResource.email = request.POST['email']
-        vmResource.phone_number = request.POST['phone_number']
-        vmResource.mode = request.POST['mode']
-        vmResource.resume = request.POST['resume']
+        vmResource.noticePeriod = request.POST['noticePeriod']
+        vmResource.clientName = request.POST['clientName']
+        vmResource.mobile = request.POST['mobile']
+        vmResource.resumeURL = request.POST['resumeURL']
+        deptInstance=Department.objects.get(department=request.POST['department'])
 
-        # vmResource.vmIdPK = request.POST['vmIdPK']
+        vmResource.department = deptInstance
+        vmResource.interviewSchedule = request.POST['interviewSchedule']
+        vmResource.resumeStatus = request.POST['resumeStatus']
+        # vmResource.remarks = request.POST['remarks']
+        vmResource.email = request.POST['email']
         vmResource.owner = request.POST['owner']
 
 
-        if 'history' in request.POST:
-            hist=request.POST['history']
-            print("hist",hist)
-            vmResource.history = hist
+        # if 'history' in request.POST:
+        #     hist=request.POST['history']
+        #     print("hist",hist)
+        #     vmResource.history = hist
         vmResource.save()
         return redirect('/showVm')
 
@@ -604,56 +655,15 @@ def mapEmpToReq(request,reqIdPK,choice):
             selectedvmList = request.POST.getlist('candidate_name')
             print("Selected VM  list",selectedvmList)
             for vm_name in selectedvmList:
-                vm=VmResource.objects.get(candidate_name=vm_name)
+                vm=VmResource.objects.get(candidateName=vm_name)
                 vm.interview_status='Selected and Mapped'
                 vm.save()
-                final=EmployeeReqMapping(req_id=salesReq,name=vm.candidate_name,eskills=vm.skillset,  added_date=today,source='VM',empstatus='Selected',sourceid_3=vm.vmIdPK)
+                final=EmployeeReqMapping(req_id=salesReq,name=vm.candidateName,eskills=vm.skillset,  added_date=today,source='VM',empstatus='Selected',sourceid_3=vm.vmIdPK)
                 final.save()
     return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
 
-# To upload data containing VM candidates
-def vmDataUpload(request): 
-    if request.method == "POST":
-        dataset = Dataset()
-        print("Input ",request)
-        new_vm = request.FILES['myfile']
-        if not new_vm.name.endswith('xlsx'):
-            messages.info(request, 'Wrong format of file')
-            return render(request, 'upload_vm_candidates.html')
-        imported_data = dataset.load(new_vm.read(), format='xlsx')
-        for data in imported_data:
-            print(":VM Onwer",data[24] )
-            value = VmResource(
-                position_status=data[0],
-                pr_date=data[1],
-                vendor_name=data[2],
-                candidate_source=data[3],
-                candidate_name=data[4],
-                skillset=data[5],
-                experience=data[6],
-                education=data[7],
-                billing_rate=data[8],
-                bu_head=data[9],
-                location=data[10],
-                notice_period=data[11],
-                reviewer_name=data[12],
-                remarks_panel=data[13],
-                vm_comment=data[14],
-                client_name=data[15],
-                interview_schedule=data[16],
-                interview_status=data[17],
-                comments=data[18],
-                remarks=data[19],
-                email=data[20],
-                phone_number=data[21],
-                mode=data[22],
-                vmIdPK = data[23],
-                owner = Employee.objects.get(eFname=data[24],isDeleted=False)
-            )
-            value.save()
-        return redirect("/showVm")
-    return render(request, "upload_vm_candidates.html")
+
 
 
 #dropdown customer names

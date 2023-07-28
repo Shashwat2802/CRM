@@ -56,7 +56,7 @@ class Ta_ResourceAdmin(ImportExportModelAdmin):
 #admin.site.register(models.VmResource)
 @admin.register(models.VmResource)
 class VmResourceAdmin(ImportExportModelAdmin):
-    list_display=('vmIdPK','candidate_name','skillset','education','phone_number','email')
+    list_display=('archivalStatus','candidateName','skillset','education','mobile','email','resumeStatus','department')
 
 
 admin.site.register(models.Role)
