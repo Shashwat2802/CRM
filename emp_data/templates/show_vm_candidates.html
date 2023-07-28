@@ -1,4 +1,6 @@
 {% extends 'basic.html' %} {% block extra %}
+{% load custom_filters %}
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link
@@ -18,6 +20,76 @@
     <h2 class="bg-info text-white">VM Candidates</h2>
   </div>
 </center>
+
+<script>
+  function getLink() {
+    var buhead = document.querySelector('#buhead').value
+    var department = document.querySelector('#department').value
+    var status = document.querySelector('#status').value
+    var url =
+      '/showVm/' +
+      encodeURIComponent(buhead) +
+      '/' +
+      encodeURIComponent(department) +
+      '/' +
+      encodeURIComponent(status)
+    return url
+  }
+</script>
+<div class="form-inline">
+  <div class="d-inline-block">
+    <span class="btn">
+      Dept
+      <select class="btn" name="department" id="department">
+        <option value="{{dept_select}}" selected hidden disabled>{{dept_select}}</option>
+        {% for val in departments %}
+        <option value="{{val}}">{{val}}</option>
+        {% endfor %}
+        <option value="All">All</option>
+      </select>
+    </span>
+    <span style="margin-left: 30" class="btn">
+      BUH
+      <select name="buhead" id="buhead" class="btn" style="border-radius: 30px">
+        <option value="{{bu_select}}" selected disabled hidden>{{bu_select}}</option>
+        {% for val in BUHList %}
+        <option value="{{val}}">{{val}}</option>
+        {% endfor %}
+        <option value="All">All</option>
+      </select>
+    </span>
+
+    <span style="margin-left: 30" class="btn">
+      Archived?
+      <select name="statuslist" id="status" class="btn" style="border-radius: 30px">
+        <option value="{{status_select}}" selected disabled hidden>{{status_select}}</option>
+        <option value="Active">Active</option>
+        <option value="Closed">Closed</option>
+        <option value="All">Both</option>
+      </select>
+    </span>
+    <span style="margin-left: 30">
+      <button
+        class="go-btn"
+        style="border-radius: 30px"
+        type="submit"
+        onClick="window.location.href = getLink()"
+      >
+        Search
+      </button>
+    </span>
+    <span style="margin-left: 10">
+      <button
+        class="go-btn"
+        style="border-radius: 30px"
+        type="submit"
+        onclick="location.href='/showVm/Choose/Choose/Choose'"
+      >
+        Refresh
+      </button>
+    </span>
+  </div>
+</div>
 
 <table class="table relative-top" id="vmTable">
   <thead class="badge-info text-white">
@@ -53,7 +125,50 @@
       <td>{{ val.location }}</td>
       <td>{{ val.department }}</td>
       <td>{{ val.buh }}</td>
-      <td>{{ val.remarks }}</td>
+      <td>
+        <p class="btn-sm" data-toggle="modal" data-target="#hist{{val.vmIdPK}}">
+          {{ val.remarks|extract_from_hashtag }}
+        </p>
+        <!-- remarks Modal -->
+        <div
+          class="modal fade"
+          id="hist{{val.vmIdPK}}"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="jobDescriptionModalLabel{{val.vmIdPK}}"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="hist{{val.vmIdPK}}">Remarks</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>{{val.remarks|linebreaksbr }}</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+
+              <div class="modal-body">
+                <div class="container-fluid">
+                  <form action="/addCommentsToVmCandidate/{{val.vmIdPK}}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label for="remark_text">Edit remarks:</label>
+                      <textarea name="remark_text" id="remark_text" cols="50" rows="10"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Comment</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
       <td>{{ val.resumeStatus }}</td>
       <td>{{ val.owner }}</td>
       <td>
@@ -170,9 +285,7 @@
           <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
               <div class="modal-header">
-                <h1 class="modal-title fs-5" id="editInfoLabel">
-                  {{val.candidateName}} 
-                </h1>
+                <h1 class="modal-title fs-5" id="editInfoLabel">{{val.candidateName}}</h1>
                 <button
                   type="button"
                   class="btn-close"

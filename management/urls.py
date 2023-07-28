@@ -42,6 +42,7 @@ urlpatterns = [
     path('listSalesReqsFiltered/<str:bu>/<str:sales>/<str:st>',views.filteredSaleReqs),
     path('listEmployeeFiltered/<str:department>/<str:buh>/<str:manager>',views.listEmployeeFiltered),
 
+    path("addCommentsToVmCandidate/<int:reqIdPK>", views.addCommentsToVmCandidate),
     path("addSalesReqComment/<int:reqIdPK>", views.addSalesReqComment),
     path('getEmployeeExperiances/<str:employee_id>/', views.getEmployeeExperiances, name='getEmployeeExperiances'),
 
@@ -97,7 +98,7 @@ urlpatterns = [
     path('salesSummary',views.salesSummary),
 
     #For VM page
-    path("showVm", views.showVm),
+    path("showVm/<str:buh>/<str:dept>/<str:status>", views.showVm),
     path("addVm", views.addVm),
     path("vmDataUpload", views.vmDataUpload),
     path("updateVmCandidate/<int:vmIdPK>", views.updateVmCandidate),

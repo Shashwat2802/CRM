@@ -267,8 +267,19 @@ def addSalesReqComment(request, reqIdPK):
         print("Existing Comment",salesReq.history)
         salesReq.history=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+salesReq.history
         salesReq.save()
-        return redirect('/listSalesReqsFiltered/Choose/Choose/Choose')
-   
+        return redirect('/showVm/Choose/Choose/Choose')
+
+def addCommentsToVmCandidate(request, reqIdPK):
+    if request.method == 'POST':
+        current_user = request.user.username.title()
+        remark_text = request.POST.get('remark_text', '')
+        today = date.today()
+        vmCandidate = VmResource.objects.get(pk=reqIdPK)
+        print("Existing Comment",vmCandidate.remarks)
+        vmCandidate.remarks=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+vmCandidate.remarks
+        vmCandidate.save()
+        return redirect('/showVm/Choose/Choose/Choose')  
+    
 def addTaComment(request, ta_id):
     if request.method == 'POST':
         current_user = request.user.username.title()
@@ -326,7 +337,6 @@ def salesSummary(request):
 
 
 def addCommentToEmployeedReqTable(request, reqIdPK,source,sourceId):
-    print("****ID",reqIdPK,source,sourceId)
     if request.method == 'POST':
         current_user = request.user.username.title()
         remark_text = request.POST.get('remark_text', '')
@@ -461,12 +471,27 @@ def selection_status(request, estatus,reqIdPK):
     return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
 # To display all the VM candidates 
-def showVm(request):
-    all_vm_candidates = VmResource.objects.all()
+def showVm(request,buh,dept,status):
+
+    filter_conditions={}
+    if buh != 'All' and buh != 'Choose':
+        filter_conditions['buh'] = buh
+
+    if dept != 'All' and dept != 'Choose':
+        filter_conditions['department'] = dept
+
+    if status != 'All' and status != 'Choose':
+        filter_conditions['archivalStatus'] = status
+
+    print("FIlter COndition",filter_conditions)
+
+    all_vm_candidates = VmResource.objects.filter(**filter_conditions)
     ownerList = list(map(lambda x:x.eFname,getOwnerList()))  
     departments =getDepartmentList()
     buhList= getBUHList()
-    return render(request, "show_vm_candidates.html", {"candidate_list":all_vm_candidates,'ownerList':ownerList,'departments':departments,'BUHList':buhList})
+
+
+    return render(request, "show_vm_candidates.html", {"candidate_list":all_vm_candidates,'ownerList':ownerList,'departments':departments,'BUHList':buhList,"dept_select":dept,"bu_select":buh,"status_select":status})
 
 # Form to add only one VM candidate 
 def addVm(request):
@@ -476,7 +501,7 @@ def addVm(request):
         if form.is_valid():
             form.save()
             messages.success(request,"Details Saved !")
-            return redirect("/showVm")
+            return redirect("/showVm/Choose/Choose/Choose")
         else:
             return HttpResponse(form.errors)
     else:
@@ -533,7 +558,7 @@ def vmDataUpload(request):
      
             print(":VM Onwer",data[16], data[5] )
             value.save()
-        return redirect("/showVm")
+        return redirect("/showVm/Choose/Choose/Choose")
     return render(request, "upload_vm_candidates.html")
 
 
@@ -542,7 +567,6 @@ def updateVmCandidate(request, vmIdPK):
         return redirect('home')
     vmResource = VmResource.objects.get(pk=vmIdPK)
     if request.method =='POST':
-        print("BUH***",request.POST)
         vmResource.archivalStatus=request.POST['archivalStatus']
         vmResource.reqDate=request.POST['reqDate']
         vmResource.providedDate=request.POST['providedDate']
@@ -573,7 +597,7 @@ def updateVmCandidate(request, vmIdPK):
         #     vmResource.history = hist
 
         vmResource.save()
-        return redirect('/showVm')
+        return redirect('/showVm/Choose/Choose/Choose')
 
 def showTaList(request,reqIdPK):
     # form=TA_Resource.objects.filter(status='Selected').values()
