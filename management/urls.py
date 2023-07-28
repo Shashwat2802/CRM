@@ -97,7 +97,7 @@ urlpatterns = [
     path('salesSummary',views.salesSummary),
 
     #For VM page
-    path("showVm", views.showVm),
+    path("showVm/<str:buh>/<str:dept>/<str:status>", views.showVm),
     path("addVm", views.addVm),
     path("vmDataUpload", views.vmDataUpload),
     path("updateVmCandidate/<int:vmIdPK>", views.updateVmCandidate),
