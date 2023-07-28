@@ -42,6 +42,7 @@ urlpatterns = [
     path('listSalesReqsFiltered/<str:bu>/<str:sales>/<str:st>',views.filteredSaleReqs),
     path('listEmployeeFiltered/<str:department>/<str:buh>/<str:manager>',views.listEmployeeFiltered),
 
+    path("addCommentsToVmCandidate/<int:reqIdPK>", views.addCommentsToVmCandidate),
     path("addSalesReqComment/<int:reqIdPK>", views.addSalesReqComment),
     path('getEmployeeExperiances/<str:employee_id>/', views.getEmployeeExperiances, name='getEmployeeExperiances'),
 

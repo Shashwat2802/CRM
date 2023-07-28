@@ -267,8 +267,19 @@ def addSalesReqComment(request, reqIdPK):
         print("Existing Comment",salesReq.history)
         salesReq.history=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+salesReq.history
         salesReq.save()
-        return redirect('/listSalesReqsFiltered/Choose/Choose/Choose')
-   
+        return redirect('/showVm/Choose/Choose/Choose')
+
+def addCommentsToVmCandidate(request, reqIdPK):
+    if request.method == 'POST':
+        current_user = request.user.username.title()
+        remark_text = request.POST.get('remark_text', '')
+        today = date.today()
+        vmCandidate = VmResource.objects.get(pk=reqIdPK)
+        print("Existing Comment",vmCandidate.remarks)
+        vmCandidate.remarks=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+vmCandidate.remarks
+        vmCandidate.save()
+        return redirect('/showVm/Choose/Choose/Choose')  
+    
 def addTaComment(request, ta_id):
     if request.method == 'POST':
         current_user = request.user.username.title()
