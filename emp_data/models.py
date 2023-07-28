@@ -156,8 +156,9 @@ class VmResource(models.Model):
     phone_number = models.IntegerField()
     mode = models.CharField(max_length=500)
     vmIdPK = models.AutoField(primary_key=True,default=0)
-    owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
+    # owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
     resume = models.CharField(max_length=1000)
+    owner = models.CharField(max_length=1000)
 
     class Meta:
         db_table = "VmResource"

@@ -96,7 +96,7 @@ urlpatterns = [
     path("showVm", views.showVm),
     path("addVm", views.addVm),
     path("vmDataUpload", views.vmDataUpload),
-    path("update_vm_candidates", views.update_vm_candidates),
+    path("update_vm_candidates/<int:vmIdPK>", views.update_vm_candidates),
     #Homepage path
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 
