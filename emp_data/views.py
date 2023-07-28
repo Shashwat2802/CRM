@@ -468,10 +468,10 @@ def addVm(request):
         else:
             return HttpResponse(form.errors)
     else:
-
         ownerList = list(map(lambda x:x.eFname,getOwnerList()))
-        BUList=list(map(lambda x:x.eFname ,getBUHList())) 
-        return render(request, "add_vm_candidates.html",{'ownerList':ownerList,'BUList':BUList})
+        BUList=list(map(lambda x:x.eFname ,getBUHList()))
+        departments=getDepartmentList()
+        return render(request, "add_vm_candidates.html",{'ownerList':ownerList,'bulist':BUList,"departments":departments})
 
 # To upload data containing VM candidates
 def vmDataUpload(request): 

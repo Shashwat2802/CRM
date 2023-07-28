@@ -1,7 +1,7 @@
 {% extends 'basic.html' %} {% block body %}
 <div class="container">
     <h3 style="color: rgba(16, 4, 33, 0.926); padding-top: 5%">Add VM candidate</h3>
-    <form action="/add_vm" method="POST">
+    <form action="/addVm" method="POST">
         {% csrf_token %}
 
         <div class="form-group">
@@ -35,7 +35,7 @@
         </div>
         <div class="form-group">
             <label for="experience">Experience</label>
-            <input type="number" id="experience" name="experience" class="form-control" step="any"/>
+            <input type="number" id="experience" name="experience" class="form-control" step="any" />
         </div>
         <div class="form-group">
             <label for="education">Education</label>
@@ -56,7 +56,7 @@
         </div>
         <div class="form-group">
             <label for="billingRate">Billing Rate</label>
-            <input type="number" id="billingRate" name="billingRate" class="form-control" step="any"/>
+            <input type="number" id="billingRate" name="billingRate" class="form-control" step="any" />
         </div>
 
         <div class="form-group">
@@ -65,18 +65,16 @@
         </div>
         <div class="form-group">
             <label for="noticePeriod">Notice Period</label>
-            <input type="number" id="noticePeriod" name="noticePeriod" class="form-control" step="any"/>
+            <input type="number" id="noticePeriod" name="noticePeriod" class="form-control" step="any" />
         </div>
-        <div class="form-group">
-            <span style="margin-left: 30" class="btn">
-                BU HEAD
-                <option value="{{val.buh}}" selected>{{val.buh}}</option>
-                {% for val in BUHList %}
-                <option value="{{val.eFname}}">{{val.eFname}}</option>
-                {% endfor %}
-                </select>
-            </span>
-        </div>
+      <div class="form-group">
+        <label for="buh">BU HEAD</label>
+        <select name="buh" id="buh">
+          {% for val in bulist %}
+          <option value="{{val}}">{{val}}</option>
+          {% endfor %}
+        </select>
+      </div>
         <div class="form-group">
             <label for="department">Department</label>
             <select name="department" id="department">
@@ -102,6 +100,27 @@
                 <option value="{{val}}">{{val}}</option>
                 {% endfor %}
             </select>
+        </div>
+
+        <div class="form-group">
+            <label for="resumeStatus">Status</label>
+            <select name="resumeStatus" id="resumeStatus">
+                <option value="PendingReview" selected>PendingReview</option>
+                <option value="reject">Reject</option>
+            </select>
+        </div>
+
+                <div class="form-group">
+            <label for="archivalStatus">Archived?</label>
+            <select name="archivalStatus" id="archivalStatus">
+                <option value="Active" selected>Active</option>
+                <option value="Closed">Closed</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="remarks">Remarks</label>
+            <input type="text" id="remarks" name="remarks" class="form-control" step="any" />
         </div>
         <button type="submit" class="btn btn-info">Add Details</button><br /><br /><br />
     </form>
