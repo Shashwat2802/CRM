@@ -575,8 +575,7 @@ def showTaList(request,reqIdPK):
     return render(request,'selected_ta_list.html',{'form':form,"reqIdPK":reqIdPK})
 
 def showVmList(request,reqIdPK):
-    # form=VmResource.objects.filter(interview_status='Selected').values()
-    form=VmResource.objects.filter(position_status__icontains='Active').values()
+    form=VmResource.objects.filter(archivalStatus__icontains='Active').values()
 
     if request.method=='GET':
         skills=request.GET.get('searchskill')
