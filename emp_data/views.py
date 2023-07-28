@@ -268,6 +268,18 @@ def addSalesReqComment(request, reqIdPK):
         salesReq.history=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+salesReq.history
         salesReq.save()
         return redirect('/listSalesReqsFiltered/Choose/Choose/Choose')
+   
+def addTaComment(request, ta_id):
+    if request.method == 'POST':
+        current_user = request.user.username.title()
+        remark_text = request.POST.get('remark_text', '')
+        today = date.today()
+        ta_commet = TA_Resource.objects.get(pk=ta_id)
+        print("Existing Comment",ta_commet.BU_comments)
+        ta_commet.history=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+ta_commet.history
+        ta_commet.save()
+        return redirect('/listSalesReqsFiltered/Choose/Choose')
+        
 
 def cust_req_dropdown(request, ref): 
     if ref[:1] == 'P':
@@ -584,44 +596,50 @@ def showVmList(request,reqIdPK):
     
     return render(request,'selected_vm_list.html',{'form':form,'reqIdPK':reqIdPK})
 
-def updateTaDetails(request,ta_id):
-    if not request.user.is_authenticated:
-        return redirect('home')
+def updateTaDetails(request,ta_id):    
     ta_instance = TA_Resource.objects.get(pk=ta_id)
     if request.method=='POST':      
 
-        ta_instance.archived=request.POST['archived']
-        ta_instance.date=request.POST['date']
-        ta_instance.name=request.POST['name']
-        ta_instance.BU=request.POST['BU']
-        ta_instance.Position=request.POST['Position']
-        ta_instance.skillset=request.POST['skillset']
-        ta_instance.education=request.POST['education']
-        ta_instance.experience=request.POST['experience']
-        ta_instance.relevant_exp=request.POST['relevant_exp']
-        ta_instance.current_org=request.POST['current_org']
-        ta_instance.current_ctc=request.POST['current_ctc']
-        ta_instance.expected_ctc=request.POST['expected_ctc']
-        ta_instance.actual_notice_period=request.POST['actual_notice_period']
-        ta_instance.notice_period=request.POST['notice_period']
-        ta_instance.current_loc=request.POST['current_loc']
-        ta_instance.preferred_loc=request.POST['preferred_loc']
-        ta_instance.phone_number=request.POST['phone_number']
-        ta_instance.email=request.POST['email']
-        ta_instance.status=request.POST['status']
-        ta_instance.T1_panel=request.POST['T1_panel']
-        ta_instance.T1_IW_date=request.POST['T1_IW_date']
-        ta_instance.T2_panel=request.POST['T2_panel']
-        ta_instance.T2_IW_date=request.POST['T2_IW_date']
-        ta_instance.source=request.POST['source']
-        ta_instance.Rec_prime=request.POST['Rec_prime']
-        ta_instance.Domain=request.POST['Domain']
-        ta_instance.T1=request.POST['T1']
-        ta_instance.T2=request.POST['T2']
-        ta_instance.owner=request.POST['owner']
+        ta_instance.archived=request.POST.get('archived')
+        ta_instance.date=request.POST.get('date')
+        ta_instance.name=request.POST.get('name')
+        ta_instance.BU=request.POST.get('BU')
+        ta_instance.Position=request.POST.get('Position')
+        ta_instance.skillset=request.POST.get('skillset')
+        ta_instance.education=request.POST.get('education')
+        ta_instance.experience=request.POST.get('experience')
+        ta_instance.relevant_exp=request.POST.get('relevant_exp')
+        ta_instance.current_org=request.POST.get('current_org')
+        ta_instance.current_ctc=request.POST.get('current_ctc')
+        ta_instance.expected_ctc=request.POST.get('expected_ctc')
+        ta_instance.actual_notice_period=request.POST.get('actual_notice_period')
+        ta_instance.notice_period=request.POST.get('notice_period')
+        ta_instance.current_loc=request.POST.get('current_loc')
+        ta_instance.preferred_loc=request.POST.get('preferred_loc')
+        ta_instance.phone_number=request.POST.get('phone_number')
+        ta_instance.email=request.POST.get('email')
+        ta_instance.status=request.POST.get('status')
+        ta_instance.T1_panel=request.POST.get('T1_panel')
+        ta_instance.T1_IW_date=request.POST.get('T1_IW_date')
+        ta_instance.T2_panel=request.POST.get('T2_panel')
+        ta_instance.T2_IW_date=request.POST.get('T2_IW_date')
+        ta_instance.source=request.POST.get('source')
+        ta_instance.Rec_prime=request.POST.get('Rec_prime')
+        ta_instance.Domain=request.POST.get('Domain')
+        ta_instance.T1=request.POST.get('T1')
+        ta_instance.T2=request.POST.get('T2')
+        ta_instance.owner=request.POST.get('owner')
         ta_instance.save()
 
     return redirect("/showTa")
+
+def addTaResume(request,ta_id):
+    ta_instance=TA_Resource.objects.get(pk=ta_id)
+    if request.method=='POST':
+        link=request.POST.get('resume')
+        ta_instance.resume=link
+        ta_instance.save()
+    return redirect ('/showTa')
 
 def mapEmpToReq(request,reqIdPK,choice):
     
@@ -682,32 +700,41 @@ def showDropDown(request):
     return render(request,'showEmpToCustomer.html',{'display_cust':display_cust})
 
 
-def deleteAppliedCandidates(request,e_id,reqIdPK):   
+def deleteAppliedCandidates(request,source,namearg,reqIdPK):   
     req=Customer_Requirements.objects.get(pk=reqIdPK)
     if not request.user.is_authenticated:
         return redirect('home') 
-    try:
-        emp = EmployeeReqMapping.objects.get(e_id=e_id)
-        status_instance=Employee.objects.get(eFname=e_id,isDeleted=False)
-        status_instance.estatus='Free'
-        status_instance.save()
-        emp.delete()
-        req.remain_positions+=1
-        req.save()
-    except EmployeeReqMapping.MultipleObjectsReturned:
-        emp = EmployeeReqMapping.objects.filter(e_id=e_id)[0]
-        emp.delete()
-        status_instance=Employee.objects.get(e_id=e_id,isDeleted=False)[0]
-        status_instance.estatus='Free'
-        status_instance.save()
-        req=Customer_Requirements.objects.get(pk=reqIdPK)
-        req.remain_positions+=1
-        req.save()
-
-    messages.success(request,'The Selected Employee'  + emp.eFname +  'is deleted successfully')
+    customer_req=Customer_Requirements.objects.get(pk=reqIdPK)
+    delete_instance=EmployeeReqMapping.objects.get(req_id=reqIdPK,name=namearg)
+    
+    if source=='LEADSOC':
+        namelist=namearg.split(' ',1)
+        emp_instance=Employee.objects.get(eFname=namelist[0],eLname=namelist[1])
+        emp_instance.estatus='Free'
+        emp_instance.save()
+        customer_req.remain_positions+=1
+        customer_req.save()
+        messages.success(request,'The Selected Employee'  + delete_instance.name +  'is deleted successfully')
+        delete_instance.delete()
+    if source=='TA':
+        ta_instance=TA_Resource.objects.get(name=namearg)
+        ta_instance.status='Selected'
+        ta_instance.save()
+        customer_req.remain_positions+=1
+        customer_req.save()
+        messages.success(request,'The Selected TA resource'  + delete_instance.name +  'is deleted successfully')
+        delete_instance.delete()
+    if source=='VM':
+        vm_instance=VmResource.objects.get(candidate_name=namearg)
+        vm_instance.interview_status='Selected'
+        vm_instance.save()
+        customer_req.remain_positions+=1
+        customer_req.save()
+        messages.success(request,'The Selected VM resource'  + delete_instance.name +  'is deleted successfully')
+        delete_instance.delete() 
+    
     company=req.customers
-    return redirect(f'/mappedEmployeeToCustomer/{company}/{reqIdPK}')
-
+    return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
 # To delete employee details
 def deleteLeadSocEmployee(request, e_id):
@@ -955,7 +982,7 @@ def taDataUpload(request):
                 Domain=data[28],
                 T1=data[29],
                 T2=data[30],                
-                owner=Employee.objects.get(eFname=data[31],isDeleted=False),  
+                owner= data[31], 
                 resume=data[32]              
                 )
             value.save()
