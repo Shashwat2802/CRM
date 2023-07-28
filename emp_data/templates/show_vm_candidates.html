@@ -42,8 +42,7 @@
     <tr>
       <td>{{ val.archivalStatus }}</td>
       <td>
-        {{ val.candidateName }} 
-        {% if val.resumeURL and val.resumeURL != 'None' %}
+        {{ val.candidateName }} {% if val.resumeURL and val.resumeURL != 'None' %}
         <a href="{{ val.resumeURL }}" target="_blank"> <i class="fa-regular fa-eye"></i></a>
         {% endif %}
       </td>
@@ -171,7 +170,9 @@
           <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
               <div class="modal-header">
-                <h1 class="modal-title fs-5" id="editInfoLabel">{{val.candidateName}} {{val.department}}</h1>
+                <h1 class="modal-title fs-5" id="editInfoLabel">
+                  {{val.candidateName}} {{val.department}}
+                </h1>
                 <button
                   type="button"
                   class="btn-close"
@@ -180,7 +181,7 @@
                 ></button>
               </div>
               <div class="modal-body">
-                <form action="/update_vm_candidates/{{val.vmIdPK}}" method="POST">
+                <form action="/updateVmCandidate/{{val.vmIdPK}}" method="POST">
                   {% csrf_token %}
                   <div class="form-group">
                     <label for="candidateName">Candidate Name:</label>

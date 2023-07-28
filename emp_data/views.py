@@ -487,7 +487,7 @@ def vmDataUpload(request):
             dept=data[19]
             deptment=Department.objects.filter(department=dept)
             if deptment.exists():
-                deptInstance=Department.objects.get(department=dept)
+                print("dept  exists",deptment)
             else :
                 deptInstance=Department(department=dept)
                 deptInstance.save()
@@ -513,7 +513,7 @@ def vmDataUpload(request):
                 resumeURL=data[16],
                 owner=data[17],
                 buh=data[18],
-                department=deptInstance,
+                department=Department(department=data[19]),
                 interviewSchedule=data[20],
                 resumeStatus=data[21],
                 remarks=data[22],
@@ -525,13 +525,12 @@ def vmDataUpload(request):
     return render(request, "upload_vm_candidates.html")
 
 
-def update_vm_candidates(request, vmIdPK): 
+def updateVmCandidate(request, vmIdPK): 
     if not request.user.is_authenticated:
         return redirect('home')
     vmResource = VmResource.objects.get(pk=vmIdPK)
     if request.method =='POST':
         print("BUH***",request.POST)
-        # vmResource=VmResource.objects.get(pk=vmIdPK)
         vmResource.archivalStatus=request.POST['archivalStatus']
         vmResource.reqDate=request.POST['reqDate']
         vmResource.providedDate=request.POST['providedDate']
@@ -548,9 +547,7 @@ def update_vm_candidates(request, vmIdPK):
         vmResource.clientName = request.POST['clientName']
         vmResource.mobile = request.POST['mobile']
         vmResource.resumeURL = request.POST['resumeURL']
-        deptInstance=Department.objects.get(department=request.POST['department'])
-
-        vmResource.department = deptInstance
+        vmResource.department = Department(department=request.POST['department'])
         vmResource.interviewSchedule = request.POST['interviewSchedule']
         vmResource.resumeStatus = request.POST['resumeStatus']
         # vmResource.remarks = request.POST['remarks']
@@ -736,6 +733,7 @@ def updateLeadSocEmployee(request, e_id):
         employee.refer_Customer=Customer(cName=request.POST['refer_Customer'])
         employee.eEmail=request.POST['eEmail']
         newval=Role(role_name=request.POST['eRole'])
+        employee.department=Department(department=request.POST['department'])
         employee.eRole=newval
         employee.estatus=request.POST['estatus']
         employee.save()
