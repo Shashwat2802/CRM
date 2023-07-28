@@ -473,47 +473,51 @@ def addVm(request):
 def update_vm_candidates(request, vmIdPK): 
     if not request.user.is_authenticated:
         return redirect('home')
-    VmResource = VmResource.objects.get(pk=vmIdPK)
+    vmResource = VmResource.objects.get(pk=vmIdPK)
     if request.method =='POST':
-        ref_name= VmResource.candidate_name
+        ref_name= vmResource.candidate_name
 
-        VmResource=VmResource.objects.get('pk=vmIdPK')
-        VmResource.position_status=request.POST['position_status']
-        VmResource.pr_date=request.POST['pr_date']
-        VmResource.vendor_name=request.POST['vendor_name']
-        VmResource.candidate_source=request.POST['candidate_source']
-        VmResource.candidate_name=request.POST['candidate_name']
-        VmResource.skillset=request.POST['skillset']
-        VmResource.experience=request.POST['experience']
-        VmResource.education = request.POST['education']
-        VmResource.billing_rate=request.POST['billing_rate']
-        VmResource.bu_head = request.POST['bu_head']
-        VmResource.location= request.POST['location']
-        VmResource.notice_period = request.POST['notice_period']
-        VmResource.reviewer_name = request.POST['reviewer_name']
-        VmResource.remarks_panel = request.POST['remarks_panel']
-        VmResource.vm_comment = request.POST['vm_comment']
-        VmResource.client_name = request.POST['client_name']
-        VmResource.interview_schedule = request.POST['interview_schedule']
-        VmResource.interview_status = request.POST['interview_status']
-        VmResource.comments = request.POST['comments']
-        VmResource.remarks = request.POST['remarks']
-        VmResource.email = request.POST['email']
-        VmResource.phone_number = request.POST['phone_number']
-        VmResource.mode = request.POST['mode']
-        VmResource.vmIdPK = request.POST['vmIdPK']
-        VmResource.owner = request.POST['owner']
+        # vmResource=VmResource.objects.get(pk=vmIdPK)
+        vmResource.position_status=request.POST['position_status']
+        vmResource.pr_date=request.POST['pr_date']
+        vmResource.vendor_name=request.POST['vendor_name']
+        vmResource.candidate_source=request.POST['candidate_source']
+        vmResource.candidate_name=request.POST['candidate_name']
+        vmResource.skillset=request.POST['skillset']
+        vmResource.experience=request.POST['experience']
+        vmResource.education = request.POST['education']
+        vmResource.billing_rate=request.POST['billing_rate']
+        vmResource.bu_head = request.POST['bu_head']
+        vmResource.location= request.POST['location']
+        vmResource.notice_period = request.POST['notice_period']
+        vmResource.reviewer_name = request.POST['reviewer_name']
+        vmResource.remarks_panel = request.POST['remarks_panel']
+        vmResource.vm_comment = request.POST['vm_comment']
+        vmResource.client_name = request.POST['client_name']
+        vmResource.interview_schedule = request.POST['interview_schedule']
+        vmResource.interview_status = request.POST['interview_status']
+        vmResource.comments = request.POST['comments']
+        vmResource.remarks = request.POST['remarks']
+        vmResource.email = request.POST['email']
+        vmResource.phone_number = request.POST['phone_number']
+        vmResource.mode = request.POST['mode']
+        vmResource.resume = request.POST['resume']
+
+        # vmResource.vmIdPK = request.POST['vmIdPK']
+        vmResource.owner = request.POST['owner']
 
 
         if 'history' in request.POST:
             hist=request.POST['history']
             print("hist",hist)
-            VmResource.history = hist
-            VmResource.save()
-        return redirect('/update_vm_candidates')
+            vmResource.history = hist
+        vmResource.save()
+        return redirect('/showVm')
 
 def showTaList(request,reqIdPK):
-    form=TA_Resource.objects.filter(status='Selected').values()
+    # form=TA_Resource.objects.filter(status='Selected').values()
+    form=TA_Resource.objects.filter(archived__icontains='Active').values()
+
     if request.method=='GET':
         skills=request.GET.get('searchskill')
         if skills != None:
@@ -522,7 +526,9 @@ def showTaList(request,reqIdPK):
     return render(request,'selected_ta_list.html',{'form':form,"reqIdPK":reqIdPK})
 
 def showVmList(request,reqIdPK):
-    form=VmResource.objects.filter(interview_status='Selected').values()
+    # form=VmResource.objects.filter(interview_status='Selected').values()
+    form=VmResource.objects.filter(position_status__icontains='Active').values()
+
     if request.method=='GET':
         skills=request.GET.get('searchskill')
         if skills!=None:
