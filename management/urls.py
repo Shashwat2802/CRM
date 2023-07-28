@@ -63,6 +63,7 @@ urlpatterns = [
     path('dropDownCustomer',views.dropDownCustomer),
     path('showDropDown',views.showDropDown),
     path('updateSaleReqs/<int:reqIdPK>',views.updateSaleReqs),
+    path('deleteAppliedCandidates/<str:source>/<str:namearg>/<int:reqIdPK>', views.deleteAppliedCandidates),
 
      #Customer paths 
     path('addCustomer', views.addCustomer),
@@ -83,6 +84,9 @@ urlpatterns = [
     path('taDataUpload',views.taDataUpload),
     path('deleteTa/<int:phone_number>',views.deleteTa),
     path('filterTa/<str:buhead>/<str:archive>',views.filterTa),
+    path('updateTaDetails/<str:ta_id>',views.updateTaDetails),
+    path('taResume/<str:ta_id>',views.addTaResume),
+    path('addTaComment/<str:ta_id>',views.addTaComment),
 
 
     path('addEmployeeExperience/<str:e_id>',views.addEmployeeExperience),
