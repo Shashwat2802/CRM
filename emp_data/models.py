@@ -133,7 +133,7 @@ class EmployeeReqMapping(models.Model):
 # model for VM candidates 
 class VmResource(models.Model):
     vmIdPK = models.AutoField(primary_key=True,default=0)
-    archivalStatus = models.CharField(max_length=100) #whether active or closed
+    archivalStatus = models.CharField(max_length=100,default='Active') #whether active or closed
     reqDate = models.DateField()
     providedDate = models.DateField()
     vendorName = models.CharField(max_length=100)
@@ -153,7 +153,7 @@ class VmResource(models.Model):
     buh = models.CharField(max_length=100)
     department = models.ForeignKey(Department,on_delete=models.CASCADE) # designation
     interviewSchedule = models.DateField(null=True)
-    resumeStatus = models.CharField(max_length=100) 
+    resumeStatus = models.CharField(max_length=100,default='pending BU Review') 
     remarks = models.CharField(max_length=1000)
 
     class Meta:

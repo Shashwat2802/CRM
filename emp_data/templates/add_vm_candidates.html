@@ -1,128 +1,110 @@
-{% extends 'basic.html' %}
-{% block body %}
+{% extends 'basic.html' %} {% block body %}
 <div class="container">
-    <h3 style="color: rgba(16, 4, 33, 0.926);padding-top: 5%;">Add VM candidate</h3>
+    <h3 style="color: rgba(16, 4, 33, 0.926); padding-top: 5%">Add VM candidate</h3>
     <form action="/add_vm" method="POST">
         {% csrf_token %}
+
         <div class="form-group">
-            <label for="vmIdPK">vmId</label>
-            <br>
-            <input type="text" name="vmIdPK" id="vmIdPK" class="form-control" placeholder="vmIdPK">
+            <label for="reqDate">Reg Date:</label>
+            <input type="date" id="reqDate" name="reqDate" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="providedDate">Resume Provided Date:</label>
+            <input type="date" id="providedDate" name="providedDate" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="vendorName">Vendor Name</label>
+            <input type="text" id="vendorName" name="vendorName" class="form-control" />
         </div>
         <div class="form-group">
-            <label for="position_status">Position Status</label>
-            <select name="position status" id="position status">
-                <option value="Archived">Archived</option>
-                <option value="Closed">Closed</option>
+            <label for="resumeSource">Availability</label>
+            <select name="resumeSource" id="resumeSource">
+                <option value="Vendor Bench">Vendor Bench</option>
+                <option value="market">market</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="pr_date">PR Date</label>
-            <input type="date" id="pr_date" name="pr_date" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="vendor_name">Vendor Name</label>
-            <input type="text" id="vendor_name" name="vendor_name" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="candidate_source">Candidate Source</label>
-            <input type="text" id="candidate_source" name="candidate_source" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="candidateName">Candidate Name</label>
-            <input type="text" id="candidateName" name="candidateName" class="form-control">
+            <label for="candidateName">Candidate Name:</label>
+            <input type="text" id="candidateName" name="candidateName" class="form-control" />
         </div>
         <div class="form-group">
             <label for="skillset">Skillset</label>
-            <input type="text" id="skillset" name="skillset" class="form-control">
+            <input type="text" id="skillset" name="skillset" class="form-control" />
         </div>
         <div class="form-group">
             <label for="experience">Experience</label>
-            <input type="number" id="experience" name="experience" class="form-control">
+            <input type="number" id="experience" name="experience" class="form-control" step="any"/>
         </div>
         <div class="form-group">
             <label for="education">Education</label>
-            <input type="text" id="education" name="education" class="form-control">
+            <input type="text" id="education" name="education" class="form-control" />
         </div>
         <div class="form-group">
-            <label for="billing_rate">Billing Rate</label>
-            <input type="number" id="billing_rate" name="billing_rate" class="form-control">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" />
         </div>
         <div class="form-group">
+            <label for="mobile">Phone </label>
+            <input type="number" id="mobile" name="mobile" class="form-control" />
+        </div>
 
-            <label for="bu_head">BU Head</label>
-            <input type="text" id="bu_head" name="bu_head" class="form-control">
-            
+        <div class="form-group">
+            <label for="resume">Resume URL</label>
+            <input type="text" id="resumeURL" name="resumeURL" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="billingRate">Billing Rate</label>
+            <input type="number" id="billingRate" name="billingRate" class="form-control" step="any"/>
         </div>
 
         <div class="form-group">
             <label for="location">Location</label>
-            <input type="text" id="location" name="location" class="form-control">
+            <input type="text" id="location" name="location" class="form-control" />
         </div>
         <div class="form-group">
-            <label for="notice_period">Notice Period</label>
-            <input type="number" id="notice_period" name="notice_period" class="form-control">
+            <label for="noticePeriod">Notice Period</label>
+            <input type="number" id="noticePeriod" name="noticePeriod" class="form-control" step="any"/>
         </div>
         <div class="form-group">
-            <label for="reviewer_name">Reviewer Name</label>
-            <input type="text" id="reviewer_name" name="reviewer_name" class="form-control">
+            <span style="margin-left: 30" class="btn">
+                BU HEAD
+                <option value="{{val.buh}}" selected>{{val.buh}}</option>
+                {% for val in BUHList %}
+                <option value="{{val.eFname}}">{{val.eFname}}</option>
+                {% endfor %}
+                </select>
+            </span>
         </div>
         <div class="form-group">
-            <label for="remarks_panel">Remarks Panel</label>
-            <input type="text" id="remarks_panel" name="remarks_panel" class="form-control">
+            <label for="department">Department</label>
+            <select name="department" id="department">
+                {% for val in departments %}
+                <option value="{{val}}">{{val}}</option>
+                {% endfor %}
+            </select>
         </div>
         <div class="form-group">
-            <label for="vm_comment">VM Comment</label>
-            <input type="text" id="vm_comment" name="vm_comment" class="form-control">
+            <label for="clientName">Client Name</label>
+            <input type="text" id="clientName" name="clientName" class="form-control" />
         </div>
         <div class="form-group">
-            <label for="client_name">Client Name</label>
-            <input type="text" id="client_name" name="client_name" class="form-control">
+            <label for="interviewSchedule">Interview Schedule</label>
+            <input type="date" id="interviewSchedule" name="interviewSchedule" class="form-control" />
         </div>
-        <div class="form-group">
-            <label for="interview_schedule">Interview Schedule</label>
-            <input type="date" id="interview_schedule" name="interview_schedule" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="interview_status">Interview Status</label>
-            <input type="text" id="interview_status" name="interview_status" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="comments">Comments</label>
-            <input type="text" id="comments" name="comments" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="remarks">Remarks</label>
-            <input type="text" id="remarks" name="remarks" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="phone_number">Phone Number</label>
-            <input type="number" id="phone_number" name="phone_number" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="mode">Mode</label>
-            <input type="text" id="mode" name="mode" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="resume">Resume</label>
-            <input type="text" id="resume" name="resume" class="form-control">
-        </div>
+
+
         <div class="form-group">
             <label for="owner">Owner</label>
             <select name="owner" id="owner">
-              {% for val in ownerList %}
-              <option value="{{val}}">{{val}}</option>
-              {% endfor %}
+                {% for val in ownerList %}
+                <option value="{{val}}">{{val}}</option>
+                {% endfor %}
             </select>
         </div>
-        <button type="submit" class="btn btn-info">Add Details</button><br><br><br>
-
+        <button type="submit" class="btn btn-info">Add Details</button><br /><br /><br />
     </form>
 </div>
-
 
 {% endblock %}
