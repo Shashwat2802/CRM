@@ -132,6 +132,7 @@ class EmployeeReqMapping(models.Model):
 
 # model for VM candidates 
 class VmResource(models.Model):
+
     vmIdPK = models.AutoField(primary_key=True,default=0)
     archivalStatus = models.CharField(max_length=100,default='Active') #whether active or closed
     reqDate = models.DateField()
@@ -155,6 +156,7 @@ class VmResource(models.Model):
     interviewSchedule = models.DateField(null=True)
     resumeStatus = models.CharField(max_length=100,default='pending BU Review') 
     remarks = models.CharField(max_length=1000)
+
 
     class Meta:
         db_table = "VmResource"

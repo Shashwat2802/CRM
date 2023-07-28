@@ -559,6 +559,7 @@ def updateVmCandidate(request, vmIdPK):
         #     hist=request.POST['history']
         #     print("hist",hist)
         #     vmResource.history = hist
+
         vmResource.save()
         return redirect('/showVm')
 
