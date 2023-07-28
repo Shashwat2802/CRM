@@ -132,38 +132,36 @@ class EmployeeReqMapping(models.Model):
 
 # model for VM candidates 
 class VmResource(models.Model):
-    position_status = models.CharField(max_length=100,null=True) #whether active or closed
-    pr_date = models.DateField()
-    vendor_name = models.CharField(max_length=100,null=True)
-    candidate_source = models.CharField(max_length=100,null=True) #whether from bench or market
-    candidate_name = models.CharField(max_length=300,null=True)    
-    skillset = models.CharField(max_length=500,null=True)
-    experience = models.FloatField()
-    education = models.CharField(max_length=500,null=True)
-    billing_rate = models.FloatField()
-    bu_head = models.CharField(max_length=100,null=True)
-    location = models.CharField(max_length=500,null=True)
-    notice_period = models.IntegerField()
-    reviewer_name = models.CharField(max_length=100,null=True)
-    remarks_panel = models.CharField(max_length=500,null=True)
-    vm_comment = models.CharField(max_length=1000,null=True)
-    client_name = models.CharField(max_length=100,null=True)  
-    interview_schedule = models.DateField()
-    interview_status = models.CharField(max_length=100,null=True) 
-    comments = models.CharField(max_length=1000,null=True)
-    remarks = models.CharField(max_length=1000,null=True)   
-    email = models.EmailField()
-    phone_number = models.IntegerField()
-    mode = models.CharField(max_length=500,null=True)
+
     vmIdPK = models.AutoField(primary_key=True,default=0)
-    # owner = models.ForeignKey(Employee, on_delete = models.CASCADE)
-    resume = models.CharField(max_length=1000,null=True)
-    owner = models.CharField(max_length=1000,null=True)
+    archivalStatus = models.CharField(max_length=100,default='Active') #whether active or closed
+    reqDate = models.DateField()
+    providedDate = models.DateField()
+    vendorName = models.CharField(max_length=100)
+    resumeSource = models.CharField(max_length=100) #whether from bench or market
+    candidateName = models.CharField(max_length=300)    
+    skillset = models.CharField(max_length=500)
+    experience = models.FloatField()
+    education = models.CharField(max_length=500)
+    billingRate = models.FloatField()
+    location = models.CharField(max_length=500)
+    noticePeriod = models.IntegerField()
+    clientName = models.CharField(max_length=100)   
+    email = models.EmailField()
+    mobile = models.IntegerField()
+    resumeURL = models.CharField(max_length=1000,null=True)
+    owner = models.CharField(max_length=1000)
+    buh = models.CharField(max_length=100)
+    department = models.ForeignKey(Department,on_delete=models.CASCADE) # designation
+    interviewSchedule = models.DateField(null=True)
+    resumeStatus = models.CharField(max_length=100,default='pending BU Review') 
+    remarks = models.CharField(max_length=1000)
+
 
     class Meta:
         db_table = "VmResource"
     def __str__(self):
-        return str(self.candidate_name)
+        return str(self.candidateName)
    
 class Employee_Details(models.Model):
     pass
