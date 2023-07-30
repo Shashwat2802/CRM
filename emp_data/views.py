@@ -408,7 +408,7 @@ def job_description(request):
 
 
 def freeFromAllSource(request,reqIdPK):
-    selected_employee=EmployeeReqMapping.objects.filter(req_id=reqIdPK)
+    selected_employee=EmployeeReqMapping.objects.filter(req_id=reqIdPK,source='BENCH')
     fnamelist=[]
     lnamelist=[]
     for item in selected_employee:
@@ -777,8 +777,8 @@ def deleteAppliedCandidates(request,source,namearg,reqIdPK):
         messages.success(request,'The Selected TA resource'  + delete_instance.name +  'is deleted successfully')
         delete_instance.delete()
     if source=='VM':
-        vm_instance=VmResource.objects.get(candidate_name=namearg)
-        vm_instance.interview_status='Selected'
+        vm_instance=VmResource.objects.get(candidateName=namearg)
+        vm_instance.resumeStatus='Selected'
         vm_instance.save()
         customer_req.remain_positions+=1
         customer_req.save()

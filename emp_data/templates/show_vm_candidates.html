@@ -114,9 +114,10 @@
     <tr>
       <td>{{ val.archivalStatus }}</td>
       <td>
-        {{ val.candidateName }} {% if val.resumeURL and val.resumeURL != 'None' %}
+        {{ val.candidateName }} 
+        <!-- {% if val.resumeURL and val.resumeURL != 'None' %}
         <a href="{{ val.resumeURL }}" target="_blank"> <i class="fa-regular fa-eye"></i></a>
-        {% endif %}
+        {% endif %} -->
       </td>
       <td>{{ val.experience }}</td>
       <td>{{ val.education }}</td>
@@ -177,7 +178,7 @@
           type="button"
           class="btn btn-info btn-sm"
           data-toggle="modal"
-          data-target="#detailedInfoModal"
+          data-target="#detailedInfoModal{{val.vmIdPK}}"
         >
           <i class="fa-regular fa-eye"></i>
         </button>
@@ -185,7 +186,7 @@
         <!-- Modal -->
         <div
           class="modal fade"
-          id="detailedInfoModal"
+          id="detailedInfoModal{{val.vmIdPK}}"
           tabindex="-1"
           role="dialog"
           aria-labelledby="exampleModalLongTitle"
@@ -269,7 +270,7 @@
           type="button"
           class="btn btn-success btn-sm"
           data-bs-toggle="modal"
-          data-bs-target="#editInfoModal"
+          data-bs-target="#editInfoModal{{val.vmIdPK}}"
         >
           <i class="fa-regular fa-pen-to-square"></i>
         </button>
@@ -277,7 +278,7 @@
         <!-- Modal -->
         <div
           class="modal fade"
-          id="editInfoModal"
+          id="editInfoModal{{val.vmIdPK}}"
           tabindex="-1"
           aria-labelledby="editInfoLabel"
           aria-hidden="true"
