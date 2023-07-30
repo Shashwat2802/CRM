@@ -48,3 +48,11 @@ To run the project
 # To remove all entries in a table
 python manage.py shell -c "from emp_data.models  import Customer_Requirements; Customer_Requirements.objects.all().delete()"
 python manage.py shell -c "from emp_data.models  import employeeReqMapping; employeeReqMapping.objects.all().delete()"
+
+
+# To remove from git repo
+git rm -r --cached path/to/folder/
+git rm --cached path/to/file.ext
+
+
+
