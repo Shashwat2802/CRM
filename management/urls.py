@@ -54,11 +54,12 @@ urlpatterns = [
     path('freeFromAllSource/<int:reqIdPK>',views.freeFromAllSource),
     path('mapEmpToReq/<int:reqIdPK>/<str:choice>',views.mapEmpToReq),
     path('mappedEmployeeToCustomer/<int:reqIdPK>',views.mappedEmployeeToCustomer),
-    path("addCommentToEmployeedReqTable/<int:reqIdPK>/<str:source>/<str:sourceId>", views.addCommentToEmployeedReqTable),
+    # path("newremark/<int:reqIdPK>/<str:source>/<int:pk>", views.MappedComment),
+    path("newremark/<int:pk>/<int:reqIdPK>",views.MappedComment),
     path('showTaList/<int:reqIdPK>',views.showTaList),
     path('showVmList/<int:reqIdPK>',views.showVmList),    
 
-    path('selection_status/<str:estatus>/<int:reqIdPK>', views.selection_status),
+    path('selection_status/<str:estatus>/<int:reqIdPK>/<int:pk>', views.selection_status),
 
     path('checkbox',views.checkbox),
     path('dropDownCustomer',views.dropDownCustomer),
@@ -84,10 +85,10 @@ urlpatterns = [
     path('showTa',views.showTa),
     path('taDataUpload',views.taDataUpload),
     path('deleteTa/<int:phone_number>',views.deleteTa),
-    path('filterTa/<str:buhead>/<str:archive>',views.filterTa),
+    path('filterTa/<str:buhead>/<str:archivestatus>',views.filterTa),
     path('updateTaDetails/<str:ta_id>',views.updateTaDetails),
     path('taResume/<str:ta_id>',views.addTaResume),
-    path('addTaComment/<str:ta_id>',views.addTaComment),
+    path('addCommentsToTaCandidate/<str:ta_id>',views.addCommentsToTaCandidate),
 
 
     path('addEmployeeExperience/<str:e_id>',views.addEmployeeExperience),

@@ -194,7 +194,7 @@ class TA_Resource(models.Model): # TA_resource contain 33 records
     notice_period = models.IntegerField(default=0)
     current_loc = models.CharField(max_length=500)
     preferred_loc = models.CharField(max_length=500)
-    phone_number = models.CharField(max_length=15,unique=True)
+    phone_number = models.CharField(max_length=15)
     email = models.EmailField(max_length=100)
     status = models.CharField(max_length=100)
     BU_comments = models.CharField(max_length=1000)
@@ -211,6 +211,7 @@ class TA_Resource(models.Model): # TA_resource contain 33 records
     #owner = models.ForeignKey(Employee, on_delete = models.CASCADE)    
     owner = models.CharField(max_length=100)
     resume = models.URLField(null=True,blank=True)
+    remarks = models.CharField(max_length=1000)
 
     class Meta:
         db_table = "TA_Resource"
