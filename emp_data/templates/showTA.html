@@ -387,13 +387,24 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="date">Update Date</label>
+                                            <label for="status">Status</label>
+                                            <select name="status" id="status">
+                                                <option value="{{value.status}}" selected>{{value.status}}</option>
+                                                <option value="ScreeningPending">pending Processing</option>
+                                                <option value="screenReject">Screen reject</option>
+                                                <option value="shortlisted">Shortlisted</option>
+                                                <option value="CustomerReject">CustomerReject</option>
+                                                <option value="Deployed">Deployed</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="date">Date</label>
                                             <br>
                                             <input type="date" name="date" id="date" class="form-control"
                                                 value="{{value.date|date:'Y-m-d' }}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="name">Update Name</label>
+                                            <label for="name">Name</label>
                                             <br>
                                             <input type="text" name="name" id="name" class="form-control"
                                                 value="{{value.name}}">
@@ -408,73 +419,73 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="Position">Update Position</label>
+                                            <label for="Position">Position</label>
                                             <br>
                                             <input type="text" name="Position" id="Position" class="form-control"
                                                 value="{{value.Position}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="skillset">Update Skillset</label>
+                                            <label for="skillset">Skillset</label>
                                             <br>
                                             <input type="text" name="skillset" id="skillset" class="form-control"
                                                 value="{{value.skillset}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="education">Update Education</label>
+                                            <label for="education">Education</label>
                                             <br>
                                             <input type="text" name="education" id="education" class="form-control"
                                                 value="{{value.education}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="experience">Update Experience</label>
+                                            <label for="experience">Experience</label>
                                             <br>
                                             <input type="number" name="experience" id="experience" class="form-control"
                                                 step="any" value="{{value.experience}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="relevant_exp">Update Relevant Exp</label>
+                                            <label for="relevant_exp">Relevant Exp</label>
                                             <br>
                                             <input type="number" name="relevant_exp" id="relevant_exp"
                                                 class="form-control" step="any" value="{{value.relevant_exp}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="current_org">Update Current Organization</label>
+                                            <label for="current_org">Current Organization</label>
                                             <br>
                                             <input type="text" name="current_org" id="current_org" class="form-control"
                                                 value="{{value.current_org}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="current_ctc">Update Current CTC</label>
+                                            <label for="current_ctc">Current CTC</label>
                                             <br>
                                             <input type="number" name="current_ctc" id="current_ctc"
                                                 class="form-control" step="any" value="{{value.current_ctc}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="expected_ctc">Update Expected CTC</label>
+                                            <label for="expected_ctc">Expected CTC</label>
                                             <br>
                                             <input type="number" name="expected_ctc" id="expected_ctc"
                                                 class="form-control" step="any" value="{{value.expected_ctc}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="actual_notice_period">Update Actual Notice Period</label>
+                                            <label for="actual_notice_period">Actual Notice Period</label>
                                             <br>
                                             <input type="number" name="actual_notice_period" id="actual_notice_period"
                                                 class="form-control" value="{{value.actual_notice_period}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="notice_period">Update Notice Period</label>
+                                            <label for="notice_period">Notice Period</label>
                                             <br>
                                             <input type="number" name="notice_period" id="notice_period"
                                                 class="form-control" value="{{value.notice_period}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="current_loc">Update Current Location</label>
+                                            <label for="current_loc">Current Location</label>
                                             <br>
                                             <input type="text" name="current_loc" id="current_loc" class="form-control"
                                                 value="{{value.current_loc}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="preferred_loc">Update preferred Location</label>
+                                            <label for="preferred_loc">preferred Location</label>
                                             <br>
                                             <input type="text" name="preferred_loc" id="preferred_loc"
                                                 class="form-control" value="{{value.preferred_loc}}">
@@ -486,75 +497,65 @@
                                                 class="form-control" placeholder=" {{value.phone_number}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="email">Update Email</label>
+                                            <label for="email">Email</label>
                                             <br>
                                             <input type="email" name="email" id="email" class="form-control"
                                                 value="{{value.email}}">
                                         </div>
 
 
-                                        <div class="form-group">
-                                            <label for="status">Status</label>
-                                            <select name="status" id="status">
-                                                <option value="{{value.status}}" selected>{{value.status}}</option>
-                                                <option value="ScreeningPending">pending Processing</option>
-                                                <option value="screenReject">Screen reject</option>
-                                                <option value="shortlisted">Shortlisted</option>
-                                                <option value="CustomerReject">CustomerReject</option>
-                                                <option value="Deployed">Deployed</option>
-                                            </select>
-                                        </div>
+
 
                                         <div class="form-group">
-                                            <label for="T1_panel">Update T1 Panel</label>
+                                            <label for="T1_panel">T1 Panel</label>
                                             <br>
                                             <input type="text" name="T1_panel" id="T1_panel" class="form-control"
                                                 value="{{value.T1_panel}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="T1_IW_date">Update T1 IW Date</label>
+                                            <label for="T1_IW_date">T1 IW Date</label>
                                             <br>
                                             <input type="date" name="T1_IW_date" id="T1_IW_date" class="form-control"
                                                 value="{{value.T1_IW_date|date:'Y-m-d' }}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="T2_panel">Update T2 Panel</label>
+                                            <label for="T2_panel">T2 Panel</label>
                                             <br>
                                             <input type="text" name="T2_panel" id="T2_panel" class="form-control"
                                                 value="{{value.T2_panel}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="T2_IW_date">Update T2 IW Date</label>
+                                            <label for="T2_IW_date">T2 IW Date</label>
                                             <br>
                                             <input type="date" name="T2_IW_date" id="T2_IW_date" class="form-control"
                                                 value="{{value.T2_IW_date|date:'Y-m-d'}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="source">Update Source</label>
+                                            <label for="source">Source</label>
                                             <br>
                                             <input type="text" name="source" id="source" class="form-control"
                                                 value="{{value.source}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="Rec_prime">Update Rec Prime</label>
+                                            <label for="Rec_prime">Rec Prime</label>
                                             <br>
                                             <input type="text" name="Rec_prime" id="Rec_prime" class="form-control"
                                                 value="{{value.Rec_prime}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="Domain">Update Domain</label>
+                                            <label for="Domain">Domain</label>
                                             <br>
                                             <input type="text" name="Domain" id="Domain" class="form-control"
                                                 value="{{value.Domain}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="T1">Update T1</label>
+                                            <label for="T1">T1</label>
                                             <br>
                                             <input type="text" name="T1" id="T1" class="form-control"
                                                 value="{{value.T1}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="T2">Update T2</label>
+                                            <label for="T2">T2</label>
                                             <br>
                                             <input type="text" name="T2" id="T2" class="form-control"
                                                 value="{{value.T2}}">

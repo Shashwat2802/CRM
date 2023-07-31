@@ -1,16 +1,8 @@
 {% extends 'basic.html' %} {% block extra %} {% load custom_filters %}
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css"
-/>
-<script
-  type="text/javascript"
-  charset="utf8"
-  src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"
-></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css" />
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 
 {% endblock %} {% block body %}
 <center>
@@ -67,22 +59,13 @@
       </select>
     </span>
     <span style="margin-left: 30">
-      <button
-        class="go-btn"
-        style="border-radius: 30px"
-        type="submit"
-        onClick="window.location.href = getLink()"
-      >
+      <button class="go-btn" style="border-radius: 30px" type="submit" onClick="window.location.href = getLink()">
         Search
       </button>
     </span>
     <span style="margin-left: 10">
-      <button
-        class="go-btn"
-        style="border-radius: 30px"
-        type="submit"
-        onclick="location.href='/showVm/Choose/Choose/Choose'"
-      >
+      <button class="go-btn" style="border-radius: 30px" type="submit"
+        onclick="location.href='/showVm/Choose/Choose/Choose'">
         Refresh
       </button>
     </span>
@@ -112,8 +95,8 @@
     <tr>
       <td>{{ val.archivalStatus }}</td>
       <td>
-        {{ val.candidateName }} {{ val.candidateName }} {% if val.resumeURL and val.resumeURL !=
-        'None' %}
+        {{ val.candidateName }} {{ val.candidateName }}
+        {% if val.resumeURL and val.resumeURL != 'None' %}
         <a href="{{ val.resumeURL }}" target="_blank"> <i class="fa-regular fa-eye"></i></a>
         {% endif %}
       </td>
@@ -129,14 +112,8 @@
           {{ val.remarks|extract_from_hashtag }}
         </p>
         <!-- remarks Modal -->
-        <div
-          class="modal fade"
-          id="hist{{val.vmIdPK}}"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="jobDescriptionModalLabel{{val.vmIdPK}}"
-          aria-hidden="true"
-        >
+        <div class="modal fade" id="hist{{val.vmIdPK}}" tabindex="-1" role="dialog"
+          aria-labelledby="jobDescriptionModalLabel{{val.vmIdPK}}" aria-hidden="true">
           <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
               <div class="modal-header">
@@ -172,24 +149,14 @@
       <td>{{ val.resumeStatus }}</td>
       <td>
         <!-- Button trigger modal -->
-        <button
-          type="button"
-          class="btn btn-info btn-sm"
-          data-toggle="modal"
-          data-target="#detailedInfoModal{{val.vmIdPK}}"
-        >
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+          data-target="#detailedInfoModal{{val.vmIdPK}}">
           <i class="fa-regular fa-eye"></i>
         </button>
 
         <!-- Modal -->
-        <div
-          class="modal fade"
-          id="detailedInfoModal{{val.vmIdPK}}"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalLongTitle"
-          aria-hidden="true"
-        >
+        <div class="modal fade" id="detailedInfoModal{{val.vmIdPK}}" tabindex="-1" role="dialog"
+          aria-labelledby="exampleModalLongTitle" aria-hidden="true">
           <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
               <div class="modal-header">
@@ -264,46 +231,27 @@
           </div>
         </div>
         <!-- Button trigger modal -->
-        <button
-          type="button"
-          class="btn btn-success btn-sm"
-          data-bs-toggle="modal"
-          data-bs-target="#editInfoModal{{val.vmIdPK}}"
-        >
+        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+          data-bs-target="#editInfoModal{{val.vmIdPK}}">
           <i class="fa-regular fa-pen-to-square"></i>
         </button>
 
         <!-- Modal -->
-        <div
-          class="modal fade"
-          id="editInfoModal{{val.vmIdPK}}"
-          tabindex="-1"
-          aria-labelledby="editInfoLabel"
-          aria-hidden="true"
-        >
+        <div class="modal fade" id="editInfoModal{{val.vmIdPK}}" tabindex="-1" aria-labelledby="editInfoLabel"
+          aria-hidden="true">
           <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
               <div class="modal-header">
                 <h1 class="modal-title fs-5" id="editInfoLabel">{{val.candidateName}}</h1>
-                <button
-                  type="button"
-                  class="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 <form action="/updateVmCandidate/{{val.vmIdPK}}" method="POST">
                   {% csrf_token %}
                   <div class="form-group">
                     <label for="candidateName">Candidate Name:</label>
-                    <input
-                      type="text"
-                      id="candidateName"
-                      name="candidateName"
-                      class="form-control"
-                      value="{{val.candidateName}}"
-                    />
+                    <input type="text" id="candidateName" name="candidateName" class="form-control"
+                      value="{{val.candidateName}}" />
                   </div>
 
                   <div class="form-group">
@@ -328,13 +276,8 @@
                   </div>
                   <div class="form-group">
                     <label for="interviewSchedule">Interview Schedule:</label>
-                    <input
-                      type="date"
-                      id="interviewSchedule"
-                      name="interviewSchedule"
-                      class="form-control"
-                      value="{{ val.interviewSchedule|date:'Y-m-d' }}"
-                    />
+                    <input type="date" id="interviewSchedule" name="interviewSchedule" class="form-control"
+                      value="{{ val.interviewSchedule|date:'Y-m-d' }}" />
                   </div>
 
                   <div class="form-group">
@@ -361,158 +304,76 @@
 
                   <div class="form-group">
                     <label for="email">Email:</label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      class="form-control"
-                      value="{{val.email}}"
-                    />
+                    <input type="email" id="email" name="email" class="form-control" value="{{val.email}}" />
                   </div>
                   <div class="form-group">
                     <label for="mobile">Phone:</label>
-                    <input
-                      type="number"
-                      id="mobile"
-                      name="mobile"
-                      class="form-control"
-                      value="{{val.mobile}}"
-                    />
+                    <input type="number" id="mobile" name="mobile" class="form-control" value="{{val.mobile}}" />
                   </div>
 
                   <div class="form-group">
                     <label for="reqDate">Req Date:</label>
-                    <input
-                      type="date"
-                      id="reqDate"
-                      name="reqDate"
-                      class="form-control"
-                      value="{{ val.reqDate|date:'Y-m-d' }}"
-                    />
+                    <input type="date" id="reqDate" name="reqDate" class="form-control"
+                      value="{{ val.reqDate|date:'Y-m-d' }}" />
                   </div>
                   <div class="form-group">
                     <label for="providedDate">Provided Date:</label>
-                    <input
-                      type="date"
-                      id="providedDate"
-                      name="providedDate"
-                      class="form-control"
-                      value="{{ val.providedDate|date:'Y-m-d' }}"
-                    />
+                    <input type="date" id="providedDate" name="providedDate" class="form-control"
+                      value="{{ val.providedDate|date:'Y-m-d' }}" />
                   </div>
                   <div class="form-group">
                     <label for="vendorName">Vendor Name:</label>
-                    <input
-                      type="text"
-                      id="vendorName"
-                      name="vendorName"
-                      class="form-control"
-                      value="{{val.vendorName}}"
-                    />
+                    <input type="text" id="vendorName" name="vendorName" class="form-control"
+                      value="{{val.vendorName}}" />
                   </div>
                   <div class="form-group">
                     <label for="resumeSource">Candidate Source:</label>
-                    <input
-                      type="text"
-                      id="resumeSource"
-                      name="resumeSource"
-                      class="form-control"
-                      value="{{val.resumeSource}}"
-                    />
+                    <input type="text" id="resumeSource" name="resumeSource" class="form-control"
+                      value="{{val.resumeSource}}" />
                   </div>
 
                   <div class="form-group">
                     <label for="skillset">Skillset:</label>
-                    <input
-                      type="text"
-                      id="skillset"
-                      name="skillset"
-                      class="form-control"
-                      value="{{val.skillset}}"
-                    />
+                    <input type="text" id="skillset" name="skillset" class="form-control" value="{{val.skillset}}" />
                   </div>
                   <div class="form-group">
                     <label for="experience">Experience:</label>
-                    <input
-                      type="number"
-                      id="experience"
-                      name="experience"
-                      class="form-control"
-                      value="{{val.experience}}"
-                    />
+                    <input type="number" id="experience" name="experience" class="form-control"
+                      value="{{val.experience}}" />
                   </div>
                   <div class="form-group">
                     <label for="education">Education:</label>
-                    <input
-                      type="text"
-                      id="education"
-                      name="education"
-                      class="form-control"
-                      value="{{val.education}}"
-                    />
+                    <input type="text" id="education" name="education" class="form-control" value="{{val.education}}" />
                   </div>
                   <div class="form-group">
                     <label for="billingRate">Billing Rate:</label>
-                    <input
-                      type="number"
-                      id="billingRate"
-                      name="billingRate"
-                      class="form-control"
-                      value="{{val.billingRate}}"
-                    />
+                    <input type="number" id="billingRate" name="billingRate" class="form-control"
+                      value="{{val.billingRate}}" />
                   </div>
 
                   <div class="form-group">
                     <label for="location">Location:</label>
-                    <input
-                      type="text"
-                      id="location"
-                      name="location"
-                      class="form-control"
-                      value="{{val.location}}"
-                    />
+                    <input type="text" id="location" name="location" class="form-control" value="{{val.location}}" />
                   </div>
                   <div class="form-group">
                     <label for="noticePeriod">Notice Period:</label>
-                    <input
-                      type="number"
-                      id="noticePeriod"
-                      name="noticePeriod"
-                      class="form-control"
-                      value="{{val.noticePeriod}}"
-                    />
+                    <input type="number" id="noticePeriod" name="noticePeriod" class="form-control"
+                      value="{{val.noticePeriod}}" />
                   </div>
 
                   <div class="form-group">
                     <label for="clientName">Client Name:</label>
-                    <input
-                      type="text"
-                      id="clientName"
-                      name="clientName"
-                      class="form-control"
-                      value="{{val.clientName}}"
-                    />
+                    <input type="text" id="clientName" name="clientName" class="form-control"
+                      value="{{val.clientName}}" />
                   </div>
 
                   <div class="form-group">
                     <label for="owner">Owner:</label>
-                    <input
-                      type="text"
-                      id="owner"
-                      name="owner"
-                      class="form-control"
-                      value="{{val.owner}}"
-                    />
+                    <input type="text" id="owner" name="owner" class="form-control" value="{{val.owner}}" />
                   </div>
                   <div class="form-group">
                     <label for="resumeURL">Resume URL:</label>
-                    <input
-                      type="text"
-                      id="resumeURL"
-                      name="resumeURL"
-                      class="form-control"
-                      value="{{val.resumeURL}}"
-                    />
+                    <input type="text" id="resumeURL" name="resumeURL" class="form-control" value="{{val.resumeURL}}" />
                   </div>
                   <button type="submit" class="btn btn-success">Submit</button><br /><br /><br />
                 </form>
@@ -527,20 +388,14 @@
   </tbody>
 </table>
 
-<link
-  rel="stylesheet"
-  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- DataTables core library -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css" />
 <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
 
 <!-- DataTables Buttons extension library -->
-<link
-  rel="stylesheet"
-  href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css"
-/>
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css" />
 <script src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
