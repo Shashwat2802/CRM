@@ -97,6 +97,7 @@ def addEmployeeExperience(request, e_id):
    
 
 def deleteEmployeeExperience(request, exp_id): 
+    print("***** In Delete")
     exp_instance = EmpExperienceHistory.objects.get(id=exp_id)
     exp_instance.delete()
     return redirect('/listEmployeeFiltered/All/All/All')
