@@ -400,7 +400,7 @@ def job_description(request):
 
 
 def freeFromAllSource(request,reqIdPK):
-    #form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='pendingProcessing')),isDeleted=False ).values()
+    #form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='ScreeningPending')),isDeleted=False ).values()
     selected_employee=EmployeeReqMapping.objects.filter(req_id=reqIdPK,source='BENCH')
     fnamelist=[]
     lnamelist=[]
@@ -408,11 +408,11 @@ def freeFromAllSource(request,reqIdPK):
         namelist=item.name.split(' ',1)
         fnamelist.append(namelist[0])
         lnamelist.append(namelist[1])
-    form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='pendingProcessing')),isDeleted=False ).exclude(eFname__in=fnamelist,eLname__in=lnamelist)
+    form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='ScreeningPending')),isDeleted=False ).exclude(eFname__in=fnamelist,eLname__in=lnamelist)
     if request.method == "GET":   
         skills = request.GET.get('searchskill')      
         if skills != None: 
-            form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='pendingProcessing')),eskills__icontains= skills,isDeleted=False).exclude(eFname__in=fnamelist,eLname__in=lnamelist)
+            form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='ScreeningPending')),eskills__icontains= skills,isDeleted=False).exclude(eFname__in=fnamelist,eLname__in=lnamelist)
     return render(request,'show_candidate.html',{'form':form ,'reqIdPK':reqIdPK})
 
 def checkbox(request):
@@ -623,23 +623,23 @@ def updateVmCandidate(request, vmIdPK):
 def showTaList(request,reqIdPK):
     # form=TA_Resource.objects.filter(status='Selected').values()
     #form=TA_Resource.objects.filter(archived__icontains='Active').values()
-    form=TA_Resource.objects.filter(archived__icontains='Active').exclude(status='Selected and Mapped')
+    form=TA_Resource.objects.filter(archived__icontains='Active').exclude(status='Deployed')
     if request.method=='GET':
         skills=request.GET.get('searchskill')
         if skills != None:
             #form=TA_Resource.objects.filter(skillset__icontains=skills)
-            form=TA_Resource.objects.filter(skillset__icontains=skills).exclude(status='Selected and Mapped')
+            form=TA_Resource.objects.filter(skillset__icontains=skills).exclude(status='Deployed')
     
     return render(request,'selected_ta_list.html',{'form':form,"reqIdPK":reqIdPK})
 
 def showVmList(request,reqIdPK):
     #form=VmResource.objects.filter(archivalStatus__icontains='Active').values()
-    form=VmResource.objects.filter(archivalStatus__icontains='Active').exclude(resumeStatus='Selected and Mapped')
+    form=VmResource.objects.filter(archivalStatus__icontains='Active').exclude(resumeStatus='Deployed')
     if request.method=='GET':
         skills=request.GET.get('searchskill')
         if skills!=None:
             #form=VmResource.objects.filter(skillset__icontains=skills)
-            form=VmResource.objects.filter(skillset__icontains=skills).exclude(resumeStatus='Selected and Mapped')
+            form=VmResource.objects.filter(skillset__icontains=skills).exclude(resumeStatus='Deployed')
     return render(request,'selected_vm_list.html',{'form':form,'reqIdPK':reqIdPK})
 
 def updateTaDetails(request,ta_id):    
@@ -698,7 +698,7 @@ def mapEmpToReq(request,reqIdPK,choice):
              print("employee list",selectedEmpList)
              for i in selectedEmpList:
                 emp=Employee.objects.get(e_id=i,isDeleted=False)
-                emp.estatus='pendingProcessing'
+                emp.estatus='ScreeningPending'
                 emp.save()
                 print("Employee status updated",emp)
                 final=EmployeeReqMapping(req_id=salesReq,name=emp.eFname + " " +emp.eLname,eskills=emp.eskills,  added_date=today,source='BENCH',sourceid_1=emp.e_id)
@@ -708,7 +708,7 @@ def mapEmpToReq(request,reqIdPK,choice):
             print("Selected TA  list",selectedtaList)
             for i in selectedtaList:
                 ta=TA_Resource.objects.get(name=i)
-                ta.status='Selected and Mapped'
+                ta.status='Deployed'
                 ta.save()
                 final=EmployeeReqMapping(req_id=salesReq,name=ta.name,eskills=ta.skillset,added_date=today,source='TA',empstatus='Selected',sourceid_2=ta.ta_id)
                 final.save()
@@ -717,7 +717,7 @@ def mapEmpToReq(request,reqIdPK,choice):
             print("Selected VM  list",selectedvmList)
             for vm_name in selectedvmList:
                 vm=VmResource.objects.get(candidateName=vm_name)
-                vm.resumeStatus='Selected and Mapped'
+                vm.resumeStatus='Deployed'
                 vm.save()
                 final=EmployeeReqMapping(req_id=salesReq,name=vm.candidateName,eskills=vm.skillset,  added_date=today,source='VM',empstatus='Selected',sourceid_3=vm.vmIdPK)
                 final.save()

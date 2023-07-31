@@ -42,8 +42,8 @@
             <b>Archived?</b>
             <select name="archivestatus" id="archivestatus" class="btn" style="border-radius: 30px;">
                 <option value="{{status_select}}" selected disabled hidden>{{status_select}}</option>
-                <option value="Archived">Archived</option>
-                <option value="Not Archived">Not Archived</option>
+                <option value="Closed">Closed</option>
+                <option value="Active">Active</option>
                 <option value="Both">Both</option>
             </select>
         </span>
@@ -497,10 +497,11 @@
                                             <label for="status">Status</label>
                                             <select name="status" id="status">
                                                 <option value="{{value.status}}" selected>{{value.status}}</option>
-                                                <option value="pendingProcessing">pending Processing</option>
-                                                <option value="screenRejected">Screen reject</option>
+                                                <option value="ScreeningPending">pending Processing</option>
+                                                <option value="screenReject">Screen reject</option>
                                                 <option value="shortlisted">Shortlisted</option>
-                                                <option value="customerSelected">Customer Selected</option>
+                                                <option value="CustomerReject">CustomerReject</option>
+                                                <option value="Deployed">Deployed</option>
                                             </select>
                                         </div>
 
