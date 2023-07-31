@@ -1,6 +1,4 @@
-{% extends 'basic.html' %} {% block extra %}
-{% load custom_filters %}
-
+{% extends 'basic.html' %} {% block extra %} {% load custom_filters %}
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link
@@ -114,8 +112,8 @@
     <tr>
       <td>{{ val.archivalStatus }}</td>
       <td>
-        {{ val.candidateName }} 
-        {{ val.candidateName }} {% if val.resumeURL and val.resumeURL != 'None' %}        
+        {{ val.candidateName }} {{ val.candidateName }} {% if val.resumeURL and val.resumeURL !=
+        'None' %}
         <a href="{{ val.resumeURL }}" target="_blank"> <i class="fa-regular fa-eye"></i></a>
         {% endif %}
       </td>
@@ -322,7 +320,7 @@
                     <label for="resumeStatus">Status</label>
                     <select name="resumeStatus" id="resumeStatus">
                       <option value="{{val.resumeStatus}}" selected>{{val.resumeStatus}}</option>
-                      <option value="pendingProcessing">pending Processing</option>
+                      <option value="ScreeningPending">pending Processing</option>
                       <option value="screenRejected">Screen reject</option>
                       <option value="shortlisted">Shortlisted</option>
                       <option value="customerSelect">Customer Selected</option>

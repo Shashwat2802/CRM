@@ -154,7 +154,7 @@ class VmResource(models.Model):
     buh = models.CharField(max_length=100)
     department = models.ForeignKey(Department,on_delete=models.CASCADE) # designation
     interviewSchedule = models.DateField(null=True)
-    resumeStatus = models.CharField(max_length=100,default='pending BU Review') 
+    resumeStatus = models.CharField(max_length=100,default='ScreeningPending') 
     remarks = models.CharField(max_length=1000)
 
 
@@ -196,13 +196,13 @@ class TA_Resource(models.Model): # TA_resource contain 33 records
     preferred_loc = models.CharField(max_length=500)
     phone_number = models.CharField(max_length=15)
     email = models.EmailField(max_length=100)
-    status = models.CharField(max_length=100)
+    status = models.CharField(max_length=100,default='ScreeningPending')
     BU_comments = models.CharField(max_length=1000)
     TA_comments = models.CharField(max_length=1000)    
     T1_panel = models.CharField(max_length=100)
-    T1_IW_date = models.DateField()
+    T1_IW_date = models.DateField(null=True)
     T2_panel = models.CharField(max_length=100)
-    T2_IW_date = models.DateField()
+    T2_IW_date = models.DateField(null=True)
     source = models.CharField(max_length=500)
     Rec_prime = models.CharField(max_length=500)
     Domain = models.CharField(max_length=100)
