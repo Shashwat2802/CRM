@@ -267,7 +267,7 @@ def addSalesReqComment(request, reqIdPK):
         print("Existing Comment",salesReq.history)
         salesReq.history=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+salesReq.history
         salesReq.save()
-        return redirect('/showVm/Choose/Choose/Choose')
+        return redirect('/listSalesReqsFiltered/Choose/Choose/Choose')
 
 def addCommentsToVmCandidate(request, reqIdPK):
     if request.method == 'POST':
@@ -280,16 +280,16 @@ def addCommentsToVmCandidate(request, reqIdPK):
         vmCandidate.save()
         return redirect('/showVm/Choose/Choose/Choose')  
     
-def addTaComment(request, ta_id):
+def addCommentsToTaCandidate(request, ta_id):
     if request.method == 'POST':
         current_user = request.user.username.title()
         remark_text = request.POST.get('remark_text', '')
         today = date.today()
         ta_commet = TA_Resource.objects.get(pk=ta_id)
-        print("Existing Comment",ta_commet.BU_comments)
-        ta_commet.history=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+ta_commet.history
+        print("Existing Comment",ta_commet.remarks)
+        ta_commet.remarks=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+ta_commet.remarks
         ta_commet.save()
-        return redirect('/listSalesReqsFiltered/Choose/Choose')
+        return redirect('/showTa')
         
 
 def cust_req_dropdown(request, ref): 
@@ -336,13 +336,14 @@ def salesSummary(request):
     return render(request,'summary.html',context)
 
 
-def addCommentToEmployeedReqTable(request, reqIdPK,source,sourceId):
+def MappedComment(request,pk,reqIdPK):
     if request.method == 'POST':
         current_user = request.user.username.title()
         remark_text = request.POST.get('remark_text', '')
         today = date.today()
-        mapping = EmployeeReqMapping.objects.get(req_id=reqIdPK,source=source,sourceId=sourceId)
-        print("Existing mapping",mapping.req_id,mapping.eFname,mapping.sourceId)
+        #mapping = EmployeeReqMapping.objects.get(req_id=reqIdPK,source=source,sourceId=sourceId)
+        #print("Existing mapping",mapping.req_id,mapping.eFname,mapping.sourceId)
+        mapping=EmployeeReqMapping.objects.get(pk=pk)
         mapping.history=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+mapping.history
         mapping.save()
         return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
@@ -362,24 +363,28 @@ def addTa(request):
     else:
         BUList=list(map(lambda x:x.eFname ,getBUHList()))
         ownerList = list(map(lambda x:x.eFname,getOwnerList()))        
-        return render(request,'addTA.html',{'BUList':BUList,'ownerList':ownerList,'status':['Select','Archived','Closed']})
+        return render(request,'addTA.html',{'BUList':BUList,'ownerList':ownerList,'status':['Select','Active','Closed']})
 
-def showTa(request):
+def showTa(request):       
     ta_instance=TA_Resource.objects.all()
     Bu_head=getBUHList()
-    return render(request,'showTA.html',{'ta_instance':ta_instance,'Bu_head':Bu_head})
+    return render(request,'showTA.html',{
+        'ta_instance':ta_instance,'Bu_head':Bu_head,
+                                        })
 
-def filterTa(request,buhead,archive):
+def filterTa(request,buhead,archivestatus):
     filtered={}
-    if buhead != 'All' :
+    if buhead != 'All' and buhead != 'Choose':
         filtered['BU']=buhead
-    if archive !='Both':
-        filtered['archived']=archive
+
+    if archivestatus !='Both' and archivestatus != 'Choose':
+        filtered['archived']=archivestatus
+
     print("Filtered Condition",filtered)
     ta_instance=TA_Resource.objects.filter(**filtered)
     Bu_head=getBUHList()
     return render(request,'showTA.html',{'ta_instance':ta_instance,'Bu_head':Bu_head,
-                                         'status_select':archive,'bu_select':buhead})
+                                         'status_select':archivestatus,'bu_select':buhead})
 
 def deleteTa(request,phone_number):
     instance=TA_Resource.objects.get(pk=phone_number)
@@ -395,11 +400,19 @@ def job_description(request):
 
 
 def freeFromAllSource(request,reqIdPK):
-    form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='pendingProcessing')),isDeleted=False ).values()
+    #form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='pendingProcessing')),isDeleted=False ).values()
+    selected_employee=EmployeeReqMapping.objects.filter(req_id=reqIdPK,source='BENCH')
+    fnamelist=[]
+    lnamelist=[]
+    for item in selected_employee:
+        namelist=item.name.split(' ',1)
+        fnamelist.append(namelist[0])
+        lnamelist.append(namelist[1])
+    form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='pendingProcessing')),isDeleted=False ).exclude(eFname__in=fnamelist,eLname__in=lnamelist)
     if request.method == "GET":   
         skills = request.GET.get('searchskill')      
         if skills != None: 
-            form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='pendingProcessing')),eskills__icontains= skills,isDeleted=False)
+            form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='pendingProcessing')),eskills__icontains= skills,isDeleted=False).exclude(eFname__in=fnamelist,eLname__in=lnamelist)
     return render(request,'show_candidate.html',{'form':form ,'reqIdPK':reqIdPK})
 
 def checkbox(request):
@@ -434,16 +447,20 @@ def mappedEmployeeToCustomer(request,reqIdPK):
 
 
 
-def selection_status(request, estatus,reqIdPK): 
-    model_instance = EmployeeReqMapping.objects.get(name=estatus[2:])
+def selection_status(request,estatus,reqIdPK,pk): 
+    model_instance = EmployeeReqMapping.objects.get(pk=pk)
     #model_instance = EmployeeReqMapping.objects.get(req=req_id)
     requirement_instance=Customer_Requirements.objects.get(pk=reqIdPK)
-
+    name=estatus[2:]
+    namelist=name.split(' ',1)
     if estatus[:2] == 'SL':
         model_instance.empstatus = 'Selected'
         requirement_instance.remain_positions-=1
         model_instance.save()
         requirement_instance.save()
+        emp_instance=Employee.objects.get(eFname=namelist[0],eLname=namelist[1])
+        emp_instance.estatus='Selected'
+        emp_instance.save()
 
     elif estatus[:2] == 'RJ': 
         model_instance.empstatus = 'Rejected'
@@ -491,7 +508,11 @@ def showVm(request,buh,dept,status):
     buhList= getBUHList()
 
 
-    return render(request, "show_vm_candidates.html", {"candidate_list":all_vm_candidates,'ownerList':ownerList,'departments':departments,'BUHList':buhList,"dept_select":dept,"bu_select":buh,"status_select":status})
+    return render(request, 
+                  "show_vm_candidates.html",
+                     {"candidate_list":all_vm_candidates,
+                        'ownerList':ownerList,'departments':departments,'BUHList':buhList,
+                        "dept_select":dept,"bu_select":buh,"status_select":status})
 
 # Form to add only one VM candidate 
 def addVm(request):
@@ -601,23 +622,24 @@ def updateVmCandidate(request, vmIdPK):
 
 def showTaList(request,reqIdPK):
     # form=TA_Resource.objects.filter(status='Selected').values()
-    form=TA_Resource.objects.filter(archived__icontains='Active').values()
-
+    #form=TA_Resource.objects.filter(archived__icontains='Active').values()
+    form=TA_Resource.objects.filter(archived__icontains='Active').exclude(status='Selected and Mapped')
     if request.method=='GET':
         skills=request.GET.get('searchskill')
         if skills != None:
-            form=TA_Resource.objects.filter(skillset__icontains=skills)
+            #form=TA_Resource.objects.filter(skillset__icontains=skills)
+            form=TA_Resource.objects.filter(skillset__icontains=skills).exclude(status='Selected and Mapped')
     
     return render(request,'selected_ta_list.html',{'form':form,"reqIdPK":reqIdPK})
 
 def showVmList(request,reqIdPK):
-    form=VmResource.objects.filter(archivalStatus__icontains='Active').values()
-
+    #form=VmResource.objects.filter(archivalStatus__icontains='Active').values()
+    form=VmResource.objects.filter(archivalStatus__icontains='Active').exclude(resumeStatus='Selected and Mapped')
     if request.method=='GET':
         skills=request.GET.get('searchskill')
         if skills!=None:
-            form=VmResource.objects.filter(skillset__icontains=skills)
-    
+            #form=VmResource.objects.filter(skillset__icontains=skills)
+            form=VmResource.objects.filter(skillset__icontains=skills).exclude(resumeStatus='Selected and Mapped')
     return render(request,'selected_vm_list.html',{'form':form,'reqIdPK':reqIdPK})
 
 def updateTaDetails(request,ta_id):    
@@ -691,11 +713,11 @@ def mapEmpToReq(request,reqIdPK,choice):
                 final=EmployeeReqMapping(req_id=salesReq,name=ta.name,eskills=ta.skillset,added_date=today,source='TA',empstatus='Selected',sourceid_2=ta.ta_id)
                 final.save()
         if choice=='VM':
-            selectedvmList = request.POST.getlist('candidate_name')
+            selectedvmList = request.POST.getlist('candidateName')
             print("Selected VM  list",selectedvmList)
             for vm_name in selectedvmList:
                 vm=VmResource.objects.get(candidateName=vm_name)
-                vm.interview_status='Selected and Mapped'
+                vm.resumeStatus='Selected and Mapped'
                 vm.save()
                 final=EmployeeReqMapping(req_id=salesReq,name=vm.candidateName,eskills=vm.skillset,  added_date=today,source='VM',empstatus='Selected',sourceid_3=vm.vmIdPK)
                 final.save()
@@ -731,7 +753,7 @@ def deleteAppliedCandidates(request,source,namearg,reqIdPK):
     customer_req=Customer_Requirements.objects.get(pk=reqIdPK)
     delete_instance=EmployeeReqMapping.objects.get(req_id=reqIdPK,name=namearg)
     
-    if source=='LEADSOC':
+    if source=='BENCH':
         namelist=namearg.split(' ',1)
         emp_instance=Employee.objects.get(eFname=namelist[0],eLname=namelist[1])
         emp_instance.estatus='Free'
@@ -749,8 +771,8 @@ def deleteAppliedCandidates(request,source,namearg,reqIdPK):
         messages.success(request,'The Selected TA resource'  + delete_instance.name +  'is deleted successfully')
         delete_instance.delete()
     if source=='VM':
-        vm_instance=VmResource.objects.get(candidate_name=namearg)
-        vm_instance.interview_status='Selected'
+        vm_instance=VmResource.objects.get(candidateName=namearg)
+        vm_instance.interviewStatus='Selected'
         vm_instance.save()
         customer_req.remain_positions+=1
         customer_req.save()

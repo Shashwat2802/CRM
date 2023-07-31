@@ -120,3 +120,4 @@ cython_debug/
 
 emp_data/migrations
 db.sqlite3
+management/__pycache__/

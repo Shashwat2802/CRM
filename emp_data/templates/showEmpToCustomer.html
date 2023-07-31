@@ -36,31 +36,32 @@
                 <td>{{values.name}}</td>
 
                 <td>
-                    <p class="btn-sm" data-toggle="modal" data-target="#hist{{reqIdPK}}">
-                       {{ value.history|extract_from_hashtag }}
+                    <p class="btn-sm" data-toggle="modal" data-target="#hist{{values.pk}}">
+                       {{ values.history|extract_from_hashtag }}
                     </p>
                     <!-- History Modal -->
-                    <div class="modal fade" id="hist{{reqIdPK}}" tabindex="-1" role="dialog"
-                        aria-labelledby="jobDescriptionModalLabel{{reqIdPK}}" aria-hidden="true">
+                    <div class="modal fade" id="hist{{values.pk}}" tabindex="-1" role="dialog"
+                        aria-labelledby="jobDescriptionModalLabel{{values.pk}}" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-scrollable" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="hist{{reqIdPK}}">Remarks
+                                    <h5 class="modal-title" id="hist{{values.pk}}">Remarks
                                     </h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <p>{{value.history|linebreaksbr }}</p>
+                                    <p>{{values.history|linebreaksbr }}</p>
                                 </div>
-                                <div class="modal-footer">
+                                <!--<div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                </div>
+                                </div>-->
 
                                 <div class="modal-body">
                                     <div class="container-fluid">
-                                        <form action="/addCommentToEmployeedReqTable/{{reqIdPK}}/{{values.source}}/{{values.sourceId}}" method="POST">
+                                        <!--<form action="/addCommentToEmployeedReqTable/{{req_id}}/{{values.source}}/{{values.sourceId}}" method="POST">-->
+                                            <form action="/newremark/{{values.pk}}/{{reqIdPK}}" method="POST"></form>
                                             {% csrf_token %}
                                             <div class="form-group">
                                                 <label for="remark_text">Edit remarks:</label>
@@ -97,13 +98,13 @@
                           Select/Reject
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="menu{{values.name}}">
-                          <a class="dropdown-item" href="/selection_status/SL{{values.name}}/{{reqIdPK}}">Selected</a>
-                          <a class="dropdown-item" href="/selection_status/RJ{{values.name}}/{{reqIdPK}}">Rejected</a>
-                          <a  class="dropdown-item" href="/selection_status/BU{{values.name}}/{{reqIdPK}}">Shorlisted by BU</a>
-                          <a  class="dropdown-item" href="/selection_status/CL{{values.name}}/{{reqIdPK}}">Shortlisted by Client</a>
-                          <a  class="dropdown-item" href="/selection_status/OP{{values.name}}/{{reqIdPK}}">Onboarding Progress</a>
-                          <a  class="dropdown-item" href="/selection_status/OB{{values.name}}/{{reqIdPK}}">Onboarded</a>
-                          <a class="dropdown-item" href="/selection_status/RR{{values.name}}/{{reqIdPK}}">Resume Rejected</a>
+                          <a class="dropdown-item" href="/selection_status/SL{{values.name}}/{{reqIdPK}}/{{values.pk}}">Selected</a>
+                          <a class="dropdown-item" href="/selection_status/RJ{{values.name}}/{{reqIdPK}}/{{values.pk}}">Rejected</a>
+                          <a class="dropdown-item" href="/selection_status/BU{{values.name}}/{{reqIdPK}}/{{values.pk}}">Shorlisted by BU</a>
+                          <a class="dropdown-item" href="/selection_status/CL{{values.name}}/{{reqIdPK}}/{{values.pk}}">Shortlisted by Client</a>
+                          <a class="dropdown-item" href="/selection_status/OP{{values.name}}/{{reqIdPK}}/{{values.pk}}">Onboarding Progress</a>
+                          <a class="dropdown-item" href="/selection_status/OB{{values.name}}/{{reqIdPK}}/{{values.pk}}">Onboarded</a>
+                          <a class="dropdown-item" href="/selection_status/RR{{values.name}}/{{reqIdPK}}/{{values.pk}}">Resume Rejected</a>
                         </div>
                       </div>
                       {% else %}
@@ -112,13 +113,13 @@
                           Select/Reject
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="menu{{values.name}}">
-                          <a class="dropdown-item" href="/selection_status/SL{{values.name}}/{{reqIdPK}}">Selected</a>
-                          <a class="dropdown-item" href="/selection_status/RJ{{values.name}}/{{reqIdPK}}">Rejected</a>
-                          <a  class="dropdown-item" href="/selection_status/BU{{values.name}}/{{reqIdPK}}">Shorlisted by BU</a>
-                          <a  class="dropdown-item" href="/selection_status/CL{{values.name}}/{{reqIdPK}}">Shortlisted by Client</a>
-                          <a  class="dropdown-item" href="/selection_status/OP{{values.name}}/{{reqIdPK}}">Onboarding Progress</a>
-                          <a  class="dropdown-item" href="/selection_status/OB{{values.name}}/{{reqIdPK}}">Onboarded</a>
-                          <a class="dropdown-item" href="/selection_status/RR{{values.name}}/{{reqIdPK}}">Resume Rejected</a>
+                          <a class="dropdown-item" href="/selection_status/SL{{values.name}}/{{reqIdPK}}/{{values.pk}}">Selected</a>
+                          <a class="dropdown-item" href="/selection_status/RJ{{values.name}}/{{reqIdPK}}/{{values.pk}}">Rejected</a>
+                          <a class="dropdown-item" href="/selection_status/BU{{values.name}}/{{reqIdPK}}/{{values.pk}}">Shorlisted by BU</a>
+                          <a class="dropdown-item" href="/selection_status/CL{{values.name}}/{{reqIdPK}}/{{values.pk}}">Shortlisted by Client</a>
+                          <a class="dropdown-item" href="/selection_status/OP{{values.name}}/{{reqIdPK}}/{{values.pk}}">Onboarding Progress</a>
+                          <a class="dropdown-item" href="/selection_status/OB{{values.name}}/{{reqIdPK}}/{{values.pk}}">Onboarded</a>
+                          <a class="dropdown-item" href="/selection_status/RR{{values.name}}/{{reqIdPK}}/{{values.pk}}">Resume Rejected</a>
                         </div>
                       </div>
                       {% endif %}
@@ -130,13 +131,13 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                          <a class="dropdown-item" href="/selection_status/SL{{values.name}}/{{reqIdPK}}">Selected</a>
-                          <a class="dropdown-item" href="/selection_status/RJ{{values.name}}/{{reqIdPK}}">Rejected</a>
-                          <a  class="dropdown-item" href="/selection_status/BU{{values.name}}/{{reqIdPK}}">Shorlisted by BU</a>
-                          <a  class="dropdown-item" href="/selection_status/CL{{values.name}}/{{reqIdPK}}">Shortlisted by Client</a>
-                          <a  class="dropdown-item" href="/selection_status/OP{{values.name}}/{{reqIdPK}}">Onboarding Progress</a>
-                          <a  class="dropdown-item" href="/selection_status/OB{{values.name}}/{{reqIdPK}}">Onboarded</a>
-                          <a class="dropdown-item" href="/selection_status/RR{{values.name}}/{{reqIdPK}}">Resume Rejected</a>
+                          <a class="dropdown-item" href="/selection_status/SL{{values.name}}/{{reqIdPK}}/{{values.pk}}">Selected</a>
+                          <a class="dropdown-item" href="/selection_status/RJ{{values.name}}/{{reqIdPK}}/{{values.pk}}">Rejected</a>
+                          <a class="dropdown-item" href="/selection_status/BU{{values.name}}/{{reqIdPK}}/{{values.pk}}">Shorlisted by BU</a>
+                          <a class="dropdown-item" href="/selection_status/CL{{values.name}}/{{reqIdPK}}/{{values.pk}}">Shortlisted by Client</a>
+                          <a class="dropdown-item" href="/selection_status/OP{{values.name}}/{{reqIdPK}}/{{values.pk}}">Onboarding Progress</a>
+                          <a class="dropdown-item" href="/selection_status/OB{{values.name}}/{{reqIdPK}}/{{values.pk}}">Onboarded</a>
+                          <a class="dropdown-item" href="/selection_status/RR{{values.name}}/{{reqIdPK}}/{{values.pk}}">Resume Rejected</a>
                         </div>
                       </div>
                     {% endif %}
