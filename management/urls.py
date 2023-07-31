@@ -54,12 +54,14 @@ urlpatterns = [
     path('freeFromAllSource/<int:reqIdPK>',views.freeFromAllSource),
     path('mapEmpToReq/<int:reqIdPK>/<str:choice>',views.mapEmpToReq),
     path('mappedEmployeeToCustomer/<int:reqIdPK>',views.mappedEmployeeToCustomer),
-    path("addCommentToEmployeedReqTable/<int:reqIdPK>/<str:source>/<str:sourceId>", views.addCommentToEmployeedReqTable),
+    #path("addCommentToEmployeedReqTable/<int:reqIdPK>/<str:source>/<str:sourceId>", views.addCommentToEmployeedReqTable),
+    #path("addCommentToEmployeedReqTable/<int:pk>/<int:reqIdPK>",views.addCommentToEmployeedReqTable),
     path('showTaList/<int:reqIdPK>',views.showTaList),
-    path('showVmList/<int:reqIdPK>',views.showVmList),    
+    path('showVmList/<int:reqIdPK>',views.showVmList),
+    path("newremark/<int:pk>/<int:reqIdPK>",views.MappedComment),    
 
-    path('selection_status/<str:estatus>/<int:reqIdPK>', views.selection_status),
-
+    #path('selection_status/<str:estatus>/<int:reqIdPK>', views.selection_status),
+    path('selection_status/<str:estatus>/<int:reqIdPK>/<int:pk>', views.selection_status),
     path('checkbox',views.checkbox),
     path('dropDownCustomer',views.dropDownCustomer),
     path('showDropDown',views.showDropDown),
@@ -84,10 +86,10 @@ urlpatterns = [
     path('showTa',views.showTa),
     path('taDataUpload',views.taDataUpload),
     path('deleteTa/<int:phone_number>',views.deleteTa),
-    path('filterTa/<str:buhead>/<str:archive>',views.filterTa),
+    path('filterTa/<str:buhead>/<str:archivestatus>',views.filterTa),
     path('updateTaDetails/<str:ta_id>',views.updateTaDetails),
     path('taResume/<str:ta_id>',views.addTaResume),
-    path('addTaComment/<str:ta_id>',views.addTaComment),
+    path('addCommentsToTaCandidate/<str:ta_id>',views.addCommentsToTaCandidate),
 
 
     path('addEmployeeExperience/<str:e_id>',views.addEmployeeExperience),
