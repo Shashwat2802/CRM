@@ -390,7 +390,7 @@
                                             <label for="date">Update Date</label>
                                             <br>
                                             <input type="date" name="date" id="date" class="form-control"
-                                                value="{{value.date}}">
+                                                value="{{value.date|date:'Y-m-d' }}">
                                         </div>
                                         <div class="form-group">
                                             <label for="name">Update Name</label>
@@ -514,7 +514,7 @@
                                             <label for="T1_IW_date">Update T1 IW Date</label>
                                             <br>
                                             <input type="date" name="T1_IW_date" id="T1_IW_date" class="form-control"
-                                                value="{{value.T1_IW_date}}">
+                                                value="{{value.T1_IW_date|date:'Y-m-d' }}">
                                         </div>
                                         <div class="form-group">
                                             <label for="T2_panel">Update T2 Panel</label>
@@ -526,7 +526,7 @@
                                             <label for="T2_IW_date">Update T2 IW Date</label>
                                             <br>
                                             <input type="date" name="T2_IW_date" id="T2_IW_date" class="form-control"
-                                                value="{{value.T2_IW_date}}">
+                                                value="{{value.T2_IW_date|date:'Y-m-d'}}">
                                         </div>
                                         <div class="form-group">
                                             <label for="source">Update Source</label>
