@@ -25,8 +25,8 @@ class EmployeeAdmin(ImportExportModelAdmin):
 
 @admin.register(models.Customer_Requirements)
 class Customer_RequirementsAdmin(ImportExportModelAdmin):
-    list_display = ('reqIdPK','customers','Customer_Requirement_id','Required_skills','Job_Description','Required_Experience','Open_positions','Position_Status','Sales_Incharge','Bu_head','history')
-    search_fields = ['Job_Description','Required_skills','history']
+    list_display = ('reqIdPK','customers','CustReqId','RequiredSkills','JD','minExp','openPositions','reqStatus','SalesIncharge','buHead','history')
+    search_fields = ['JD','RequiredSkills','history']
     filter_horizontal = ()
     list_filter = ()
     fieldsets = ()

@@ -64,18 +64,30 @@ class EmpExperienceHistory(models.Model):
         
 
 class Customer_Requirements(models.Model):
+# ReqDate	Customer	CustomeRequirmentID	JobTitle	JobDescription	RequiredSkills	MinExp	MaxExp	OpenPositions	filled	lapsed	Remaining 	Status	ReqClosedDate	SalesIncharge	BuHead	Remarks	priority	FullFillment	ACtiveSubmissionCount	ActiveResumeList
+
+    ReqDate=models.DateField()
     customers = models.ForeignKey(Customer, on_delete = models.CASCADE)
-    Customer_Requirement_id = models.CharField(max_length=100,null=True)
-    Required_skills = models.TextField()
-    Job_Description = models.TextField()
-    Required_Experience = models.FloatField(default=0)
-    Open_positions = models.IntegerField(default=0)
-    remain_positions = models.IntegerField(default=0)
-    Position_Status = models.CharField(max_length=10) # active or closed        
-    Sales_Incharge = models.CharField(max_length=50,null=True)# name of the person
-    Bu_head=models.CharField(max_length=50,null=True)
+    CustReqId = models.CharField(max_length=100,null=True)
+    jobTitle = models.CharField(max_length=100,null=True)
+    JD = models.TextField()
+    RequiredSkills = models.TextField()
+    minExp = models.FloatField(default=3)
+    maxExp = models.FloatField(default=10)
+    openPositions = models.IntegerField(default=0)
+    filledPositions = models.IntegerField(default=0)
+    lapsedPositions = models.IntegerField(default=0)
+    remainPositions = models.IntegerField(default=0)
+    reqStatus = models.CharField(max_length=10) # active,hold or closed  
+    ReqClosedDate=models.DateField(null=True)
+      
+    SalesIncharge = models.CharField(max_length=50,null=True)# name of the person
+    buHead=models.CharField(max_length=50,null=True)
     history = models.TextField(default="")
     priority = models.IntegerField(default=1)
+    fulfillThru = models.CharField(max_length=10,default='BENCH')
+    ActiveSubmissionCount = models.IntegerField(default=0)
+# ActiveResumeList  == This is only for Excel sheet 
     reqIdPK = models.AutoField(primary_key=True)
 
 
@@ -85,28 +97,6 @@ class Customer_Requirements(models.Model):
     def __str__(self):
         return str(self.customers)
     
-
-'''
-class EmployeeReqMapping(models.Model):
-    # req_id=models.IntegerField(default=0) #Model name change: Employee requirement 
-
-    req_id=models.ForeignKey(Customer_Requirements, on_delete = models.CASCADE) #Model name change: Employee requirement 
-    eFname = models.CharField(max_length=100,null=True)
-    eLname = models.CharField(max_length=100, null=True)
-    eskills = models.CharField(max_length=100,null=True)
-    estatus = models.CharField(max_length=100,null=True)
-    empstatus = models.CharField(max_length=100,null=True, default='')
-    added_date = models.DateField(null=True)
-    source = models.CharField(max_length=100,null=True, default='BENCH')
-    sourceId = models.CharField(max_length=100,null=True,default='') # Can We  give foriegn key from 3 different table, like VM,TA, employee
-    history = models.TextField(default="")
-
-    class Meta:
-        db_table = "employeereqmapping"
-
-    def __str__(self):
-        return str(self.req_id)
-        '''
 
 class EmployeeReqMapping(models.Model):
     # req_id=models.IntegerField(default=0) #Model name change: Employee requirement 

@@ -25,7 +25,7 @@
             Sales
             <select class="btn" name="saleslist" id="sales">
                 <option value="{{sales_select}}" selected hidden disabled>{{sales_select}}</option>
-                {% for val in sales_incharge %}
+                {% for val in SalesIncharge %}
                 <option value="{{val.eFname}}">{{val.eFname}}</option>
                 {% endfor %}
                 <option value="All">All</option>
@@ -103,11 +103,11 @@
             <div>
                 <td>{{forloop.counter}}</td>
                 <td>{{val.customers}}</td>
-                <td>{{val.Customer_Requirement_id}}</td>
-                <td>{{val.Required_skills}}</td>
+                <td>{{val.CustReqId}}</td>
+                <td>{{val.RequiredSkills}}</td>
                 <td>
                     <p class="btn-sm" data-toggle="modal" data-target="#jobDescriptionModal{{val.reqIdPK}}">
-                        {{ val.Job_Description|default:'NA'|truncatewords:5 }}
+                        {{ val.JD|default:'NA'|truncatewords:5 }}
 
                     </p>
                     <!-- JOb description Modal -->
@@ -123,7 +123,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <p>{{val.Job_Description}}</p>
+                                    <p>{{val.JD}}</p>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -175,12 +175,12 @@
 
                 </td>
                 <td>{{val.priority}}</td>
-                <td>{{val.Required_Experience}}</td>
-                <td>{{val.Open_positions}}</td>
-                <td>{{val.remain_positions}}</td>
-                <td>{{val.Position_Status}}</td>
-                <td>{{val.Sales_Incharge}}</td>
-                <td>{{val.Bu_head}}</td>
+                <td>{{val.minExp}}</td>
+                <td>{{val.openPositions}}</td>
+                <td>{{val.remainPositions}}</td>
+                <td>{{val.reqStatus}}</td>
+                <td>{{val.SalesIncharge}}</td>
+                <td>{{val.buHead}}</td>
                 <!-- Button trigger modal -->
                 <td>
                     <button type="button" class="btn-info btn-sm"
@@ -205,95 +205,138 @@
                                 <div class="modal-body">
                                     <div class="container-fluid">
                                         <h6>Customer : {{val.customers}}</h6>
-                                        <h6>Customer Requirement id : {{val.Customer_Requirement_id}}</h6>
+                                        <h6>Requirement id : {{val.CustReqId}}</h6>
                                         <form action="/updateSaleReqs/{{val.reqIdPK}}" method="POST">
                                             {% csrf_token %}
 
-                                                <br>
-                                                <label for="Position_Status">Position Status:</label>
+                                            <br>
+                                            <label for="reqStatus">Status:</label>
 
-                                                <select name="Position_Status" id="Position_Status">
-                                                    <option value={{val.Position_Status}} selected>
-                                                        {{val.Position_Status}}
-                                                    </option>
-                                                    <option value="Active">Active </option>
-                                                    <option value="Closed">Closed </option>
+                                            <select name="reqStatus" id="reqStatus">
+                                                <option value={{val.reqStatus}} selected>
+                                                    {{val.reqStatus}}
+                                                </option>
+                                                <option value="Active">Active </option>
+                                                <option value="Closed">Closed </option>
+                                                <option value="Hold">Hold </option>
 
-                                                </select>
+                                            </select>
 
-                                                <label for="priority">Priority</label>
-                                                <select name="priority" id="priority">
-                                                    <option value={{val.priority}} selected>{{val.priority}}</option>
-                                                    <option value=1>P1</option>
-                                                    <option value=2>P2</option>
-                                                    <option value=3>P3</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="Required_skills">Updated Required Skills:</label>
-                                                <input type="text" class="form-control" id="Required_skills"
-                                                    name="Required_skills" value="{{val.Required_skills}}">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="Job_Description">Updated Job Description:</label>
-                                                <textarea name="Job_Description" id="Job_Description" cols="40"
-                                                    rows="20">{{val.Job_Description}}</textarea>
-                                            </div>
+                                            <label for="priority">Priority</label>
+                                            <select name="priority" id="priority">
+                                                <option value={{val.priority}} selected>{{val.priority}}</option>
+                                                <option value=1>P1</option>
+                                                <option value=2>P2</option>
+                                                <option value=3>P3</option>
+                                            </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="JD"> Job Description:</label>
+                                        <textarea name="JD" id="JD" cols="40" rows="20">{{val.JD}}</textarea>
+                                    </div>
 
-                                            <div class="form-group">
-                                                <label for="Required_Experience">Updated Required
-                                                    Experience:</label>
-                                                <input type="number" class="form-control" id="Required_Experience"
-                                                    name="Required_Experience" placeholder="enter required experience"
-                                                    value="{{val.Required_Experience}}" min="0" max="100" step="0.1">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="Open_positions">Updated Open positions:</label>
-                                                <input type="number" class="form-control" id="Open_positions"
-                                                    name="Open_positions" placeholder="Enter opened positions"
-                                                    value="{{val.Open_positions}}">
-                                            </div>
+                                    <div class="form-group">
+                                        <label for="jobTitle"> Job Title:</label>
+                                        <input type="text" class="form-control" id="jobTitle" name="jobTitle"
+                                            value="{{val.jobTitle}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="RequiredSkills"> Required Skills:</label>
+                                        <input type="text" class="form-control" id="RequiredSkills"
+                                            name="RequiredSkills" value="{{val.RequiredSkills}}">
+                                    </div>
 
 
+                                    <div class="form-group">
+                                        <label for="minExp"> Min
+                                            Experience:</label>
+                                        <input type="number" class="form-control" id="minExp" name="minExp"
+                                            placeholder="enter required experience" value="{{val.minExp}}" min="0"
+                                            max="100" step="0.1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="maxExp"> Max
+                                            Experience:</label>
+                                        <input type="number" class="form-control" id="maxExp" name="maxExp"
+                                            placeholder="enter required experience" value="{{val.maxExp}}" min="0"
+                                            max="100" step="0.1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="openPositions"> Open positions:</label>
+                                        <input type="number" class="form-control" id="openPositions"
+                                            name="openPositions" placeholder="Enter opened positions"
+                                            value="{{val.openPositions}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="filledPositions"> Filled positions:</label>
+                                        <input type="number" class="form-control" id="filledPositions"
+                                            name="filledPositions" placeholder="Enter filledPositions positions"
+                                            value="{{val.filledPositions}}">
+                                    </div>
 
-                                            <div class="form-group">
-                                                <label for="Job_Description">Remarks</label>
-                                                <textarea name="history" id="history" cols="40"
-                                                    rows="20">{{val.history}}</textarea>
-                                            </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="Sales_Incharge">Sales Incharge</label>
-                                                <select name="Sales_Incharge" id="Sales_Incharge">
-                                                {% for val in sales_incharge %}
-                                                <option value="{{val}}">{{val}}</option>
-                                                {% endfor %}
-                                                </select>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="Bu_Head">Bu Head:</label>
-                                                <select name="Bu_Head" id="Bu_Head">
-                                                {% for val in bu_head %}
-                                                <option value="{{val}}">{{val}}</option>
-                                                {% endfor %}
-                                                </select>
-                                            </div>
-                                        <div>
-                                        <input type="submit" class="btn btn-info" value=" Update">
-                                        <br>
-                                    </form>
+                                    <div class="form-group">
+                                        <label for="lapsedPositions"> Lapsed positions:</label>
+                                        <input type="number" class="form-control" id="lapsedPositions"
+                                            name="lapsedPositions" placeholder="Enter opened positions"
+                                            value="{{val.lapsedPositions}}">
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label for="ActiveSubmissionCount"> Active Submission Count:</label>
+                                        <input type="number" class="form-control" id="ActiveSubmissionCount"
+                                            name="ActiveSubmissionCount" placeholder="Enter opened positions"
+                                            value="{{val.ActiveSubmissionCount}}">
+                                    </div>
+
+                                    <label for="fulfillThru">FullFilment Thru</label>
+                                    <select name="fulfillThru" id="fulfillThru">
+                                        <option value={{val.fulfillThru}} selected>{{val.fulfillThru}}</option>
+                                        <option value=BENCH>BENCH</option>
+                                        <option value=TA>TA</option>
+                                        <option value=VM>VM</option>
+                                                            <option value="ALL" selected>ALL</option>
+
+                                    </select>
+
+                                    <div class="form-group">
+                                        <label for="JD">Remarks</label>
+                                        <textarea name="history" id="history" cols="40"
+                                            rows="20">{{val.history}}</textarea>
+                                    </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="SalesIncharge">Sales Incharge</label>
+                                    <select name="SalesIncharge" id="SalesIncharge">
+                                        {% for val in SalesTeam %}
+                                        <option value="{{val}}">{{val}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="buHead">Bu Head:</label>
+                                    <select name="buHead" id="buHead">
+                                        {% for val in buList %}
+                                        <option value="{{val}}">{{val}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div>
+                                    <input type="submit" class="btn btn-info" value=" Update">
+                                    <br>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
+            </div>
         </tr>
         {% endfor %}
     </tbody>
 
 </table>
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- DataTables core library -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">

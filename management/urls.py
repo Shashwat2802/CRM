@@ -50,7 +50,7 @@ urlpatterns = [
 
     path("save_emp_details", views.save_emp_details, name="save_emp_details"),
     path('addSalesReqs',views.addSalesReqs),
-    path('job_description',views.job_description),  
+    path('JD',views.JD),  
     path('freeFromAllSource/<int:reqIdPK>',views.freeFromAllSource),
     path('mapEmpToReq/<int:reqIdPK>/<str:choice>',views.mapEmpToReq),
     path('mappedEmployeeToCustomer/<int:reqIdPK>',views.mappedEmployeeToCustomer),

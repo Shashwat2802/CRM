@@ -31,7 +31,7 @@
             BUH
             <select name="buhead" id="buhead" class="btn" style="border-radius: 30px;">
                 <option value="{{bu_select}}" selected disabled hidden>{{bu_select}}</option>
-                {% for val in Bu_head %}
+                {% for val in buHead %}
                 <option value="{{val.eFname}}">{{val.eFname}}</option>
                 {% endfor %}
                 <option value="All">All</option>
@@ -226,7 +226,7 @@
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <h5 for="position_status">TA ID</h5> {{value.ta_id}}
+                                    <h5 for="reqStatus">TA ID</h5> {{value.ta_id}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
@@ -408,7 +408,7 @@
                                             <label for="BU">BU HEAD</label>
                                             <select name="BU" id="BU" class="btn" style="border-radius: 30px">
                                                 <option value="{{value.BU}}" Selected>{{ value.BU }}</option>
-                                                {% for val in Bu_head %}
+                                                {% for val in buHead %}
                                                 <option value="{{val}}">{{val}}</option>
                                                 {% endfor %}
                                             </select>
