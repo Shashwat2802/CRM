@@ -16,19 +16,19 @@
 </center>
 <div class="form-inline">
     <div class="d-inline-block">
-        <!--<span class="btn">
-            <b>Dept</b>
+        <span class="btn">
+            Dept
             <select class="btn" name="department" id="department">
-                <option value="{{dept_select}}" selected hidden disabled>{{dept_select}}</option>
+                <option value="{{department}}" selected hidden disabled>{{department}}</option>
                 {% for val in departments %}
                 <option value="{{val}}">{{val}}</option>
                 {% endfor %}
                 <option value="All">All</option>
             </select>
-        </span>-->
+        </span>
 
         <span style="margin-left: 30;" class="btn">
-            <b>BUH</b>
+            BUH
             <select name="buhead" id="buhead" class="btn" style="border-radius: 30px;">
                 <option value="{{bu_select}}" selected disabled hidden>{{bu_select}}</option>
                 {% for val in Bu_head %}
@@ -39,7 +39,7 @@
         </span>
 
         <span style="margin-left: 30;" class="btn">
-            <b>Archived?</b>
+            Archived?
             <select name="archivestatus" id="archivestatus" class="btn" style="border-radius: 30px;">
                 <option value="{{status_select}}" selected disabled hidden>{{status_select}}</option>
                 <option value="Closed">Closed</option>
@@ -59,9 +59,14 @@
         <script>
             function getLink() {
                 var buhead = document.querySelector("#buhead").value;
-
+                var department = document.querySelector("#department").value;
                 var archivestatus = document.querySelector("#archivestatus").value;
-                var url = '/filterTa/' + encodeURIComponent(buhead) + '/' + encodeURIComponent(archivestatus)
+                var url = '/filterTa/'
+                    + encodeURIComponent(department) +
+                    '/'
+                    + encodeURIComponent(buhead) +
+                    '/'
+                    + encodeURIComponent(archivestatus);
                 return url;
             }
         </script>
@@ -237,6 +242,10 @@
                                 </div>
                                 <hr>
                                 <div class="form-group">
+                                    <h5 for="candidate_source">Department</h5> {{value.department}}
+                                </div>
+                                <hr>
+                                <div class="form-group">
                                     <h5 for="candidate_name">BU</h5>
                                     {{value.BU}}
                                 </div>
@@ -254,103 +263,83 @@
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="experience">Experience </h5> {{val.experience}}
+                                    <h5 for="experience">Experience </h5> {{value.experience}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="bu_head">relevant_exp</h5> {{value.relevant_exp}}
+                                    <h5 for="bu_head">Relevant Experience</h5> {{value.relevant_exp}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="location">current_org</h5> {{value.current_org}}
+                                    <h5 for="location">Current Organization</h5> {{value.current_org}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="notice_period">current_ctc</h5> {{value.current_ctc}}
+                                    <h5 for="notice_period">Current CTC</h5> {{value.current_ctc}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="reviewer_name">expected_ctc</h5> {{value.expected_ctc}}
+                                    <h5 for="reviewer_name">Expected CTC</h5> {{value.expected_ctc}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="remarks_panel">actual_notice_period</h5> {{value.actual_notice_period}}
+                                    <h5 for="remarks_panel">Actual Notice Period</h5> {{value.actual_notice_period}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="vm_comment">notice_period</h5> {{value.notice_period}}
+                                    <h5 for="vm_comment">Notice Period</h5> {{value.notice_period}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="client_name">current_loc</h5> {{value.current_loc}}
+                                    <h5 for="client_name">Current Location</h5> {{value.current_loc}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="interview_schedule">preferred_loc</h5> {{value.preferred_loc}}
+                                    <h5 for="interview_schedule">Preferred Location</h5> {{value.preferred_loc}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="pr_date">Phone_number</h5> {{value.phone_number}}
+                                    <h5 for="pr_date">Phone Number</h5> {{value.phone_number}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="comments">email </h5> {{value.email }}
+                                    <h5 for="comments">Email </h5> {{value.email }}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="remarks">status</h5> {{value.status}}
+                                    <h5 for="remarks">Status</h5> {{value.status}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="email">BU_comments</h5> {{value.BU_comments}}
+                                    <h5 for="mode">T1 Panel</h5> {{value.T1_panel}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="phone_number">TA_comments</h5> {{value.TA_comments}}
+                                    <h5 for="mode">T1 IW Date </h5> {{value.T1_IW_date }}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="mode">T1_panel</h5> {{value.T1_panel}}
+                                    <h5 for="mode">T2 Panel</h5> {{value.T2_panel}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="mode">T1_IW_date </h5> {{value.T1_IW_date }}
+                                    <h5 for="mode">T2 IW Date</h5> {{value.T2_IW_date}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="mode">T1_panel</h5> {{value.T1_panel}}
+                                    <h5 for="mode">Source</h5> {{value.source}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="mode">T2_panel</h5> {{value.T2_panel}}
+                                    <h5 for="mode">Owner</h5> {{value.owner}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="mode">T2_IW_date</h5> {{value.T2_IW_date}}
+                                    <h5 for="mode">Resume URL</h5> {{value.resume}}
                                 </div>
                                 <hr>
                                 <div class="form-group">
-                                    <h5 for="mode">source</h5> {{value.source}}
-                                </div>
-                                <hr>
-                                <div class="form-group">
-                                    <h5 for="mode">Rec_prime</h5> {{value.Rec_prime}}
-                                </div>
-                                <hr>
-                                <div class="form-group">
-                                    <h5 for="mode">Domain</h5> {{value.Domain}}
-                                </div>
-                                <hr>
-                                <div class="form-group">
-                                    <h5 for="mode">T1 </h5> {{value.T1}}
-                                </div>
-                                <hr>
-                                <div class="form-group">
-                                    <h5 for="mode">T2</h5> {{value.T2}}
-                                </div>
-                                <hr>
-                                <div class="form-group">
-                                    <h5 for="mode">owner</h5> {{value.owner}}
+                                    <h5 for="mode">Remarks</h5> {{value.remarks}}
                                 </div>
                                 <hr>
                             </div>
@@ -373,8 +362,12 @@
                                 <div class="container-fluid">
                                     <form action="updateTaDetails/{{value.ta_id}}" method="POST">
                                         {% csrf_token %}
-
-
+                                        <div class="form-group">
+                                            <label for="name">Name</label>
+                                            <br>
+                                            <input type="text" name="name" id="name" class="form-control"
+                                                value="{{value.name}}">
+                                        </div>
                                         <div class="form-group">
                                             <label for="archived">Archived?</label>
                                             <select name="archived" id="archived" class="btn"
@@ -404,10 +397,12 @@
                                                 value="{{value.date|date:'Y-m-d' }}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="name">Name</label>
-                                            <br>
-                                            <input type="text" name="name" id="name" class="form-control"
-                                                value="{{value.name}}">
+                                            <label for="department">Department</label>
+                                            <select name="department" id="department">
+                                                {% for val in departments %}
+                                                <option value="{{val}}">{{val}}</option>
+                                                {% endfor %}
+                                            </select>
                                         </div>
                                         <div class="form-group">
                                             <label for="BU">BU HEAD</label>
@@ -443,7 +438,7 @@
                                                 step="any" value="{{value.experience}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="relevant_exp">Relevant Exp</label>
+                                            <label for="relevant_exp">Relevant Experience</label>
                                             <br>
                                             <input type="number" name="relevant_exp" id="relevant_exp"
                                                 class="form-control" step="any" value="{{value.relevant_exp}}">
@@ -485,7 +480,7 @@
                                                 value="{{value.current_loc}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="preferred_loc">preferred Location</label>
+                                            <label for="preferred_loc">Preferred Location</label>
                                             <br>
                                             <input type="text" name="preferred_loc" id="preferred_loc"
                                                 class="form-control" value="{{value.preferred_loc}}">
@@ -502,10 +497,6 @@
                                             <input type="email" name="email" id="email" class="form-control"
                                                 value="{{value.email}}">
                                         </div>
-
-
-
-
                                         <div class="form-group">
                                             <label for="T1_panel">T1 Panel</label>
                                             <br>
@@ -537,34 +528,22 @@
                                                 value="{{value.source}}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="Rec_prime">Rec Prime</label>
-                                            <br>
-                                            <input type="text" name="Rec_prime" id="Rec_prime" class="form-control"
-                                                value="{{value.Rec_prime}}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="Domain">Domain</label>
-                                            <br>
-                                            <input type="text" name="Domain" id="Domain" class="form-control"
-                                                value="{{value.Domain}}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="T1">T1</label>
-                                            <br>
-                                            <input type="text" name="T1" id="T1" class="form-control"
-                                                value="{{value.T1}}">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="T2">T2</label>
-                                            <br>
-                                            <input type="text" name="T2" id="T2" class="form-control"
-                                                value="{{value.T2}}">
-                                        </div>
-                                        <div class="form-group">
                                             <label for="owner">Owner</label>
                                             <br>
                                             <input type="text" name="owner" id="owner" class="form-control"
                                                 value="{{value.owner}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="resume">Resume URL</label>
+                                            <br>
+                                            <input type="text" name="resume" id="resume" class="form-control"
+                                                value="{{value.resume}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="remarks">Remarks</label>
+                                            <br>
+                                            <input type="text" name="remarks" id="remarks" class="form-control"
+                                                value="{{value.remarks}}">
                                         </div>
                                         <br>
                                         <input type="submit" class="btn btn-info" value="Update Details">

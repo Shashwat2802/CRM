@@ -10,15 +10,15 @@
             <input type="text" name="ta_id" id="ta_id" class="form-control" placeholder="TA ID">
         </div>
         <div class="form-group">
-            <label for="estatus">Archived:</label>
-            <select name="estatus" id="estatus">
+            <label for="archived">Archived:</label>
+            <select name="archived" id="archived">
               {% for val in status %}
               <option value="{{val}}">{{val}}</option>
               {% endfor %}
             </select>
           </div>
         <div class="form-group">
-            <label for="date">Date</label>
+            <label for="date">Reg. Date</label>
             <br>
             <input type="date" name="date" id="date" class="form-control" placeholder="Add Date">
         </div>
@@ -28,9 +28,18 @@
             <input type="text" name="name" id="name" class="form-control" placeholder="Name">
         </div>
         <div class="form-group">
-            <label for="Bu_head">Select BU</label>
-            <select name="Bu_head" id="Bu_head">
-                <option value="{{ value.owner }}">Select{{ value.owner }}</option>
+            <label for="department">Department</label>
+            <select name="department" id="department">
+                <option value="{{ value }}">Select{{ value}}</option>
+                {% for val in departments %}
+                <option value="{{val}}">{{val}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="BU">Select BU</label>
+            <select name="BU" id="BU">
+                <option value="{{ value }}">Select{{ value}}</option>
               {% for val in BUList %}
               <option value="{{val}}">{{val}}</option>
               {% endfor %}
@@ -111,17 +120,7 @@
             <label for="status">Status</label>
             <br>
             <input type="text" name="status" id="status" class="form-control" placeholder="Status">
-        </div>
-        <div class="form-group">
-            <label for="BU_comments">BU Comments</label>
-            <br>
-            <input type="text" name="BU_comments" id="BU_comments" class="form-control" placeholder=" BU Comments">
-        </div>
-        <div class="form-group">
-            <label for="TA_comments">TA Comments</label>
-            <br>
-            <input type="text" name="TA_comments" id="TA_comments" class="form-control" placeholder=" TA Comments">
-        </div>       
+        </div>        
         <div class="form-group">
             <label for="T1_panel">T1 Panel</label>
             <br>
@@ -146,27 +145,7 @@
             <label for="source">Source</label>
             <br>
             <input type="text" name="source" id="source" class="form-control" placeholder=" Source">
-        </div>
-        <div class="form-group">
-            <label for="Rec_prime">Rec Prime</label>
-            <br>
-            <input type="text" name="Rec_prime" id="Rec_prime" class="form-control" placeholder=" Rec Prime">
-        </div>
-        <div class="form-group">
-            <label for="Domain">Domain</label>
-            <br>
-            <input type="text" name="Domain" id="Domain" class="form-control" placeholder="Domain">
-        </div>
-        <div class="form-group">
-            <label for="T1">T1</label>
-            <br>
-            <input type="text" name="T1" id="T1" class="form-control" placeholder=" T1">
-        </div>
-        <div class="form-group">
-            <label for="T2">T2</label>
-            <br>
-            <input type="text" name="T2" id="T2" class="form-control" placeholder=" T2">
-        </div>
+        </div>        
         <div class="form-group">
             <label for="owner">Owner</label>
             <select name="owner" id="owner">
@@ -176,6 +155,16 @@
               {% endfor %}
             </select>
           </div>
+          <div class="form-group">
+            <label for="resume">Resume URL</label>
+            <br>
+            <input type="text" name="resume" id="resume" class="form-control" placeholder=" Resume url">
+        </div>
+        <div class="form-group">
+            <label for="remarks">Remarks</label>
+            <br>
+            <input type="text" name="remarks" id="remarks" class="form-control" placeholder=" Remarks">
+        </div>
        
         <br>
         <input type="submit" class="btn btn-info" value="Add Details">
