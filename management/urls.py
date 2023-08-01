@@ -58,7 +58,7 @@ urlpatterns = [
     #path("addCommentToEmployeedReqTable/<int:pk>/<int:reqIdPK>",views.addCommentToEmployeedReqTable),
     path('showTaList/<int:reqIdPK>',views.showTaList),
     path('showVmList/<int:reqIdPK>',views.showVmList),
-    path("newremark/<int:pk>/<int:reqIdPK>",views.MappedComment),    
+    path("addCommentToEmpReqSelect/<int:pk>/<int:reqIdPK>",views.addCommentToEmpReqSelect),    
 
     #path('selection_status/<str:estatus>/<int:reqIdPK>', views.selection_status),
     path('selection_status/<str:estatus>/<int:reqIdPK>/<int:pk>', views.selection_status),

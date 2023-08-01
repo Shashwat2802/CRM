@@ -362,7 +362,7 @@ def salesSummary(request):
     return render(request,'summary.html',context)
 
 
-def MappedComment(request,pk,reqIdPK):
+def addCommentToEmpReqSelect(request,pk,reqIdPK):
     if request.method == 'POST':
         current_user = request.user.username.title()
         remark_text = request.POST.get('remark_text', '')
