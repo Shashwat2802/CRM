@@ -110,7 +110,9 @@ def addSalesReqs(request):
         
         form=Customer_RequirementForm(request.POST)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            instance.ReqClosedDate = None
+            instance.save()
             messages.success(request,'Details Saved !')
             return redirect('/listSalesReqsFiltered/Choose/Choose/Choose')
         else:
@@ -133,22 +135,45 @@ def getRoleList () :
 
 def updateSaleReqs(request,reqIdPK):
     model_instance=Customer_Requirements.objects.get(pk=reqIdPK)
-    model_instance.Required_skills=request.POST['Required_skills']
-    model_instance.Job_Description=request.POST['Job_Description']
-    model_instance.Required_Experience=request.POST['Required_Experience']
-    model_instance.Open_positions=request.POST['Open_positions']
-    model_instance.remain_positions=request.POST['Open_positions']
-    model_instance.Position_Status=request.POST['Position_Status']
-    model_instance.Sales_Incharge=request.POST['Sales_Incharge']
-    model_instance.Bu_head = request.POST['Bu_Head']
+    model_instance.RequiredSkills=request.POST['RequiredSkills']
+    model_instance.JD=request.POST['JD']
+    model_instance.jobTitle=request.POST['jobTitle']
+    model_instance.minExp=request.POST['minExp']
+    model_instance.maxExp=request.POST['maxExp']
+
+    try:
+        # Convert the value to an integer
+        open_positions = int(request.POST['openPositions'])
+        lapsedPositions = int(request.POST['lapsedPositions'])
+        filledPositions = int(request.POST['filledPositions'])
+
+        # Now you have open_positions as an integer
+        # You can use it for calculations or store it in your Django model
+    except ValueError:
+        open_positions = 0
+        lapsedPositions = 0
+        filledPositions = 0
+        pass
+
+    model_instance.openPositions=open_positions
+    model_instance.lapsedPositions=lapsedPositions
+    model_instance.filledPositions=filledPositions
+
+    model_instance.remainPositions=open_positions - lapsedPositions - filledPositions
+
+    model_instance.fulfillThru=request.POST['fulfillThru']
+    model_instance.ActiveSubmissionCount=request.POST['ActiveSubmissionCount']
+
+
+    model_instance.reqStatus=request.POST['reqStatus']
+    model_instance.SalesIncharge=request.POST['SalesIncharge']
+    model_instance.buHead = request.POST['buHead']
     model_instance.priority = request.POST['priority']
     if 'history' in request.POST:
         hist=request.POST['history']
         print("hist",hist)
         model_instance.history = hist
-    
-    # print("history",hist)
-    # model_instance.history = request.POST['history']
+
 
     model_instance.save()
     return redirect('/listSalesReqsFiltered/Choose/Choose/Choose')  
@@ -204,22 +229,22 @@ def filteredSaleReqs(request,bu,sales,st):
     
     filter_conditions={}
     if bu != 'All' and bu != 'Choose':
-        filter_conditions['Bu_head'] = bu
+        filter_conditions['buHead'] = bu
 
     if sales != 'All' and sales != 'Choose':
-        filter_conditions['Sales_Incharge'] = sales
+        filter_conditions['SalesIncharge'] = sales
 
     if st != 'All' and st != 'Choose':
-        filter_conditions['Position_Status'] = st
+        filter_conditions['reqStatus'] = st
 
     print("FIlter COndition",filter_conditions,bu,sales,st)
     customer_requirements=  Customer_Requirements.objects.filter(**filter_conditions)
 
-    bu_head = getBUHList()
+    buList = getBUHList()
     current_user = request.user.username.title() 
-    sales_incharge= getSalesTeam()
+    SalesTeam= getSalesTeam()
     return render(request,'show_cust_requirements.html',{'customer_requirements':customer_requirements,
-                                                        'sales_incharge': sales_incharge, 'bu_head': bu_head, 
+                                                        'SalesTeam': SalesTeam, 'buList': buList, 
                                                         'current_user':current_user,'bu_select': bu, "sales_select": sales, 'status_select': st})
 
 def listEmployeeFiltered(request,department,buh,manager):
@@ -297,17 +322,17 @@ def cust_req_dropdown(request, ref):
     if ref[:1] == 'P':
         cust = Customer_Requirements.objects.get(pk=ref[2:3])
         if ref[1:2] == 'A': 
-            cust.Position_Status = 'Active'
+            cust.reqStatus = 'Active'
         elif ref[1:2] == 'H': 
-            cust.Position_Status = 'Hold'
+            cust.reqStatus = 'Hold'
         elif ref[1:2] == 'I': 
-            cust.Position_Status = 'Inactive'
+            cust.reqStatus = 'Inactive'
     elif ref[:1] == 'S':
         cust = Customer_Requirements.objects.get(pk=ref[1:2])
-        cust.Sales_Incharge = ref[2:]
+        cust.SalesIncharge = ref[2:]
     elif ref[:1] == 'B': 
         cust = Customer_Requirements.objects.get(pk=ref[1:2])
-        cust.Bu_head = ref[2:]
+        cust.buHead = ref[2:]
     cust.save()
     return redirect('/listSalesReqsFiltered/Choose/Choose/Choose')
     
@@ -325,7 +350,7 @@ def salesSummary(request):
     for val in saleslist:
         firstarray=[]
         for newval in bulist:
-            customercount=len(Customer_Requirements.objects.filter(Bu_head=str(newval),Sales_Incharge=str(val)))
+            customercount=len(Customer_Requirements.objects.filter(buHead=str(newval),SalesIncharge=str(val)))
             firstarray.append(customercount)
         firstarray.append(sum(firstarray))
         firstarray.insert(0,val)
@@ -370,10 +395,10 @@ def addTa(request):
 
 def showTa(request):       
     ta_instance=TA_Resource.objects.all()
-    Bu_head=getBUHList()
+    buHead=getBUHList()
     departments =getDepartmentList()
     return render(request,'showTA.html',{
-        'ta_instance':ta_instance,'Bu_head':Bu_head,'departments':departments
+        'ta_instance':ta_instance,'buHead':buHead,'departments':departments
                                         })
 
 def filterTa(request,department,buhead,archivestatus):
@@ -389,9 +414,9 @@ def filterTa(request,department,buhead,archivestatus):
 
     print("Filtered Condition",filtered)
     ta_instance=TA_Resource.objects.filter(**filtered)
-    Bu_head=getBUHList()
+    buHead=getBUHList()
     departments =getDepartmentList()
-    return render(request,'showTA.html',{'ta_instance':ta_instance,'Bu_head':Bu_head,'departments':departments,
+    return render(request,'showTA.html',{'ta_instance':ta_instance,'buHead':buHead,'departments':departments,
                                         'status_select':archivestatus,'bu_select':buhead,'department':department})
 
 def deleteTa(request,phone_number):
@@ -400,9 +425,9 @@ def deleteTa(request,phone_number):
     return redirect('/showTa')
 
 
-def job_description(request):
-    job_desc = Customer_Requirements.objects.values('Job_Description')
-    return render(request,"job_description.html",{'job_desc':job_desc})
+def JD(request):
+    job_desc = Customer_Requirements.objects.values('JD')
+    return render(request,"JD.html",{'job_desc':job_desc})
 
 
 
@@ -449,7 +474,7 @@ def mappedEmployeeToCustomer(request,reqIdPK):
         return redirect('home')
     emp_data = EmployeeReqMapping.objects.filter(req_id=reqIdPK)
     req_instance=Customer_Requirements.objects.get(pk=reqIdPK)
-    position=req_instance.remain_positions
+    position=req_instance.remainPositions
     return render(request, "showEmpToCustomer.html", {'form':emp_data,'reqIdPK':reqIdPK,'position':position,
     })
 
@@ -463,7 +488,7 @@ def selection_status(request,estatus,reqIdPK,pk):
     namelist=name.split(' ',1)
     if estatus[:2] == 'SL':
         model_instance.empstatus = 'Selected'
-        requirement_instance.remain_positions-=1
+        requirement_instance.remainPositions-=1
         model_instance.save()
         requirement_instance.save()
         emp_instance=Employee.objects.get(eFname=namelist[0],eLname=namelist[1])
@@ -698,7 +723,7 @@ def mapEmpToReq(request,reqIdPK,choice):
     if request.method == 'POST':
         today = date.today()
         salesReq=Customer_Requirements.objects.get(pk=reqIdPK)
-        print("Req",salesReq, salesReq.Bu_head)
+        print("Req",salesReq, salesReq.buHead)
         if choice=='bench':
              selectedEmpList = request.POST.getlist('empId')
              print("employee list",selectedEmpList)
@@ -760,7 +785,7 @@ def deleteAppliedCandidates(request,source,namearg,reqIdPK):
         emp_instance=Employee.objects.get(eFname=namelist[0],eLname=namelist[1])
         emp_instance.estatus='Free'
         emp_instance.save()
-        customer_req.remain_positions+=1
+        customer_req.remainPositions+=1
         customer_req.save()
         messages.success(request,'The Selected Employee'  + delete_instance.name +  'is deleted successfully')
         delete_instance.delete()
@@ -768,7 +793,7 @@ def deleteAppliedCandidates(request,source,namearg,reqIdPK):
         ta_instance=TA_Resource.objects.get(name=namearg)
         ta_instance.status='Selected'
         ta_instance.save()
-        customer_req.remain_positions+=1
+        customer_req.remainPositions+=1
         customer_req.save()
         messages.success(request,'The Selected TA resource'  + delete_instance.name +  'is deleted successfully')
         delete_instance.delete()
@@ -776,7 +801,7 @@ def deleteAppliedCandidates(request,source,namearg,reqIdPK):
         vm_instance=VmResource.objects.get(candidateName=namearg)
         vm_instance.interviewStatus='Selected'
         vm_instance.save()
-        customer_req.remain_positions+=1
+        customer_req.remainPositions+=1
         customer_req.save()
         messages.success(request,'The Selected VM resource'  + delete_instance.name +  'is deleted successfully')
         delete_instance.delete() 
@@ -957,7 +982,7 @@ def salesDataUpload(request):
         imported_data = dataset.load(new_Requirements.read(), format='xlsx')
         for data in imported_data:
             print(data)
-            custName=data[0]
+            custName=data[1]
             cust=Customer.objects.filter(cName=custName)
 
             if cust.exists():
@@ -966,6 +991,9 @@ def salesDataUpload(request):
                 print("Customer does not exists")
                 newCust=Customer(cName=custName,cEmail='test@gmail.com',cUrl="test.com")
                 newCust.save()
+
+            # Parse the comma separated and fillin customerReqemp table 
+            activeResList=data[20]    
             value = Customer_Requirements(
                 data[0],
                 data[1],
@@ -978,7 +1006,17 @@ def salesDataUpload(request):
                 data[8],
                 data[9],  
                 data[10],
-                data[11],                                                    
+                data[11], 
+                data[12], 
+                data[13], 
+                data[14], 
+                data[15], 
+                data[16], 
+                data[17], 
+                data[18], 
+                data[19], 
+       
+
                 )
             value.save()
         return redirect("/listSalesReqsFiltered/Choose/Choose/Choose")
