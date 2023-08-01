@@ -79,14 +79,12 @@ urlpatterns = [
     path('deleteLeadSocEmployee/<str:e_id>', views.deleteLeadSocEmployee),
     path('updateLeadSocEmployee/<str:e_id>', views.updateLeadSocEmployee),
 
-
-
     #TA Path
     path('addTa',views.addTa),
     path('showTa',views.showTa),
     path('taDataUpload',views.taDataUpload),
     path('deleteTa/<int:phone_number>',views.deleteTa),
-    path('filterTa/<str:buhead>/<str:archivestatus>',views.filterTa),
+    path('filterTa/<str:department>/<str:buhead>/<str:archivestatus>',views.filterTa),
     path('updateTaDetails/<str:ta_id>',views.updateTaDetails),
     path('taResume/<str:ta_id>',views.addTaResume),
     path('addCommentsToTaCandidate/<str:ta_id>',views.addCommentsToTaCandidate),
