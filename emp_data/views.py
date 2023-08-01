@@ -363,29 +363,36 @@ def addTa(request):
             return HttpResponse(form.errors)
     else:
         BUList=list(map(lambda x:x.eFname ,getBUHList()))
-        ownerList = list(map(lambda x:x.eFname,getOwnerList()))        
-        return render(request,'addTA.html',{'BUList':BUList,'ownerList':ownerList,'status':['Select','Active','Closed']})
+        ownerList = list(map(lambda x:x.eFname,getOwnerList()))
+        departments =getDepartmentList()        
+        return render(request,'addTA.html',{'BUList':BUList,'ownerList':ownerList,
+                                            'status':['Select','Active','Closed'],'departments':departments})
 
 def showTa(request):       
     ta_instance=TA_Resource.objects.all()
     Bu_head=getBUHList()
+    departments =getDepartmentList()
     return render(request,'showTA.html',{
-        'ta_instance':ta_instance,'Bu_head':Bu_head,
+        'ta_instance':ta_instance,'Bu_head':Bu_head,'departments':departments
                                         })
 
-def filterTa(request,buhead,archivestatus):
+def filterTa(request,department,buhead,archivestatus):
     filtered={}
+    if department != 'All' and department != 'Choose':
+        filtered['department'] = department
+
     if buhead != 'All' and buhead != 'Choose':
-        filtered['BU']=buhead
+        filtered['BU'] = buhead
 
     if archivestatus !='Both' and archivestatus != 'Choose':
-        filtered['archived']=archivestatus
+        filtered['archived'] = archivestatus
 
     print("Filtered Condition",filtered)
     ta_instance=TA_Resource.objects.filter(**filtered)
     Bu_head=getBUHList()
-    return render(request,'showTA.html',{'ta_instance':ta_instance,'Bu_head':Bu_head,
-                                         'status_select':archivestatus,'bu_select':buhead})
+    departments =getDepartmentList()
+    return render(request,'showTA.html',{'ta_instance':ta_instance,'Bu_head':Bu_head,'departments':departments,
+                                        'status_select':archivestatus,'bu_select':buhead,'department':department})
 
 def deleteTa(request,phone_number):
     instance=TA_Resource.objects.get(pk=phone_number)
@@ -670,12 +677,10 @@ def updateTaDetails(request,ta_id):
         ta_instance.T1_IW_date=request.POST.get('T1_IW_date')
         ta_instance.T2_panel=request.POST.get('T2_panel')
         ta_instance.T2_IW_date=request.POST.get('T2_IW_date')
-        ta_instance.source=request.POST.get('source')
-        ta_instance.Rec_prime=request.POST.get('Rec_prime')
-        ta_instance.Domain=request.POST.get('Domain')
-        ta_instance.T1=request.POST.get('T1')
-        ta_instance.T2=request.POST.get('T2')
+        ta_instance.source=request.POST.get('source')        
         ta_instance.owner=request.POST.get('owner')
+        ta_instance.resume=request.POST.get('resume')
+        ta_instance.remarks=request.POST.get('remarks')
         ta_instance.save()
 
     return redirect("/showTa")
@@ -723,10 +728,6 @@ def mapEmpToReq(request,reqIdPK,choice):
                 final=EmployeeReqMapping(req_id=salesReq,name=vm.candidateName,eskills=vm.skillset,  added_date=today,source='VM',empstatus='Selected',sourceid_3=vm.vmIdPK)
                 final.save()
     return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
-
-
-
-
 
 #dropdown customer names
 def dropDownCustomer(request):
@@ -1001,36 +1002,32 @@ def taDataUpload(request):
                 ta_id=data[0],
                 archived=data[1],
                 date=data[2],
-                name=data[3],                
-                BU=data[4],
-                Position=data[5],
-                skillset=data[6],
-                education=data[7],
-                experience=data[8],
-                relevant_exp=data[9],
-                current_org=data[10],
-                current_ctc=data[11],
-                expected_ctc=data[12],
-                actual_notice_period=data[13],
-                notice_period=data[14],
-                current_loc=data[15],
-                preferred_loc=data[16],
-                phone_number=data[17],
-                email=data[18],
-                status=data[19],
-                BU_comments=data[20],
-                TA_comments=data[21],
-                T1_panel=data[22],
-                T1_IW_date=data[23],
-                T2_panel=data[24],
-                T2_IW_date=data[25],
-                source=data[26],
-                Rec_prime=data[27],
-                Domain=data[28],
-                T1=data[29],
-                T2=data[30],                
-                owner= data[31], 
-                resume=data[32]              
+                name=data[3], 
+                department=Department(department=data[4]),              
+                BU=data[5],
+                Position=data[6],
+                skillset=data[7],
+                education=data[8],
+                experience=data[9],
+                relevant_exp=data[10],
+                current_org=data[11],
+                current_ctc=data[12],
+                expected_ctc=data[13],
+                actual_notice_period=data[14],
+                notice_period=data[15],
+                current_loc=data[16],
+                preferred_loc=data[17],
+                phone_number=data[18],
+                email=data[19],
+                status=data[20],
+                T1_panel=data[21],
+                T1_IW_date=data[22],
+                T2_panel=data[23],
+                T2_IW_date=data[24],
+                source=data[25],                                
+                owner= data[26], 
+                resume=data[27],  
+                remarks=data[28]            
                 )
             value.save()
         return redirect('/showTa')   
