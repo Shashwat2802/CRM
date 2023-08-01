@@ -87,7 +87,6 @@
       <th>Remarks</th>
       <th>Owner</th>
       <th>Status</th>
-      <th>Resume link</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -96,10 +95,11 @@
     <tr>
       <td>{{ val.archivalStatus }}</td>
       <td>
-        {{ val.candidateName }} 
-        
+        {{ val.candidateName }} {{ val.candidateName }}
+        {% if val.resumeURL and val.resumeURL != 'None' %}
+        <a href="{{ val.resumeURL }}" target="_blank"> <i class="fa-regular fa-eye"></i></a>
+        {% endif %}
       </td>
-      <td>{{value.availibility}}</td>
       <td>{{ val.experience }}</td>
       <td>{{ val.education }}</td>
       <td>{{ val.skillset }}</td>
@@ -107,7 +107,6 @@
       <td>{{ val.location }}</td>
       <td>{{ val.department }}</td>
       <td>{{ val.buh }}</td>
-      <td>{{ val.archived }}</td>
       <td>
         <p class="btn-sm" data-toggle="modal" data-target="#hist{{val.vmIdPK}}">
           {{ val.remarks|extract_from_hashtag }}
@@ -150,38 +149,10 @@
       <td>{{ val.resumeStatus }}</td>
       <td>
         <!-- Button trigger modal -->
-        <td>
-          <button class=" btn-sm" data-toggle="modal" data-target="#modalupload{{val.vmIdPK}}"><i
-                  class="fa-solid fa-plus"></i></button>
-          <div class="modal" id="modalupload{{val.vmIdPK}}" tabindex="-1" role="dialog"
-              aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-              <div class=" modal-dialog modal-sm" role="document">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                          Upload Resume for : {{val.name}}
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">&times;</span>
-                          </button>
-                      </div>
-                      <div class="modal-body">
-                          <form action="/vmResume/{{val.vmIdPK}}" method="POST">
-                              {% csrf_token %}
-                              <div class="form-group">
-                                  <label for="resume">
-                                      <input type="url" name="resume" id="resume"
-                                          placeholder="Upload Resume link">
-                                  </label>
-                                  <input type="submit" value="Upload Resume">
-                              </div>
-                          </form>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <button class="button-sm">
-              <a href="{{val.resume}}"><i class="fa-solid fa-eye"></i></a>
-          </button>
-      </td>
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
+          data-target="#detailedInfoModal{{val.vmIdPK}}">
+          <i class="fa-regular fa-eye"></i>
+        </button>
 
         <!-- Modal -->
         <div class="modal fade" id="detailedInfoModal{{val.vmIdPK}}" tabindex="-1" role="dialog"

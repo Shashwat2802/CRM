@@ -6,7 +6,7 @@ import queue
 import quopri
 from emp_data.admin import EmployeeReqMappingAdmin
 from django.shortcuts import render,redirect,get_object_or_404
-from emp_data.models import Customer,Employee,Customer_Requirements,EmployeeReqMapping,TA_Resource,VmResource
+from emp_data.models import Customer,Employee,Customer_Requirements,EmployeeReqMapping
 from .resources import EmployeeResource
 from emp_data.forms import CustomerForm,EmployeeForm, loginForm,UploadFileForm,Customer_RequirementForm,TA_Form, VmCandidateForm
 from django.contrib import messages
