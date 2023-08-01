@@ -21,6 +21,15 @@ class CustomerForm(forms.ModelForm):
 
 # this is for customer_requirement
 class Customer_RequirementForm(forms.ModelForm):
+    # This will make this field not mandatory for Form Valid
+    ReqClosedDate = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+    ActiveSubmissionCount = forms.IntegerField(required=False, widget=forms.HiddenInput(), initial=0)
+    CustReqId = forms.CharField(required=False, widget=forms.HiddenInput(), initial='NA')
+    filledPositions = forms.IntegerField(required=False, widget=forms.HiddenInput(), initial=0)
+    lapsedPositions = forms.IntegerField(required=False, widget=forms.HiddenInput(), initial=0)
+    history = forms.CharField(required=False, widget=forms.HiddenInput(), initial='NA')
+
+
     class Meta:
         model = Customer_Requirements
         fields = "__all__"

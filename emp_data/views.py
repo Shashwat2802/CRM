@@ -110,7 +110,9 @@ def addSalesReqs(request):
         
         form=Customer_RequirementForm(request.POST)
         if form.is_valid():
-            form.save()
+            instance = form.save(commit=False)
+            instance.ReqClosedDate = None
+            instance.save()
             messages.success(request,'Details Saved !')
             return redirect('/listSalesReqsFiltered/Choose/Choose/Choose')
         else:
