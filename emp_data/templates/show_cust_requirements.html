@@ -48,7 +48,8 @@
                 <option value="{{status_select}}" selected disabled hidden>{{status_select}}</option>
                 <option value="Active">Active</option>
                 <option value="Closed">Closed</option>
-                <option value="All">Both</option>
+                <option value="Hold">Hold</option>
+                <option value="All">All</option>
             </select>
         </span>
         <span style="margin-left: 30;">
@@ -78,20 +79,19 @@
     <thead class="badge-info text-white">
         <tr>
         <tr>
-            <th>Sl#</th>
+            <th>Opened On</th>
             <th>Customer</th>
-            <th>Customer ReqID</th>
+            <th>ReqID</th>
             <th>Skills</th>
             <th>Job Desc.</th>
             <th>Remarks</th>
-            <th>Priority</th>
-            <th>Exp.</th>
-            <th>Total Reqs</th>
-            <th>To Fill</th>
+            <th>Prio</th>
+            <th>ExpRange</th>
+            <th>Requirements</th>
             <th>Status</th>
             <th>BDM</th>
             <th>BU Head</th>
-            <th>Candidates</th>
+            <th>Fulfill</th>
             <th>Actions</th>
         </tr>
         </tr>
@@ -101,13 +101,13 @@
         {% for val in customer_requirements %}
         <tr>
             <div>
-                <td>{{forloop.counter}}</td>
+                <td>{{val.ReqDate|date:'d/m'}}</td>
                 <td>{{val.customers}}</td>
                 <td>{{val.CustReqId}}</td>
                 <td>{{val.RequiredSkills}}</td>
                 <td>
                     <p class="btn-sm" data-toggle="modal" data-target="#jobDescriptionModal{{val.reqIdPK}}">
-                        {{ val.JD|default:'NA'|truncatewords:5 }}
+                        {{ val.jobTitle|default:'NA'|truncatewords:5 }}
 
                     </p>
                     <!-- JOb description Modal -->
@@ -175,20 +175,24 @@
 
                 </td>
                 <td>{{val.priority}}</td>
-                <td>{{val.minExp}}</td>
-                <td>{{val.openPositions}}</td>
-                <td>{{val.remainPositions}}</td>
+                <td>{{val.minExp}}- {{val.maxExp}}</td>
+                <td>
+                    Open: {{val.openPositions}}<br>
+                    Lapsed: {{val.lapsedPositions}}<br>
+                    Filled: {{val.filledPositions}}<br>
+                    ToFill: {{val.remainPositions}}
+                </td>
                 <td>{{val.reqStatus}}</td>
                 <td>{{val.SalesIncharge}}</td>
                 <td>{{val.buHead}}</td>
+                  <td>{{val.fulfillThru}}</td>
                 <!-- Button trigger modal -->
                 <td>
                     <button type="button" class="btn-info btn-sm"
                         onclick="location.href='/mappedEmployeeToCustomer/{{val.reqIdPK}}'">
                         <i class="fa-regular fa-eye"></i>
                     </button>
-                </td>
-                <td>
+       
                     <button class="btn-success btn-sm" data-toggle="modal" data-target="#modalForm{{val.reqIdPK}}"><i
                             class="fa-solid fa-pen-to-square"></i></button>
                     <!-- Modal form -->
@@ -295,8 +299,7 @@
                                         <option value=BENCH>BENCH</option>
                                         <option value=TA>TA</option>
                                         <option value=VM>VM</option>
-                                                            <option value="ALL" selected>ALL</option>
-
+                                        <option value="ANY" selected>ANY</option>
                                     </select>
 
                                     <div class="form-group">
