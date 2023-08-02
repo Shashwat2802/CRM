@@ -315,7 +315,7 @@ def addCommentsToTaCandidate(request, ta_id):
         print("Existing Comment",ta_commet.remarks)
         ta_commet.remarks=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+ta_commet.remarks
         ta_commet.save()
-        return redirect('/showTa')
+        return redirect('/showTa/Choose/Choose/Choose')
         
 
 def cust_req_dropdown(request, ref): 
@@ -383,7 +383,7 @@ def addTa(request):
         form=TA_Form(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/showTa')
+            return redirect('/showTa/Choose/Choose/Choose')
         else:
             return HttpResponse(form.errors)
     else:
@@ -392,7 +392,7 @@ def addTa(request):
         departments =getDepartmentList()        
         return render(request,'addTA.html',{'BUList':BUList,'ownerList':ownerList,
                                             'status':['Select','Active','Closed'],'departments':departments})
-
+'''
 def showTa(request):       
     ta_instance=TA_Resource.objects.all()
     buHead=getBUHList()
@@ -400,8 +400,8 @@ def showTa(request):
     return render(request,'showTA.html',{
         'ta_instance':ta_instance,'buHead':buHead,'departments':departments
                                         })
-
-def filterTa(request,department,buhead,archivestatus):
+'''
+def showTa(request,department,buhead,archivestatus):
     filtered={}
     if department != 'All' and department != 'Choose':
         filtered['department'] = department
@@ -422,7 +422,7 @@ def filterTa(request,department,buhead,archivestatus):
 def deleteTa(request,phone_number):
     instance=TA_Resource.objects.get(pk=phone_number)
     instance.delete()
-    return redirect('/showTa')
+    return redirect('/showTa/Choose/Choose/Choose')
 
 
 def JD(request):
@@ -708,7 +708,7 @@ def updateTaDetails(request,ta_id):
         ta_instance.remarks=request.POST.get('remarks')
         ta_instance.save()
 
-    return redirect("/showTa")
+    return redirect("/showTa/Choose/Choose/Choose")
 
 def addTaResume(request,ta_id):
     ta_instance=TA_Resource.objects.get(pk=ta_id)
@@ -716,7 +716,7 @@ def addTaResume(request,ta_id):
         link=request.POST.get('resume')
         ta_instance.resume=link
         ta_instance.save()
-    return redirect ('/showTa')
+    return redirect ('/showTa/Choose/Choose/Choose')
 
 def mapEmpToReq(request,reqIdPK,choice):
     
@@ -1068,7 +1068,7 @@ def taDataUpload(request):
                 remarks=data[28]            
                 )
             value.save()
-        return redirect('/showTa')   
+        return redirect('/showTa/Choose/Choose/Choose')   
 
     return render(request,'TA_upload.html')
 
