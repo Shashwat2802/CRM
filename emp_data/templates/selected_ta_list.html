@@ -59,7 +59,7 @@
     <table class="table">
         <thead class="badge-info text-white">
             <tr>
-                <th>No.</th>
+             
                 <th>select</th>
                 <th>Candidate name</th>
                 <th>Candidate Skills</th>
@@ -71,9 +71,9 @@
             {% for candidate_list in form %}
             <tr>
 
-                <td>{{forloop.counter}}</td>
-                <td><input type="checkbox" name="name" id="name" value="{{candidate_list.name}}">
-                    <label for="name"></label>
+               
+                <td><input type="checkbox" name="ta_id" id="ta_id" value="{{candidate_list.ta_id}}">
+                    <label for="ta_id"></label>
                 </td>
                 <td>{{candidate_list.name}}</td>
                 <td>{{candidate_list.skillset}}</td>

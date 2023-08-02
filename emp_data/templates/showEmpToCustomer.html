@@ -19,11 +19,9 @@
     <table class="table">
         <thead class="badge-info text-white">
             <tr>
-                <th>No.</th>
                 <th>Candidate</th>
                 <th>Remarks</th>
                 <th>Source</th>
-                <!--<th>Reference</th>-->
                 <th>Status</th>
                 <th>Actions</th>
             </tr>
@@ -32,9 +30,10 @@
         <tbody>
             {% for values in form %}
             <tr>
-                <td>{{forloop.counter}}</td>
                 <td>{{values.name}}
+                    {% if values.resumeURL != 'None' %}
                     <a href="{{values.resumeURL}}" target="_blank"><i class="fa-regular fa-eye"></i></a>
+                    {% endif %}
                 </td>
                 <td>
                     <p class="btn-sm" data-toggle="modal" data-target="#hist{{values.pk}}">
