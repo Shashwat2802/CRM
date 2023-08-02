@@ -373,6 +373,16 @@ def addCommentToEmpReqSelect(request,pk,reqIdPK):
         mapping.history=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+mapping.history
         mapping.save()
         return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
+    
+def addResumeToMappedEmployees(request,pk,reqIdPK):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    addEmployeeReqMappingResume=EmployeeReqMapping.objects.get(pk=pk)
+    if request.method=='POST':
+        link=request.POST.get('resumeURL')
+        addEmployeeReqMappingResume.resumeURL=link
+        addEmployeeReqMappingResume.save()
+    return redirect (f'/mappedEmployeeToCustomer/{reqIdPK}')
 
 def getOwnerList():
     return Employee.objects.filter((Q(eRole='TA_HEAD')|Q(eRole='TA_STAFF')|Q(eRole='VM_STAFF')),isDeleted=False)

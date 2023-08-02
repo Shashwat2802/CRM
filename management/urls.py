@@ -67,6 +67,7 @@ urlpatterns = [
     path('showDropDown',views.showDropDown),
     path('updateSaleReqs/<int:reqIdPK>',views.updateSaleReqs),
     path('deleteAppliedCandidates/<str:source>/<str:namearg>/<int:reqIdPK>', views.deleteAppliedCandidates),
+    path('addResumeToMappedEmployees/<int:pk>/<int:reqIdPK>',views.addResumeToMappedEmployees),
 
      #Customer paths 
     path('addCustomer', views.addCustomer),
