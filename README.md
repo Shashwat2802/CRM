@@ -54,5 +54,9 @@ python manage.py shell -c "from emp_data.models  import employeeReqMapping; empl
 git rm -r --cached path/to/folder/
 git rm --cached path/to/file.ext
 
+# To Delete branch from Git repo
+git push origin --delete <branch-name>
+
+
 
 
