@@ -59,7 +59,6 @@
     <table class="table">
         <thead class="badge-info text-white">
             <tr>
-                <th>No.</th>
                 <th>select</th>
                 <th>Candidate name</th>
                 <th>Candidate Skills</th>
@@ -70,25 +69,12 @@
         <tbody>
             {% for candidate_list in form %}
             <tr>
-                <!--<td>{{customer_requirement.Requirement_Id}}</td>-->
-                <td>{{forloop.counter}}</td>
-                <td><input type="checkbox" name="candidateName" id="candidateName" value="{{candidate_list.candidateName}}">
-                    <label for="candidateName"></label>
+                <td><input type="checkbox" name="vmIdPK" id="vmIdPK" value="{{candidate_list.vmIdPK}}">
+                    <label for="vmIdPK"></label>
                 </td>
                 <td>{{candidate_list.candidateName}}</td>
                 <td>{{candidate_list.skillset}}</td>
                 <td>{{candidate_list.resumeStatus}}</td>
-                <!-- <td>{{candidate_list.eskills}}</td>
-            <td>{{candidate_list.estatus}}</td> -->
-
-
-                <!-- <td> -->
-                <!--<button class="btn-danger btn-sm"
-                    onclick="location.href='/deleteEmp/{{employee.eFname}}'">Delete</button>
-                <button class="btn-success btn-sm"
-                    onclick="location.href='/editemp/{{employee.eFname}}'">Update</button>-->
-                <!-- </td> -->
-
             </tr>
             {% empty %}
             <span class="text-center text-danger">No record found</span>

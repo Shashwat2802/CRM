@@ -671,7 +671,7 @@ def showTaList(request,reqIdPK):
         skills=request.GET.get('searchskill')
         if skills != None:
             #form=TA_Resource.objects.filter(skillset__icontains=skills)
-            form=TA_Resource.objects.filter(skillset__icontains=skills).exclude(status='Deployed')
+            form=TA_Resource.objects.filter(archived__icontains='Active',skillset__icontains=skills).exclude(status='Deployed')
     
     return render(request,'selected_ta_list.html',{'form':form,"reqIdPK":reqIdPK})
 
@@ -742,25 +742,25 @@ def mapEmpToReq(request,reqIdPK,choice):
                 emp.estatus='ScreeningPending'
                 emp.save()
                 print("Employee status updated",emp)
-                final=EmployeeReqMapping(req_id=salesReq,name=emp.eFname + " " +emp.eLname,eskills=emp.eskills,  added_date=today,source='BENCH',sourceid_1=emp.e_id)
+                final=EmployeeReqMapping(req_id=salesReq,name=emp.eFname + " " +emp.eLname,eskills=emp.eskills,  added_date=today,source='BENCH',sourceid_1=emp.e_id,empstatus='shortlisted',resumeURL='None')
                 final.save()
         if choice=='TA':
-            selectedtaList = request.POST.getlist('name')
+            selectedtaList = request.POST.getlist('ta_id')
             print("Selected TA  list",selectedtaList)
             for i in selectedtaList:
-                ta=TA_Resource.objects.get(name=i)
-                ta.status='Deployed'
+                ta=TA_Resource.objects.get(ta_id=i)
+                ta.status='shortlisted'
                 ta.save()
-                final=EmployeeReqMapping(req_id=salesReq,name=ta.name,eskills=ta.skillset,added_date=today,source='TA',empstatus='Selected',sourceid_2=ta.ta_id)
+                final=EmployeeReqMapping(resumeURL=ta.resume,req_id=salesReq,name=ta.name,eskills=ta.skillset,added_date=today,source='TA',empstatus='shortlisted',sourceid_2=ta.ta_id)
                 final.save()
         if choice=='VM':
-            selectedvmList = request.POST.getlist('candidateName')
+            selectedvmList = request.POST.getlist('vmIdPK')
             print("Selected VM  list",selectedvmList)
-            for vm_name in selectedvmList:
-                vm=VmResource.objects.get(candidateName=vm_name)
-                vm.resumeStatus='Deployed'
+            for id in selectedvmList:
+                vm=VmResource.objects.get(vmIdPK=id)
+                vm.resumeStatus='shortlisted'
                 vm.save()
-                final=EmployeeReqMapping(req_id=salesReq,name=vm.candidateName,eskills=vm.skillset,  added_date=today,source='VM',empstatus='Selected',sourceid_3=vm.vmIdPK)
+                final=EmployeeReqMapping(resumeURL=vm.resumeURL, req_id=salesReq,name=vm.candidateName,eskills=vm.skillset,  added_date=today,source='VM',empstatus='shortlisted',sourceid_3=vm.vmIdPK)
                 final.save()
     return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
