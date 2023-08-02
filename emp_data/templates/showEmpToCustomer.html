@@ -34,7 +34,7 @@
             <tr>
                 <td>{{forloop.counter}}</td>
                 <td>{{values.name}}
-                    <a href="{{value.resumeURL}}" target="_blank"><i class="fa-regular fa-eye"></i></a>
+                    <a href="{{values.resumeURL}}" target="_blank"><i class="fa-regular fa-eye"></i></a>
                 </td>
                 <td>
                     <p class="btn-sm" data-toggle="modal" data-target="#hist{{values.pk}}">
@@ -62,7 +62,8 @@
                                 <div class="modal-body">
                                     <div class="container-fluid">
                                         <!--<form action="/addCommentToEmployeedReqTable/{{req_id}}/{{values.source}}/{{values.sourceId}}" method="POST">-->
-                                        <form action="/addCommentToEmpReqSelect/{{values.pk}}/{{reqIdPK}}" method="POST">
+                                        <form action="/addCommentToEmpReqSelect/{{values.pk}}/{{reqIdPK}}"
+                                            method="POST">
                                             {% csrf_token %}
                                             <div class="form-group">
                                                 <label for="remark_text">Edit remarks:</label>
@@ -79,7 +80,7 @@
                 </td>
                 <td>
                     {{values.source}}
-                </td>                
+                </td>
                 <td>
                     {{values.empstatus}}
                 </td>
@@ -169,9 +170,36 @@
                     <!--Delete button-->
                     <button class="btn-danger btn-sm"
                         onclick="location.href='/deleteAppliedCandidates/{{values.source}}/{{values.name}}/{{reqIdPK}}'">
-
                         <i class="fa-solid fa-trash"></i>
                     </button>
+                    <!--Add resume to mapped employees-->
+                    <button class=" btn-sm" data-toggle="modal" data-target="#modalupload{{values.pk}}"><i
+                            class="fa-solid fa-plus"></i></button>
+                    <div class="modal" id="modalupload{{values.pk}}" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                        <div class=" modal-dialog modal-sm" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    Upload Resume for : {{values.name}}
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form action="/addResumeToMappedEmployees/{{values.pk}}/{{reqIdPK}}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="resumeURL">
+                                                <input type="url" name="resumeURL" id="resumeURL"
+                                                    placeholder="Upload Resume link">
+                                            </label>
+                                            <input type="submit" value="Upload Resume">
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </td>
             </tr>
             {% endfor %}
