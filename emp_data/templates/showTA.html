@@ -18,7 +18,7 @@
     <div class="d-inline-block">
         <span class="btn">
             Dept
-            <select class="btn" name="department" id="department">
+            <select class="btn" name="department" id="department" style="border-radius: 30px;">
                 <option value="{{department}}" selected hidden disabled>{{department}}</option>
                 {% for val in departments %}
                 <option value="{{val}}">{{val}}</option>
@@ -54,14 +54,14 @@
         </span>
         <span style="margin-left: 10;">
             <button class="go-btn" style="border-radius: 30px;" type="submit"
-                onclick="location.href='/showTa'">Refresh</button>
+                onclick="location.href='/showTa/Choose/Choose/Choose'">Refresh</button>
         </span>
         <script>
             function getLink() {
                 var buhead = document.querySelector("#buhead").value;
                 var department = document.querySelector("#department").value;
                 var archivestatus = document.querySelector("#archivestatus").value;
-                var url = '/filterTa/'
+                var url = '/showTa/'
                     + encodeURIComponent(department) +
                     '/'
                     + encodeURIComponent(buhead) +
@@ -108,8 +108,7 @@
             <th>BUH</th>
             <th>Remarks</th>
             <th>Owner</th>
-            <th>Status</th>
-            <th>Resume link</th>
+            <th>Status</th>            
             <th>Actions</th>
         </tr>
     </thead>
@@ -117,7 +116,9 @@
         {% for value in ta_instance %}
         <tr>
             <td>{{value.archived}}</td>
-            <td>{{value.name}}</td>
+            <td>{{value.name}}
+                <a href="{{value.resume}}" target="_blank"><i class="fa-regular fa-eye"></i></a>
+            </td>
             <td>{{value.experience}}</td>
             <td>{{value.education}}</td>
             <td>{{value.skillset}}</td>
@@ -167,7 +168,7 @@
             <td>{{value.status}}</td>
 
             <!-- Model upload for resume -->
-            <td>
+            <!--<td>
                 <button class=" btn-sm" data-toggle="modal" data-target="#modalupload{{value.ta_id}}"><i
                         class="fa-solid fa-plus"></i></button>
                 <div class="modal" id="modalupload{{value.ta_id}}" tabindex="-1" role="dialog"
@@ -198,7 +199,7 @@
                 <button class="button-sm">
                     <a href="{{value.resume}}"><i class="fa-solid fa-eye"></i></a>
                 </button>
-            </td>
+            </td>-->
 
 
             <td>
@@ -360,7 +361,7 @@
                             </div>
                             <div class="modal-body">
                                 <div class="container-fluid">
-                                    <form action="updateTaDetails/{{value.ta_id}}" method="POST">
+                                    <form action="/updateTaDetails/{{value.ta_id}}" method="POST">
                                         {% csrf_token %}
                                         <div class="form-group">
                                             <label for="name">Name</label>
@@ -489,7 +490,7 @@
                                             <label for="phone_number">Phone Number</label>
                                             <br>
                                             <input type="number" name="phone_number" id="phone_number"
-                                                class="form-control" placeholder=" {{value.phone_number}}">
+                                                class="form-control" value="{{value.phone_number}}">
                                         </div>
                                         <div class="form-group">
                                             <label for="email">Email</label>

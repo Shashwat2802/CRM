@@ -112,6 +112,7 @@ class EmployeeReqMapping(models.Model):
     sourceid_2=models.CharField(max_length=10,null=True)
     sourceid_3=models.IntegerField(default=0)
     history = models.TextField(default="")
+    resumeURL = models.CharField(max_length=1000,null=True)
 
     class Meta:
         db_table = "employeereqmapping"
