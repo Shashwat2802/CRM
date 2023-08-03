@@ -25,7 +25,7 @@
             Sales
             <select class="btn" name="saleslist" id="sales">
                 <option value="{{sales_select}}" selected hidden disabled>{{sales_select}}</option>
-                {% for val in SalesIncharge %}
+                {% for val in SalesTeam %}
                 <option value="{{val.eFname}}">{{val.eFname}}</option>
                 {% endfor %}
                 <option value="All">All</option>
@@ -35,7 +35,7 @@
             BUH
             <select name="buhead" id="buhead" class="btn" style="border-radius: 30px;">
                 <option value="{{bu_select}}" selected disabled hidden>{{bu_select}}</option>
-                {% for val in bu_head %}
+                {% for val in buList %}
                 <option value="{{val.eFname}}">{{val.eFname}}</option>
                 {% endfor %}
                 <option value="All">All</option>
