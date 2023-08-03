@@ -18,15 +18,17 @@
         </select>
       </div>
       <div class="form-group">
-        <label for="CustReqId">Requirement ID:</label>
-        <input
-          type="text"
-          class="form-control"
-          id="CustReqId"
-          name="CustReqId"
-          placeholder="enter customer Requirement id"
-        />
-      </div>
+        <label for="Requirement ID" 
+        class="was-validated">Req ID:</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="CustReqId" 
+          name="CustReqId" required
+          placeholder="Requirement ID"/>
+            <div class="invalid-feedback">Please fill out this field</div>
+          
+          </div>
       <div class="form-group">
         <label for="ReqDate">Req Date:</label>
         <input
@@ -48,15 +50,16 @@
         />
       </div>
       <div class="form-group">
-        <label for="jobTitle">Job Title:</label>
-        <input
-          type="text"
-          class="form-control"
-          id="jobTitle"
-          name="jobTitle"
-          placeholder="Enter skills"
-        />
-      </div>
+        <label for="Jobtitle" 
+        class="was-validated">Job Title:</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="jobtitle" 
+          name="jobtitle" required
+          placeholder="Enter Skills">
+            <div class="invalid-feedback">Please fill out this field.</div>
+
       <div class="form-group">
         <label for="JD">Job Description:</label>
         <textarea
@@ -168,15 +171,18 @@
       </div>
 
       <div class="form-group">
-        <label for="history">Remarks</label>
+        <label for="history"
+        class="was-validated">Remarks</label>
         <textarea
           id="history"
-          style="width: 500px; height: 150px"
+          style="width: 500px; height: 130px"
           class="form-control"
+          id="remarks"
           name="history"
-          placeholder="Enter Remarks"
-        ></textarea>
-      </div>
+          placeholder="Enter Remarks">
+        </textarea>
+          <div class="invalid-feedback">Please fill out this field.
+          </div>
 
 
       <script>
@@ -194,7 +200,7 @@
         }
       </script>
 
-      <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>
 </div>
