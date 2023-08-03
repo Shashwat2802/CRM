@@ -202,7 +202,7 @@
                         <label for="Manager">Update Manager</label>
                         <select name="Manager" id="Manager">
                           <option value="{{ employee.Manager }}" selected>{{ employee.Manager }}</option>
-                          {% for val in managers %}
+                          {% for val in managerList %}
                           <option value="{{val}}">{{val}}</option>
                           {% endfor %}
                         </select>

@@ -266,12 +266,14 @@ def listEmployeeFiltered(request,department,buh,manager):
     print("Employee list",employees)
     departments =getDepartmentList()
     buhList= getBUHList()
+    rolelist=getRoleList()
+    customerlist=getCustomerList()
 
     managerList=getManagers()
     current_user = request.user.username  
     current_emp = Employee.objects.get(eFname__icontains=current_user,isDeleted=False)     
-    return render(request, "showemp.html", {'employees':employees,"department":department,"buh":buh,
-                                             "manager":manager,"current_emp":current_emp,
+    return render(request, "showemp.html", {'employees':employees,"department":department,"buh":buh,'customerlist':customerlist,
+                                             "manager":manager,"current_emp":current_emp,'rolelist':rolelist,
                                               'departments':departments,'BUHList':buhList,'managerList':managerList}) 
 
 
