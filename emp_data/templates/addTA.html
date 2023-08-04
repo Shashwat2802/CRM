@@ -5,9 +5,11 @@
     <form action="/addTa" method="POST">
         {% csrf_token %}
         <div class="form-group">
-            <label for="ta_id">TA ID</label>
+            <label for="ta_id"
+            class="was-validated">TA ID</label>
             <br>
-            <input type="text" name="ta_id" id="ta_id" class="form-control" placeholder="TA ID">
+            <input type="text" name="ta_id" id="ta_id" class="form-control" required placeholder="TA ID">
+            <div class="invalid-feedback">Please fill out this field</div>
         </div>
         <div class="form-group">
             <label for="archived">Archived:</label>
@@ -23,9 +25,11 @@
             <input type="date" name="date" id="date" class="form-control" placeholder="Add Date">
         </div>
         <div class="form-group">
-            <label for="name">Name</label>
+            <label for="name"
+            class="was-validated">Name</label>
             <br>
-            <input type="text" name="name" id="name" class="form-control" placeholder="Name">
+            <input type="text" name="name" id="name" class="form-control" required placeholder="Name">
+            <div class="invalid-feedback">Please fill out this field</div>
         </div>
         <div class="form-group">
             <label for="department">Department</label>
@@ -156,14 +160,18 @@
             </select>
           </div>
           <div class="form-group">
-            <label for="resume">Resume URL</label>
+            <label for="resume"
+               class="was-validated">Resume URL</label>
             <br>
-            <input type="text" name="resume" id="resume" class="form-control" placeholder=" Resume url">
+            <input type="text" name="resume" id="resume" class="form-control" required placeholder=" Resume url">
+            <div class="invalid-feedback">Please fill out this field</div>
         </div>
         <div class="form-group">
-            <label for="remarks">Remarks</label>
+            <label for="remarks"
+               class="was-validated">Remarks</label>
             <br>
-            <input type="text" name="remarks" id="remarks" class="form-control" placeholder=" Remarks">
+            <input type="text" name="remarks" id="remarks" class="form-control" required placeholder=" Remarks">
+            <div class="invalid-feedback">Please fill out this field</div>
         </div>
        
         <br>

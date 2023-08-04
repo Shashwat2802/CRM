@@ -922,6 +922,11 @@ def bulkUploadEmployee(request):
             if data[14]==True:
                 isManager=True 
 
+            isDeleted=False
+            print('BUH',data[16])
+            if data[16]==True:
+                isDeleted=True
+
             value = Employee(
                 data[0],
                 data[1],
@@ -939,6 +944,7 @@ def bulkUploadEmployee(request):
                 data[13],
                 isManager,
                 data[15],
+                isDeleted,
 
 
                 )

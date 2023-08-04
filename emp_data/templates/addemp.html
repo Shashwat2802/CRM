@@ -11,34 +11,37 @@
       {% csrf_token %}
 
       <div class="form-group">
-        <label for="e_id">Employee Id</label>
-        <input
-          type="text"
-          class="form-control"
-          id="e_id"
-          name="e_id"
-          placeholder="Enter Employee ID"
-        />
-      </div>
+        <label for="Employee Id" 
+        class="was-validated">Employee Id:</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="e_Id" 
+          name="e_Id" required
+          placeholder="Employee Id"/>
+            <div class="invalid-feedback">Please fill out this field</div>
+        </div>
       <div class="form-group">
-        <label for="eFname">First Name:</label>
+        <label for="eFname"
+          class="was-validated">First Name:</label>
         <input
           type="text"
           class="form-control"
           id="eFname"
-          name="eFname"
-          placeholder="Enter First Name"
-        />
+          name="eFname" required
+          placeholder="Enter First Name"/>
+          <div class="invalid-feedback">Please fill out this field</div>
       </div>
       <div class="form-group">
-        <label for="eLname">Last Name:</label>
+        <label for="eLname"
+           class="was-validated">Last Name:</label>
         <input
           type="text"
           class="form-control"
           id="eLname"
-          name="eLname"
-          placeholder="enter Last name"
-        />
+          name="eLname" required
+          placeholder="enter Last name"/>
+          <div class="invalid-feedback">Please fill out this field</div>
       </div>
       <div class="form-group">
         <label for="refer_Customer">Select Customer</label>
@@ -77,14 +80,15 @@
       </div>
 
       <div class="form-group">
-        <label for="eEmail">Email:</label>
+        <label for="eEmail"
+          class="was-validated">Email:</label>
         <input
           type="eEmail"
           class="form-control"
           id="eEmail"
-          name="eEmail"
-          placeholder="enter email"
-        />
+          name="eEmail" required
+          placeholder="enter email"/>
+          <div class="invalid-feedback">Please fill out this field</div>
       </div>
       <div class="form-group">
         <label for="ePhone">Phone Number:</label>
@@ -152,6 +156,8 @@
           placeholder="enter customer deployed date"
         />
       </div>
+      {{ form.IsManager }} {# This field will be rendered as a hidden input #}
+        {{ form.IsDeleted }}{# This field will be rendered as a hidden input #}
 
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
