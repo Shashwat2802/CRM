@@ -182,6 +182,8 @@ def updateSaleReqs(request,reqIdPK):
 def listCustomers(request):
     if not request.user.is_authenticated:
         return redirect('home')
+    
+    print("****User permissions****",request.user.role, request.user.emp_id)
     companies = Customer.objects.all()
     return render(request, "show.html", {'companies':companies})
 

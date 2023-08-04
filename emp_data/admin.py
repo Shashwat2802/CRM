@@ -1,8 +1,15 @@
 from import_export.admin import ImportExportModelAdmin 
 from django.contrib import admin
 from emp_data import models
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from .models import CustomUser
 
 admin.site.register(models.UploadFile)
+
+@admin.register(models.CustomUser)
+class CustomUserAdmin(ImportExportModelAdmin):
+    list_display = ['username', 'email', 'role', 'emp_id','user_permissions']
 
 @admin.register(models.Customer)
 class CustomerAdmin(ImportExportModelAdmin):
@@ -61,6 +68,10 @@ class VmResourceAdmin(ImportExportModelAdmin):
 
 admin.site.register(models.Role)
 admin.site.register(models.Department)
+
+
+
+# admin.site.register(CustomUser, CustomUserAdmin)
 
 
 

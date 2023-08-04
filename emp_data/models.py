@@ -1,6 +1,15 @@
 from django.db import models
 from datetime import datetime
 
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+class CustomUser(AbstractUser):
+    role = models.CharField(max_length=100, default='user')
+    emp_id = models.CharField(max_length=100, default='LS111')
+    user_permissions=models.IntegerField(default=0xFFFFFFFFFFF)
+
+
 class Customer(models.Model):
     cName = models.CharField(max_length=50,primary_key=True)
     cEmail = models.EmailField(null=True)
