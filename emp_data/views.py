@@ -1,26 +1,24 @@
-import csv
-from ctypes import wstring_at
-from io import TextIOWrapper
-from pkgutil import get_data
-import queue
-import quopri
-from emp_data.admin import EmployeeReqMappingAdmin
+
 from django.shortcuts import render,redirect,get_object_or_404
 from emp_data.models import Customer,Employee,Customer_Requirements,EmployeeReqMapping
-from .resources import EmployeeResource
 from emp_data.forms import CustomerForm,EmployeeForm, loginForm,UploadFileForm,Customer_RequirementForm,TA_Form, VmCandidateForm
 from django.contrib import messages
 from django.contrib.auth.models import auth
 from emp_data.models import *
 from tablib import Dataset
 from .models import Customer
-from django.template import loader
-import xlwt
 from django.http import HttpResponse
 from django.db.models import Q
 from datetime import date
-from django.db.models import Func, F
+
+from django.contrib import messages
 from django.http import JsonResponse
+
+def get_messages_json(request):
+    message_list = [str(message) for message in messages.get_messages(request)]
+    print("Error message",message_list)
+    return JsonResponse({'messages': message_list})
+
 
 def loginCheck(request):
     if request.method == 'POST':
@@ -45,7 +43,14 @@ def home(request):
 
 # To add Customer
 
+
 def addCustomer(request):
+    if request.user.role != 'HR':
+        messages.error(request, 'Error, Access denied')
+        return redirect("/home")
+
+
+
     if request.method == "POST":
 
         form = CustomerForm(request.POST)
@@ -265,7 +270,6 @@ def listEmployeeFiltered(request,department,buh,manager):
 
     print("FIlter COndition",filter_conditions,department,buh,manager)
     employees=  Employee.objects.filter(**filter_conditions,isDeleted=False)
-    print("Employee list",employees)
     departments =getDepartmentList()
     buhList= getBUHList()
     rolelist=getRoleList()
@@ -740,12 +744,10 @@ def mapEmpToReq(request,reqIdPK,choice):
         print("Req",salesReq, salesReq.buHead)
         if choice=='bench':
              selectedEmpList = request.POST.getlist('empId')
-             print("employee list",selectedEmpList)
              for i in selectedEmpList:
                 emp=Employee.objects.get(e_id=i,isDeleted=False)
                 emp.estatus='ScreeningPending'
                 emp.save()
-                print("Employee status updated",emp)
                 final=EmployeeReqMapping(req_id=salesReq,name=emp.eFname + " " +emp.eLname,eskills=emp.eskills,  added_date=today,source='BENCH',sourceid_1=emp.e_id,empstatus='shortlisted',resumeURL='None')
                 final.save()
         if choice=='TA':
