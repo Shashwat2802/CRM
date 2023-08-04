@@ -1029,6 +1029,7 @@ def salesDataUpload(request):
                 data[17], 
                 data[18], 
                 data[19], 
+                data[20], 
        
 
                 )

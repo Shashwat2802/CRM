@@ -74,7 +74,7 @@ class EmpExperienceHistory(models.Model):
 
 class Customer_Requirements(models.Model):
 # ReqDate	Customer	CustomeRequirmentID	JobTitle	JobDescription	RequiredSkills	MinExp	MaxExp	OpenPositions	filled	lapsed	Remaining 	Status	ReqClosedDate	SalesIncharge	BuHead	Remarks	priority	FullFillment	ACtiveSubmissionCount	ActiveResumeList
-
+    reqIdPK = models.AutoField(primary_key=True)
     ReqDate=models.DateField()
     customers = models.ForeignKey(Customer, on_delete = models.CASCADE)
     CustReqId = models.CharField(max_length=100,null=True)
@@ -97,7 +97,6 @@ class Customer_Requirements(models.Model):
     fulfillThru = models.CharField(max_length=10,default='BENCH')
     ActiveSubmissionCount = models.IntegerField(default=0)
 # ActiveResumeList  == This is only for Excel sheet 
-    reqIdPK = models.AutoField(primary_key=True)
 
 
     class Meta:
