@@ -32,6 +32,15 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import CustomUser
 from .forms import UserPermissionForm
 
+from django.shortcuts import render
+from .models import CustomUser
+
+def userAccounts(request):
+    users = CustomUser.objects.all()
+    context = {'users': users}
+    return render(request, 'user_account_manage.html', context)
+
+
 def int_to_binary(n):
     return bin(n)[2:]  # [2:] is used to remove the '0b' prefix
 
