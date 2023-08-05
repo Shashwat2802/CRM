@@ -96,9 +96,9 @@ def home(request):
 
 def addCustomer(request):
     print("Permission Check", request.user.user_permissions, PERM_CUSTOMER_ADD)
-    if not checkPermission(request.user.user_permissions,PERM_CUSTOMER_ADD):
-        messages.error(request, 'Sorry , You are NOT authoursied to do this action')
-        return redirect("/home")
+    if not request.user.check_permission(f'customUser.{PERM_CUSTOMER_ADD}'):
+        messages.error(request, 'Sorry, You are NOT authorized to do this action')
+        return redirect("/home")       
 
 
 

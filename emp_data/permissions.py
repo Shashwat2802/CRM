@@ -2,26 +2,51 @@
     ## in binary 111111111111111111111111111111111111111111111111111111111111111
 FILENAME = 'customUser'
 
-PERMISSION_ITEMS = [
-    (0, 'Employee View'),
-    (1, 'Employee Add'),
-    (2, 'Employee Edit'),
-    (3, 'Employee Delete'),
-    (4, 'Sales View'),
-    (5, 'Sales Add'),
-    (6, 'Sales Edit'),
-    (7, 'Sales Delete'),
-    (8, 'VM View'),
-    (9, 'VM Add'),
-    (10, 'VM Edit'),
-    (11, 'VM Delete'),
-    (12, 'TA View'),
-    (13, 'TA Add'),
-    (14, 'TA Edit'),
-    (15, 'TA Delete'),
-    (16, 'Customer View'),
-    (17, 'Customer Add'),
-    (18, 'Customer Edit'),
-    (19, 'Customer Delete'),
-]
+PERM_EMPLOYEE_VIEW = 0
+PERM_EMPLOYEE_ADD = 1
+PERM_EMPLOYEE_EDIT = 2
+PERM_EMPLOYEE_DELETE = 3
 
+PERM_SALES_VIEW = 4
+PERM_SALES_ADD = 5
+PERM_SALES_EDIT = 6
+PERM_SALES_DELETE = 7
+
+PERM_VM_VIEW = 8
+PERM_VM_ADD = 9
+PERM_VM_EDIT = 10
+PERM_VM_DELETE = 11
+
+PERM_TA_VIEW = 12
+PERM_TA_ADD = 13
+PERM_TA_EDIT = 14
+PERM_TA_DELETE = 15
+
+PERM_CUSTOMER_VIEW = 16
+PERM_CUSTOMER_ADD = 17
+PERM_CUSTOMER_EDIT = 18
+PERM_CUSTOMER_DELETE = 19
+
+
+PERMISSION_ITEMS = [
+    (PERM_EMPLOYEE_VIEW, 'Employee View'),
+    (PERM_EMPLOYEE_ADD, 'Employee Add'),
+    (PERM_EMPLOYEE_EDIT, 'Employee Edit'),
+    (PERM_EMPLOYEE_DELETE, 'Employee Delete'),
+    (PERM_SALES_VIEW, 'Sales View'),
+    (PERM_SALES_ADD, 'Sales Add'),
+    (PERM_SALES_EDIT, 'Sales Edit'),
+    (PERM_SALES_DELETE, 'Sales Delete'),
+    (PERM_VM_VIEW, 'VM View'),
+    (PERM_VM_ADD, 'VM Add'),
+    (PERM_VM_EDIT, 'VM Edit'),
+    (PERM_VM_DELETE, 'VM Delete'),
+    (PERM_TA_VIEW, 'TA View'),
+    (PERM_TA_ADD, 'TA Add'),
+    (PERM_TA_EDIT, 'TA Edit'),
+    (PERM_TA_DELETE, 'TA Delete'),
+    (PERM_CUSTOMER_VIEW, 'Customer View'),
+    (PERM_CUSTOMER_ADD, 'Customer Add'),
+    (PERM_CUSTOMER_EDIT, 'Customer Edit'),
+    (PERM_CUSTOMER_DELETE, 'Customer Delete'),
+]
