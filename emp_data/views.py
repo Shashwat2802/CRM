@@ -14,7 +14,9 @@ from datetime import date
 from django.contrib import messages
 from django.http import JsonResponse
 
-def get_messages_json(request):
+from .permissions import *
+
+def getMessagesJson(request):
     message_list = [str(message) for message in messages.get_messages(request)]
     print("Error message",message_list)
     return JsonResponse({'messages': message_list})
@@ -45,8 +47,9 @@ def home(request):
 
 
 def addCustomer(request):
-    if request.user.role != 'HR':
-        messages.error(request, 'Error, Access denied')
+    print("Permission Check", request.user.user_permissions, PERM_CUSTOMER_ADD)
+    if not checkPermission(request.user.user_permissions,PERM_CUSTOMER_ADD):
+        messages.error(request, 'Sorry , You are NOT authoursied to do this action')
         return redirect("/home")
 
 

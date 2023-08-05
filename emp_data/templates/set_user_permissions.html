@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Set User Permissions</title>
+</head>
+<body>
+    <h1>Set User Permissions</h1>
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>Permission Item</th>
+                <th>Has Permission?</th>
+            </tr>
+            {% for permission_item, permission_name in permission_items %}
+            <tr>
+                <td>{{ permission_name }}</td>
+                <td><input type="checkbox" name="permissions" value="{{ permission_item }}" {% if user_permission.has_permission(permission_item) %}checked{% endif %}></td>
+            </tr>
+            {% endfor %}
+        </table>
+        <button type="submit">Save Permissions</button>
+    </form>
+</body>
+</html>

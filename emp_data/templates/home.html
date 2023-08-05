@@ -27,7 +27,7 @@
 <body>
   <script>
     $(document).ready(function () {
-      $.getJSON('/get_messages_json/', function (data) {
+      $.getJSON('/getMessagesJson/', function (data) {
         var messages = data.messages;
         console.log("Inside model",data)
         if (messages.length > 0) {

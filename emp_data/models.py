@@ -7,7 +7,9 @@ from django.db import models
 class CustomUser(AbstractUser):
     role = models.CharField(max_length=100, default='user')
     emp_id = models.CharField(max_length=100, default='LS111')
-    user_permissions=models.IntegerField(default=0xFFFFFFFFFFF)
+    user_permissions=models.BigIntegerField(default=0x7FFFFFFFFFFFFFFF)
+    # Maximum Value 7FFFFFFFFFFFFFFF ==> 9223372036854775807
+    ## in binary 111111111111111111111111111111111111111111111111111111111111111
 
 
 class Customer(models.Model):

@@ -35,7 +35,7 @@ urlpatterns = [
              
     path('admin/', admin.site.urls),
     
-    path('get_messages_json/', get_messages_json, name='get_messages_json'),
+    path('getMessagesJson/', getMessagesJson, name='getMessagesJson'),
 
     path("bulkUploadEmployee",views.bulkUploadEmployee),
     path("customerDataUpload",views.customerDataUpload),
