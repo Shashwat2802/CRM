@@ -14,12 +14,60 @@ from datetime import date
 from django.contrib import messages
 from django.http import JsonResponse
 
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import UserPermissionForm
+
 from .permissions import *
+
+
+from .models import CustomUser
+from .forms import UserPermissionForm
+
+# view.py
+
+# view.py
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import CustomUser
+from .forms import UserPermissionForm
+
+def int_to_binary(n):
+    return bin(n)[2:]  # [2:] is used to remove the '0b' prefix
+
+def edit_user_permissions(request, user_id):
+    user = get_object_or_404(CustomUser, emp_id=user_id)
+
+    if request.method == 'POST':
+        form = UserPermissionForm(request.POST, instance=user)
+        if form.is_valid():
+            user_permissions = 0  # Initialize user permissions
+            for permission_item, _ in user.PERMISSION_ITEMS:
+                if form.cleaned_data.get(permission_item):
+                    user_permissions = user.grant_permission(permission_item)
+                else:
+                    user_permissions = user.revoke_permission(permission_item)
+            user.user_permissions = user_permissions  # Update user_permissions value
+            print("****User Value:", user.user_permissions,int_to_binary(user.user_permissions) )
+            user.save()
+            return redirect('home')  # Redirect to user list or other page
+    else:
+        form = UserPermissionForm(instance=user)
+
+    context = {
+        'user': user,
+        'form': form,
+    }
+    return render(request, 'edit_user_permissions.html', context)
+
+    
+
 
 def getMessagesJson(request):
     message_list = [str(message) for message in messages.get_messages(request)]
     print("Error message",message_list)
     return JsonResponse({'messages': message_list})
+
 
 
 def loginCheck(request):

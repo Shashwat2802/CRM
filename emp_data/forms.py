@@ -1,5 +1,5 @@
 from django import forms
-from emp_data.models import Employee
+from emp_data.models import CustomUser, Employee
 from emp_data.models import Customer
 from emp_data.models import Login
 
@@ -7,6 +7,7 @@ from emp_data.models import Customer_Requirements
 from emp_data.models import EmployeeReqMapping
 from emp_data.models import TA_Resource
 from emp_data.models import VmResource
+
 # This is for employee
 class EmployeeForm(forms.ModelForm):
     class Meta:
@@ -58,3 +59,26 @@ class VmCandidateForm(forms.ModelForm):
     class Meta: 
         model = VmResource
         fields = "__all__"
+
+
+
+
+# forms.py
+
+from django import forms
+from .models import CustomUser
+
+class UserPermissionForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = []
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        for permission_item, permission_name in CustomUser.PERMISSION_ITEMS:
+            self.fields[permission_item] = forms.BooleanField(
+                required=False,
+                initial=self.instance.check_permission(permission_item),
+                label=permission_name
+            )

@@ -4,13 +4,45 @@ from datetime import datetime
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from .permissions import FILENAME, PERMISSION_ITEMS
+
 class CustomUser(AbstractUser):
     role = models.CharField(max_length=100, default='user')
     emp_id = models.CharField(max_length=100, default='LS111')
-    user_permissions=models.BigIntegerField(default=0x7FFFFFFFFFFFFFFF)
-    # Maximum Value 7FFFFFFFFFFFFFFF ==> 9223372036854775807
-    ## in binary 111111111111111111111111111111111111111111111111111111111111111
+    user_permissions = models.BigIntegerField(default=0x7FFFFFFFFFFFFFFF)
 
+    PERMISSION_ITEMS = [
+        (f'customUser.{item[0]}', item[1]) for item in PERMISSION_ITEMS
+    ]
+
+    def check_permission(self, permission_item):
+        if permission_item not in dict(self.PERMISSION_ITEMS):
+            raise ValueError("Invalid permission item")
+
+        permission_index = next(index for index, item in enumerate(self.PERMISSION_ITEMS) if item[0] == permission_item)
+        permission_mask = 1 << permission_index
+        return (self.user_permissions & permission_mask) != 0
+
+    def grant_permission(self, permission_item):
+        if permission_item not in dict(self.PERMISSION_ITEMS):
+            raise ValueError("Invalid permission item")
+        
+        permission_index = next(index for index, item in enumerate(self.PERMISSION_ITEMS) if item[0] == permission_item)
+        permission_mask = 1 << permission_index
+        updated_permissions = self.user_permissions | permission_mask
+        self.user_permissions = updated_permissions
+        return updated_permissions  
+
+    def revoke_permission(self, permission_item):
+        if permission_item not in dict(self.PERMISSION_ITEMS):
+            raise ValueError("Invalid permission item")
+
+        permission_index = next(index for index, item in enumerate(self.PERMISSION_ITEMS) if item[0] == permission_item)
+        permission_mask = 1 << permission_index
+        complement_mask = ~permission_mask
+        updated_permissions = self.user_permissions & complement_mask
+        self.user_permissions = updated_permissions
+        return updated_permissions
 
 class Customer(models.Model):
     cName = models.CharField(max_length=50,primary_key=True)
