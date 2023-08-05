@@ -1,26 +1,74 @@
-import csv
-from ctypes import wstring_at
-from io import TextIOWrapper
-from pkgutil import get_data
-import queue
-import quopri
-from emp_data.admin import EmployeeReqMappingAdmin
+
 from django.shortcuts import render,redirect,get_object_or_404
 from emp_data.models import Customer,Employee,Customer_Requirements,EmployeeReqMapping
-from .resources import EmployeeResource
 from emp_data.forms import CustomerForm,EmployeeForm, loginForm,UploadFileForm,Customer_RequirementForm,TA_Form, VmCandidateForm
 from django.contrib import messages
 from django.contrib.auth.models import auth
 from emp_data.models import *
 from tablib import Dataset
 from .models import Customer
-from django.template import loader
-import xlwt
 from django.http import HttpResponse
 from django.db.models import Q
 from datetime import date
-from django.db.models import Func, F
+
+from django.contrib import messages
 from django.http import JsonResponse
+
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import UserPermissionForm
+
+from .permissions import *
+
+
+from .models import CustomUser
+from .forms import UserPermissionForm
+
+# view.py
+
+# view.py
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import CustomUser
+from .forms import UserPermissionForm
+
+def int_to_binary(n):
+    return bin(n)[2:]  # [2:] is used to remove the '0b' prefix
+
+def edit_user_permissions(request, user_id):
+    user = get_object_or_404(CustomUser, emp_id=user_id)
+
+    if request.method == 'POST':
+        form = UserPermissionForm(request.POST, instance=user)
+        if form.is_valid():
+            user_permissions = 0  # Initialize user permissions
+            for permission_item, _ in user.PERMISSION_ITEMS:
+                if form.cleaned_data.get(permission_item):
+                    user_permissions = user.grant_permission(permission_item)
+                else:
+                    user_permissions = user.revoke_permission(permission_item)
+            user.user_permissions = user_permissions  # Update user_permissions value
+            print("****User Value:", user.user_permissions,int_to_binary(user.user_permissions) )
+            user.save()
+            return redirect('home')  # Redirect to user list or other page
+    else:
+        form = UserPermissionForm(instance=user)
+
+    context = {
+        'user': user,
+        'form': form,
+    }
+    return render(request, 'edit_user_permissions.html', context)
+
+    
+
+
+def getMessagesJson(request):
+    message_list = [str(message) for message in messages.get_messages(request)]
+    print("Error message",message_list)
+    return JsonResponse({'messages': message_list})
+
+
 
 def loginCheck(request):
     if request.method == 'POST':
@@ -45,7 +93,15 @@ def home(request):
 
 # To add Customer
 
+
 def addCustomer(request):
+    print("Permission Check", request.user.user_permissions, PERM_CUSTOMER_ADD)
+    if not request.user.check_permission(f'customUser.{PERM_CUSTOMER_ADD}'):
+        messages.error(request, 'Sorry, You are NOT authorized to do this action')
+        return redirect("/home")       
+
+
+
     if request.method == "POST":
 
         form = CustomerForm(request.POST)
@@ -182,6 +238,8 @@ def updateSaleReqs(request,reqIdPK):
 def listCustomers(request):
     if not request.user.is_authenticated:
         return redirect('home')
+    
+    print("****User permissions****",request.user.role, request.user.emp_id)
     companies = Customer.objects.all()
     return render(request, "show.html", {'companies':companies})
 
@@ -263,7 +321,6 @@ def listEmployeeFiltered(request,department,buh,manager):
 
     print("FIlter COndition",filter_conditions,department,buh,manager)
     employees=  Employee.objects.filter(**filter_conditions,isDeleted=False)
-    print("Employee list",employees)
     departments =getDepartmentList()
     buhList= getBUHList()
     rolelist=getRoleList()
@@ -738,12 +795,10 @@ def mapEmpToReq(request,reqIdPK,choice):
         print("Req",salesReq, salesReq.buHead)
         if choice=='bench':
              selectedEmpList = request.POST.getlist('empId')
-             print("employee list",selectedEmpList)
              for i in selectedEmpList:
                 emp=Employee.objects.get(e_id=i,isDeleted=False)
                 emp.estatus='ScreeningPending'
                 emp.save()
-                print("Employee status updated",emp)
                 final=EmployeeReqMapping(req_id=salesReq,name=emp.eFname + " " +emp.eLname,eskills=emp.eskills,  added_date=today,source='BENCH',sourceid_1=emp.e_id,empstatus='shortlisted',resumeURL='None')
                 final.save()
         if choice=='TA':
@@ -1027,6 +1082,7 @@ def salesDataUpload(request):
                 data[17], 
                 data[18], 
                 data[19], 
+                data[20], 
        
 
                 )

@@ -31,8 +31,13 @@ admin.site.index_title = "Welcome to LeadSoc Technologies PVT LTD."
 
 
     
-urlpatterns = [        
+urlpatterns = [   
+             
     path('admin/', admin.site.urls),
+    path('edit_user_permissions/<str:user_id>/', views.edit_user_permissions, name='edit_user_permissions'),
+
+    path('getMessagesJson/', getMessagesJson, name='getMessagesJson'),
+
     path("bulkUploadEmployee",views.bulkUploadEmployee),
     path("customerDataUpload",views.customerDataUpload),
     path('salesDataUpload',views.salesDataUpload),
