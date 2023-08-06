@@ -1,11 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>User List</title>
-</head>
+{% extends 'basic.html' %}
+{% block extra %}
+{% load custom_filters %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+{% endblock %}
+
+{% block body %}
+<center>
+    <div>
+        <h2 class="bg-info text-white">User Login Accounts</h2>
+    </div>
+</center>
 <body>
-    <h1>User List</h1>
-    <table>
+<table class="table table-bordered table-hover" id="taTable" name="taTable">
         <tr>
             <th>Username</th>
             <th>Role</th>
@@ -18,11 +28,15 @@
             <td>{{ user.role }}</td>
             <td>{{ user.emp_id }}</td>
             <td>
-            <a class="dropdown-item" onclick="location.href='/edit_user_permissions/{{user.emp_id}}'">Change permissions</a>
-
+            <p  onclick="location.href='/edit_user_permissions/{{user.emp_id}}'">
+                    {% for permission in user.enabled_permissions %}
+                        <spann>{{ permission }},</spann>
+                    {% endfor %}
+                </p>
             </td>
         </tr>
         {% endfor %}
     </table>
 </body>
-</html>
+
+    {% endblock %}

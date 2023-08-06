@@ -37,6 +37,10 @@ from .models import CustomUser
 
 def userAccounts(request):
     users = CustomUser.objects.all()
+        # Preprocess enabled permissions for each user
+    for user in users:
+        enabled_permissions = [permission_item[1] for permission_item in user.PERMISSION_ITEMS if user.check_permission(permission_item[0])]
+        user.enabled_permissions = enabled_permissions
     context = {'users': users}
     return render(request, 'user_account_manage.html', context)
 
