@@ -20,6 +20,11 @@
             <td>
             <a class="dropdown-item" onclick="location.href='/edit_user_permissions/{{user.emp_id}}'">Change permissions</a>
 
+            <p style="width: 50%;">
+                    {% for permission in user.enabled_permissions %}
+                        <spann>{{ permission }},</spann>
+                    {% endfor %}
+                </p>
             </td>
         </tr>
         {% endfor %}
