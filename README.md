@@ -52,7 +52,9 @@ source /home/ec2-user/venv/bin/activate
 
 sudo yum install python3 python3-pip python3-devel gcc
 python3 -m venv venv
-source venv/bin/activate
+source ../venv/bin/activate
+
+
 python -m pip install --upgrade pip
 pip install django-admin
 pip install pip-tools
