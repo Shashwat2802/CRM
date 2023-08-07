@@ -27,8 +27,7 @@
           name="CustReqId" required
           placeholder="Requirement ID"/>
             <div class="invalid-feedback">Please fill out this field</div>
-          
-          </div>
+        </div>
       <div class="form-group">
         <label for="ReqDate">Req Date:</label>
         <input
@@ -40,14 +39,15 @@
         />
       </div>
       <div class="form-group">
-        <label for="RequiredSkills">Required Skills:</label>
+        <label for="RequiredSkills"
+           class="was-validated">Required Skills:</label>
         <input
           type="text"
           class="form-control"
           id="RequiredSkills"
-          name="RequiredSkills"
-          placeholder="Enter skills"
-        />
+          name="RequiredSkills" required
+          placeholder="Enter skills"/>
+          <div class="invalid-feedback">Please fill out this field</div>
       </div>
       <div class="form-group">
         <label for="Jobtitle" 
