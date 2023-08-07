@@ -15,8 +15,10 @@
         </div>
 
         <div class="form-group">
-            <label for="vendorName">Vendor Name</label>
-            <input type="text" id="vendorName" name="vendorName" class="form-control" />
+            <label for="vendorName"
+            class="was-validated">Vendor Name</label>
+            <input type="text" id="vendorName" name="vendorName" required placeholder="Enter Vendor Name" class="form-control" />
+            <div class="invalid-feedback">Please fill out this field</div>
         </div>
         <div class="form-group">
             <label for="resumeSource">Availability</label>
@@ -26,42 +28,46 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="candidateName">Candidate Name:</label>
-            <input type="text" id="candidateName" name="candidateName" class="form-control" />
+            <label for="candidateName"
+               class="was-validated">Candidate Name:</label>
+            <input type="text" id="candidateName" name="candidateName" required placeholder="Enter Candidate name" class="form-control" />
+            <div class="invalid-feedback">Please fill out this field</div>
         </div>
         <div class="form-group">
             <label for="skillset">Skillset</label>
-            <input type="text" id="skillset" name="skillset" class="form-control" />
+            <input type="text" id="skillset" name="skillset" placeholder="Enter Skillset" class="form-control" />
         </div>
         <div class="form-group">
             <label for="experience">Experience</label>
-            <input type="number" id="experience" name="experience" class="form-control" step="any" />
+            <input type="number" id="experience" name="experience" placeholder="Enter Experience" class="form-control" step="any" />
         </div>
         <div class="form-group">
             <label for="education">Education</label>
-            <input type="text" id="education" name="education" class="form-control" />
+            <input type="text" id="education" name="education" placeholder="Enter Education" class="form-control" />
         </div>
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" class="form-control" />
+            <input type="email" id="email" name="email" placeholder="Enter email id" class="form-control" />
         </div>
         <div class="form-group">
             <label for="mobile">Phone </label>
-            <input type="number" id="mobile" name="mobile" class="form-control" />
+            <input type="number" id="mobile" name="mobile" placeholder="Enter mobile number"  class="form-control" />
         </div>
 
         <div class="form-group">
-            <label for="resume">Resume URL</label>
-            <input type="text" id="resumeURL" name="resumeURL" class="form-control" />
+            <label for="resume"
+               class="was-validated">Resume URL</label>
+            <input type="text" id="resumeURL" name="resumeURL" required placeholder="Enter Resume URL" class="form-control" />
+            <div class="invalid-feedback">Please fill out this field</div>
         </div>
         <div class="form-group">
             <label for="billingRate">Billing Rate</label>
-            <input type="number" id="billingRate" name="billingRate" class="form-control" step="any" />
+            <input type="number" id="billingRate" name="billingRate" placeholder="Enter Billing rate" class="form-control" step="any" />
         </div>
 
         <div class="form-group">
             <label for="location">Location</label>
-            <input type="text" id="location" name="location" class="form-control" />
+            <input type="text" id="location" name="location" placeholder="Enter Location" class="form-control" />
         </div>
         <div class="form-group">
             <label for="noticePeriod">Notice Period</label>
@@ -119,8 +125,10 @@
         </div>
 
         <div class="form-group">
-            <label for="remarks">Remarks</label>
-            <input type="text" id="remarks" name="remarks" class="form-control" step="any" />
+            <label for="remarks"
+               class="was-validated">Remarks</label>
+            <input type="text" id="remarks" name="remarks" required placeholder="Enter Remarks" class="form-control" step="any" />
+            <div class="invalid-feedback">Please fill out this field</div>
         </div>
         <button type="submit" class="btn btn-info">Add Details</button><br /><br /><br />
     </form>

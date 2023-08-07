@@ -10,6 +10,9 @@ from emp_data.models import VmResource
 
 # This is for employee
 class EmployeeForm(forms.ModelForm):
+    # This will make the field not mandatory for Form Valid
+    IsManager = forms.BooleanField(widget=forms.HiddenInput())
+    IsDeleted = forms.BooleanField(widget=forms.HiddenInput())
     class Meta:
         model = Employee
         fields = "__all__"

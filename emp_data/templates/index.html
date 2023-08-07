@@ -8,17 +8,22 @@
       
 
       <div class="form-group">
-        <label for="cName">Customer Name:</label>
-        <input type="text" class="form-control" id="cName" name="cName" placeholder="Enter Customer name">
-
+        <label for="cName"
+        class="was-validated">Customer Name:</label>
+        <input type="text" class="form-control" id="cName" name="cName" required placeholder="Enter Customer name">
+        <div class="invalid-feedback">Please fill out this field</div>
       </div>
       <div class="form-group">
-        <label for="cEmail">Customer Email:</label>
-        <input type="text" class="form-control" id="cEmail" name="cEmail" placeholder="Enter Customer email">
+        <label for="cEmail"
+        clas="was-validated">Customer Email:</label>
+        <input type="text" class="form-control" id="cEmail" name="cEmail" required placeholder="Enter Customer email">
+        <div class="invalid-feedback">Please fill out this field</div>
       </div>
       <div class="form-group">
-        <label for="cUrl">Customer Website:</label>
-        <input type="text" class="form-control" id="cUrl" name="cUrl" placeholder="Enter Customer url">
+        <label for="cUrl"
+        class="was-validated">Customer Website:</label>
+        <input type="text" class="form-control" id="cUrl" name="cUrl" required placeholder="Enter Customer url">
+        <div class="invalid-feedback">Please fill out this field</div>
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
