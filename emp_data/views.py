@@ -85,7 +85,22 @@ def getMessagesJson(request):
     print("Error message",message_list)
     return JsonResponse({'messages': message_list})
 
-
+def addUser(request,e_id):
+    if not request.user.is_authenticated:
+        return redirect('home')
+    
+    user_list =list(map(lambda x:x.emp_id ,CustomUser.objects.all()))    
+    employees = Employee.objects.get(pk=e_id)    
+    if employees.e_id not in user_list:    
+        add_user = CustomUser(
+            username = employees.eFname + employees.eLname,
+            role = employees.eRole,
+            emp_id = employees.e_id            
+        )
+        add_user.save()
+        return redirect('/userAccounts')
+    else:
+        return HttpResponse("Sorry, This Employee already exists...!")        
 
 def loginCheck(request):
     if request.method == 'POST':
