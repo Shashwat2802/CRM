@@ -43,6 +43,36 @@ To run the project
 5. python manage.py runserver
 6. copy generated IP Adress and paste into the browser, output will be visible. 
 
+nohup python manage.py runserver 0.0.0.0:8000 &
+gunicorn emp_data.wsgi:application --bind 0.0.0.0:8000
+
+source /home/ec2-user/venv/bin/activate
+
+# How to create requiremnet.txt
+
+sudo yum install python3 python3-pip python3-devel gcc
+python3 -m venv venv
+source venv/bin/activate
+python -m pip install --upgrade pip
+pip install django-admin
+pip install pip-tools
+pip install django-import_export
+pip install django-bootstrap-v5
+pip install pymysql
+pip install pandas
+pip install gunicorn
+pip freeze > requirements.txt
+pip install -r requirements.txt
+gunicorn management.wsgi:application --bind 0.0.0.0:8000
+
+<!-- Note : here wsgi.py is inside management folder. Thats why management.wsgi:application is given -->
+
+# Set up nginx
+sudo yum install nginx
+
+# new learnings for deployment
+
+
 
 
 # To remove all entries in a table
