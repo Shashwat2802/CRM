@@ -96,7 +96,7 @@
       <td>{{ val.archivalStatus }}</td>
       <td>
         {{ val.candidateName }}
-        {% if val.resumeURL and val.resumeURL != 'None' %}
+        {% if val.resumeURL != 'None' %}
         <a href="{{ val.resumeURL }}" target="_blank"> <i class="fa-regular fa-eye"></i></a>
         {% endif %}
       </td>
