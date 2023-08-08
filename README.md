@@ -50,22 +50,9 @@ source /home/ec2-user/venv/bin/activate
 
 # How to create requiremnet.txt
 
-sudo yum install python3 python3-pip python3-devel gcc
-python3 -m venv venv
-source ../venv/bin/activate
 
 
-python -m pip install --upgrade pip
-pip install django-admin
-pip install pip-tools
-pip install django-import_export
-pip install django-bootstrap-v5
-pip install pymysql
-pip install pandas
-pip install gunicorn
-pip freeze > requirements.txt
-pip install -r requirements.txt
-gunicorn management.wsgi:application --bind 0.0.0.0:8000
+
 
 <!-- Note : here wsgi.py is inside management folder. Thats why management.wsgi:application is given -->
 
@@ -116,6 +103,31 @@ git push origin --delete <branch-name>
 
 
 .......
+
+AWS Deployment
+==============
+
+sudo yum install python3 python3-pip python3-devel gcc
+python3 -m venv venv
+source ../venv/bin/activate
+
+
+python -m pip install --upgrade pip
+pip install django-admin
+pip install pip-tools
+pip install django-import_export
+pip install django-bootstrap-v5
+pip install pymysql
+pip install pandas
+pip install gunicorn
+pip install whitenoise
+
+pip freeze > requirements.txt
+pip install -r requirements.txt
+python manage.py collectstatic
+
+gunicorn management.wsgi:application --bind 0.0.0.0:8000  --workers 4 --threads 2
+
 
 
 
