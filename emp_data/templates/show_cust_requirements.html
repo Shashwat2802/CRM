@@ -52,6 +52,30 @@
                 <option value="All">All</option>
             </select>
         </span>
+
+        <span style="margin-left: 30;" class="btn">
+            Priority
+            <select name="priority_select" id="priority_select" class="btn" style="border-radius: 30px;">
+                <option value="{{priority_select}}" selected disabled hidden>{{priority_select}}</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="All">All</option>
+            </select>
+        </span>
+
+        <span style="margin-left: 30;" class="btn">
+            FullFilment
+            <select name="fulfillThru" id="fulfillThru" class="btn" style="border-radius: 30px;">
+                <option value={{fulfillThru_select}} selected disabled hidden>{{fulfillThru_select}}</option>
+                <option value=BENCH>BENCH</option>
+                <option value=TA>TA</option>
+                <option value=VM>VM</option>
+                <option value="All">ANY</option>
+            </select>
+        </span>
+
+
         <span style="margin-left: 30;">
             <button class="go-btn" style="border-radius: 30px;" type="submit"
                 onClick="window.location.href = getLink()">Search</button>
@@ -59,7 +83,7 @@
         </span>
         <span style="margin-left: 10;">
             <button class="go-btn" style="border-radius: 30px;" type="submit"
-                onclick="location.href='/listSalesReqsFiltered/Choose/Choose/Choose'">Refresh</button>
+                onclick="location.href='/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose'">Refresh</button>
         </span>
 
     </div>
@@ -69,7 +93,10 @@
         var buhead = document.querySelector("#buhead").value;
         var salesincharge = document.querySelector("#sales").value;
         var status = document.querySelector("#status").value;
-        var url = '/listSalesReqsFiltered/' + encodeURIComponent(buhead) + '/' + encodeURIComponent(salesincharge) + '/' + encodeURIComponent(status);
+        var priority = document.querySelector("#priority_select").value;
+        var fulfillThru = document.querySelector("#fulfillThru").value;
+        var url = '/listSalesReqsFiltered/' + encodeURIComponent(buhead) + '/' + encodeURIComponent(salesincharge) + '/' + encodeURIComponent(status) + '/' + encodeURIComponent(priority) + '/' + encodeURIComponent(fulfillThru);
+        console.log("URL ",url)
         return url;
     }
 </script>
@@ -185,14 +212,14 @@
                 <td>{{val.reqStatus}}</td>
                 <td>{{val.SalesIncharge}}</td>
                 <td>{{val.buHead}}</td>
-                  <td>{{val.fulfillThru}}</td>
+                <td>{{val.fulfillThru}}</td>
                 <!-- Button trigger modal -->
                 <td>
                     <button type="button" class="btn-info btn-sm"
                         onclick="location.href='/mappedEmployeeToCustomer/{{val.reqIdPK}}'">
                         <i class="fa-regular fa-eye"></i>
                     </button>
-       
+
                     <button class="btn-success btn-sm" data-toggle="modal" data-target="#modalForm{{val.reqIdPK}}"><i
                             class="fa-solid fa-pen-to-square"></i></button>
                     <!-- Modal form -->

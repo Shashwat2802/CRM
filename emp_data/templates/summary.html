@@ -1,27 +1,23 @@
-{% extends 'basic.html' %}
-{% block extra %}
-Summary of customers
-{% endblock%}
+{% extends 'basic.html' %} {% block extra %} Summary of Active Customer Requirements {% endblock%}
 {% block body %}
 <div class="container-fluid">
-    <table class="table table-bordered table-hover" id="example">
+  <table class="table table-bordered table-hover" id="example">
     <thead>
-        <th></th>
-        {% for val in bulist %}
-        <th>{{val}}</th>
-        {% endfor %}
-        <th>Total Customers</th>
+      <th></th>
+      {% for val in bulist %}
+      <th>{{val}}</th>
+      {% endfor %}
+      <th>Total Customers</th>
     </thead>
     <tbody>
-            {% for values in final %}
-            <tr>
-            {% for val in values %}
-            <td>{{val}}</td>
-            {% endfor %}
-        </tr>
-            {% endfor %}
-        
+      {% for values in final %}
+      <tr>
+        {% for val in values %}
+        <td>{{val}}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
     </tbody>
-</table>  
+  </table>
 </div>
 {% endblock %}
