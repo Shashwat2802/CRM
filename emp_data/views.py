@@ -468,19 +468,16 @@ def salesSummary(request):
     if not request.user.check_permission(f'customUser.{PERM_SALES_SUMMARY}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home") 
-    first=getBUHList()
-    second=getSalesTeam()
-    saleslist=[]
-    bulist=[]
-    for val in first:
-        bulist.append(val.eFname)
-    for val in second:
-        saleslist.append(val.eFname)
+
     final=[]
+
+    bulist=list(map(lambda x:x.eFname ,getBUHList()))
+    saleslist=list(map(lambda x:x.eFname ,getSalesTeam()))
+
     for val in saleslist:
         firstarray=[]
         for newval in bulist:
-            customercount=len(Customer_Requirements.objects.filter(buHead=str(newval),SalesIncharge=str(val)))
+            customercount=len(Customer_Requirements.objects.filter(buHead=str(newval),SalesIncharge=str(val),reqStatus='Active'))
             firstarray.append(customercount)
         firstarray.append(sum(firstarray))
         firstarray.insert(0,val)
