@@ -75,6 +75,7 @@ git rm -r --cached path/to/folder/
 git rm --cached path/to/file.ext
 
 # To Delete branch from Git repo
+git branch -r
 git push origin --delete <branch-name>
 
 
