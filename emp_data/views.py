@@ -19,7 +19,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import UserPermissionForm
 
 from .permissions import *
-
+from .authentication import unauthenticated_user
 
 from .models import CustomUser
 from .forms import UserPermissionForm
@@ -27,7 +27,7 @@ from .forms import UserPermissionForm
 # view.py
 
 # view.py
-
+from django.core.exceptions import MultipleObjectsReturned
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import CustomUser
 from .forms import UserPermissionForm
@@ -35,6 +35,7 @@ from .forms import UserPermissionForm
 from django.shortcuts import render
 from .models import CustomUser
 
+@unauthenticated_user
 def userAccounts(request):
     users = CustomUser.objects.all()
         # Preprocess enabled permissions for each user
@@ -48,7 +49,7 @@ def userAccounts(request):
 def int_to_binary(n):
     return bin(n)[2:]  # [2:] is used to remove the '0b' prefix
 
-from django.core.exceptions import MultipleObjectsReturned
+@unauthenticated_user
 def edit_user_permissions(request, user_id):
     try:
         user = get_object_or_404(CustomUser, emp_id=user_id)
@@ -77,18 +78,18 @@ def edit_user_permissions(request, user_id):
     }
     return render(request, 'edit_user_permissions.html', context)
 
-    
-
-
+@unauthenticated_user
 def getMessagesJson(request):
     message_list = [str(message) for message in messages.get_messages(request)]
     print("Error message",message_list)
     return JsonResponse({'messages': message_list})
 
+@unauthenticated_user
 def addUser(request,e_id):
-    if not request.user.is_authenticated:
-        return redirect('home')
-    
+    if not request.user.check_permission(f'customUser.{PERM_USER_ADD}'):
+        messages.error(request, 'Sorry, You are NOT authorized to do this action')
+        return redirect("/home") 
+
     user_list =list(map(lambda x:x.emp_id ,CustomUser.objects.all()))    
     employees = Employee.objects.get(pk=e_id)    
     if employees.e_id not in user_list:    
@@ -102,6 +103,7 @@ def addUser(request,e_id):
     else:
         return HttpResponse("Sorry, This Employee already exists...!")        
 
+@unauthenticated_user
 def loginCheck(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -120,12 +122,13 @@ def loginCheck(request):
 
 
 #Home page
+@unauthenticated_user
 def home(request):
     return render(request,"home.html")
 
 # To add Customer
 
-
+@unauthenticated_user
 def addCustomer(request):
     print("Permission Check", request.user.user_permissions, PERM_CUSTOMER_ADD)
     if not request.user.check_permission(f'customUser.{PERM_CUSTOMER_ADD}'):
@@ -146,7 +149,7 @@ def addCustomer(request):
         form = CustomerForm()
     return render(request, "index.html", {'form':form})
 
-
+@unauthenticated_user
 def addEmployee(request):
     if not request.user.check_permission(f'customUser.{PERM_EMPLOYEE_ADD}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
@@ -172,8 +175,11 @@ def addEmployee(request):
         managerList=getManagers()
         return render(request, 'addemp.html',{'departments':departments,'customerList': customerList,'rolelist':rolelist,'status':['Free','Deployed','Support Team'],"buhList":buhList,"managerList":managerList})
 
-
+@unauthenticated_user
 def addEmployeeExperience(request, e_id):
+    if not request.user.check_permission(f'customUser.{PERM_EMPLOYEE_ADD_EXPERIENCE}'):
+        messages.error(request, 'Sorry, You are NOT authorized to do this action')
+        return redirect("/home")
      
     if request.method == 'POST':
         c_name = request.POST.get('refer_customer')
@@ -185,7 +191,7 @@ def addEmployeeExperience(request, e_id):
     else:
         return HttpResponse("Error")
    
-
+@unauthenticated_user
 def deleteEmployeeExperience(request, exp_id): 
     if not request.user.check_permission(f'customUser.{PERM_EMPLOYEE_EXPERIENCE_DELETE}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
@@ -195,7 +201,7 @@ def deleteEmployeeExperience(request, exp_id):
     exp_instance.delete()
     return redirect('/listEmployeeFiltered/All/All/All')
 
-
+@unauthenticated_user
 def addSalesReqs(request):
     if not request.user.check_permission(f'customUser.{PERM_SALES_ADD}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
@@ -287,10 +293,8 @@ def updateSaleReqs(request,reqIdPK):
     model_instance.save()
     return redirect('/listSalesReqsFiltered/Choose/Choose/Choose')  
         
-
-def listCustomers(request):
-    if not request.user.is_authenticated:
-        return redirect('home')
+@unauthenticated_user
+def listCustomers(request):    
     if not request.user.check_permission(f'customUser.{PERM_CUSTOMER_VIEW}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home")  
@@ -300,9 +304,8 @@ def listCustomers(request):
     return render(request, "show.html", {'companies':companies})
 
 # To Update Customer
-def updateCustomers(request, cName):
-    if not request.user.is_authenticated:
-        return redirect('home')
+@unauthenticated_user
+def updateCustomers(request, cName):    
     customer = get_object_or_404(Customer,pk=cName)
     form = CustomerForm(request.POST or None, instance= customer)
     if form.is_valid():
@@ -314,9 +317,8 @@ def updateCustomers(request, cName):
     # return render(request, "edit.html", {'customer': customer})
 
 # To Delete Customer details
-def deleteCustomer(request, cName):
-    if not request.user.is_authenticated:
-        return redirect('home')
+@unauthenticated_user
+def deleteCustomer(request, cName):    
     if not request.user.check_permission(f'customUser.{PERM_CUSTOMER_DELETE}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home")  
@@ -339,11 +341,8 @@ def getSalesTeam():
 def getBUHList():
     return Employee.objects.filter(eRole='BUH',isDeleted=False)
 
-
-def filteredSaleReqs(request,bu,sales,st):
-
-    if not request.user.is_authenticated:
-        return redirect('home')
+@unauthenticated_user
+def filteredSaleReqs(request,bu,sales,st):    
     if not request.user.check_permission(f'customUser.{PERM_SALES_VIEW}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home")  
@@ -368,9 +367,8 @@ def filteredSaleReqs(request,bu,sales,st):
                                                         'SalesTeam': SalesTeam, 'buList': buList, 
                                                         'current_user':current_user,'bu_select': bu, "sales_select": sales, 'status_select': st})
 
-def listEmployeeFiltered(request,department,buh,manager):
-    if not request.user.is_authenticated:
-        return redirect('home')
+@unauthenticated_user
+def listEmployeeFiltered(request,department,buh,manager):    
     if not request.user.check_permission(f'customUser.{PERM_EMPLOYEE_VIEW}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home")  
@@ -399,10 +397,8 @@ def listEmployeeFiltered(request,department,buh,manager):
                                              "manager":manager,"current_emp":current_emp,'rolelist':rolelist,
                                               'departments':departments,'BUHList':buhList,'managerList':managerList}) 
 
-
-def getEmployeeExperiances(request, employee_id):
-    if not request.user.is_authenticated:
-        return redirect('home')
+@unauthenticated_user
+def getEmployeeExperiances(request, employee_id):   
     
     print("Emp id from model", employee_id)
     employee=  Employee.objects.get(e_id=employee_id,isDeleted=False)
@@ -412,6 +408,7 @@ def getEmployeeExperiances(request, employee_id):
     print("emp exp Data in view",context)
     return render(request, "empExpModal.html", context) 
 
+@unauthenticated_user
 def addSalesReqComment(request, reqIdPK):
     if request.method == 'POST':
         current_user = request.user.username.title()
@@ -423,6 +420,7 @@ def addSalesReqComment(request, reqIdPK):
         salesReq.save()
         return redirect('/listSalesReqsFiltered/Choose/Choose/Choose')
 
+@unauthenticated_user
 def addCommentsToVmCandidate(request, reqIdPK):
     if request.method == 'POST':
         current_user = request.user.username.title()
@@ -433,7 +431,8 @@ def addCommentsToVmCandidate(request, reqIdPK):
         vmCandidate.remarks=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+vmCandidate.remarks
         vmCandidate.save()
         return redirect('/showVm/Choose/Choose/Choose')  
-    
+
+@unauthenticated_user    
 def addCommentsToTaCandidate(request, ta_id):
     if request.method == 'POST':
         current_user = request.user.username.title()
@@ -445,7 +444,7 @@ def addCommentsToTaCandidate(request, ta_id):
         ta_commet.save()
         return redirect('/showTa/Choose/Choose/Choose')
         
-
+@unauthenticated_user
 def cust_req_dropdown(request, ref): 
     if ref[:1] == 'P':
         cust = Customer_Requirements.objects.get(pk=ref[2:3])
@@ -464,7 +463,7 @@ def cust_req_dropdown(request, ref):
     cust.save()
     return redirect('/listSalesReqsFiltered/Choose/Choose/Choose')
     
-
+@unauthenticated_user
 def salesSummary(request):
     if not request.user.check_permission(f'customUser.{PERM_SALES_SUMMARY}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
@@ -492,7 +491,7 @@ def salesSummary(request):
              'length':length}
     return render(request,'summary.html',context)
 
-
+@unauthenticated_user
 def addCommentToEmpReqSelect(request,pk,reqIdPK):
     if request.method == 'POST':
         current_user = request.user.username.title()
@@ -504,10 +503,9 @@ def addCommentToEmpReqSelect(request,pk,reqIdPK):
         mapping.history=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+mapping.history
         mapping.save()
         return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
-    
-def addResumeToMappedEmployees(request,pk,reqIdPK):
-    if not request.user.is_authenticated:
-        return redirect('home')
+
+@unauthenticated_user    
+def addResumeToMappedEmployees(request,pk,reqIdPK):   
     addEmployeeReqMappingResume=EmployeeReqMapping.objects.get(pk=pk)
     if request.method=='POST':
         link=request.POST.get('resumeURL')
@@ -518,6 +516,7 @@ def addResumeToMappedEmployees(request,pk,reqIdPK):
 def getOwnerList():
     return Employee.objects.filter((Q(eRole='TA_HEAD')|Q(eRole='TA_STAFF')|Q(eRole='VM_STAFF')),isDeleted=False)
 
+@unauthenticated_user
 def addTa(request):
     if not request.user.check_permission(f'customUser.{PERM_TA_ADD}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
@@ -537,6 +536,7 @@ def addTa(request):
         return render(request,'addTA.html',{'BUList':BUList,'ownerList':ownerList,
                                             'status':['Select','Active','Closed'],'departments':departments})
 
+@unauthenticated_user
 def showTa(request,department,buhead,archivestatus):
     if not request.user.check_permission(f'customUser.{PERM_TA_VIEW}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
@@ -563,14 +563,14 @@ def deleteTa(request,phone_number):
     instance.delete()
     return redirect('/showTa/Choose/Choose/Choose')
 
-
+@unauthenticated_user
 def JD(request):
     job_desc = Customer_Requirements.objects.values('JD')
     return render(request,"JD.html",{'job_desc':job_desc})
 
 
 
-
+@unauthenticated_user
 def freeFromAllSource(request,reqIdPK):
     if not request.user.check_permission(f'customUser.{PERM_SALES_BENCH_EMP_VIEW}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
@@ -590,10 +590,8 @@ def freeFromAllSource(request,reqIdPK):
             form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='ScreeningPending')),eskills__icontains= skills,isDeleted=False).exclude(eFname__in=fnamelist,eLname__in=lnamelist)
     return render(request,'show_candidate.html',{'form':form ,'reqIdPK':reqIdPK})
 
-def checkbox(request):
-    if not request.user.is_authenticated:
-        return redirect('home')
-    
+@unauthenticated_user
+def checkbox(request):    
     if request.method == 'POST':
         if request.POST.getlist('checks'):
             
@@ -611,9 +609,8 @@ def checkbox(request):
 
 
 #show added employe to customer
-def mappedEmployeeToCustomer(request,reqIdPK):  
-    if not request.user.is_authenticated:
-        return redirect('home')
+@unauthenticated_user
+def mappedEmployeeToCustomer(request,reqIdPK):      
     if not request.user.check_permission(f'customUser.{PERM_SALES_MAPPED_EMP_TO_CUSTOMER}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home") 
@@ -624,7 +621,7 @@ def mappedEmployeeToCustomer(request,reqIdPK):
     })
 
 
-
+@unauthenticated_user
 def selection_status(request,estatus,reqIdPK,pk): 
     model_instance = EmployeeReqMapping.objects.get(pk=pk)
     #model_instance = EmployeeReqMapping.objects.get(req=req_id)
@@ -666,6 +663,7 @@ def selection_status(request,estatus,reqIdPK,pk):
     return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
 # To display all the VM candidates 
+@unauthenticated_user
 def showVm(request,buh,dept,status):
     if not request.user.check_permission(f'customUser.{PERM_VM_VIEW}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
@@ -687,8 +685,6 @@ def showVm(request,buh,dept,status):
     ownerList = list(map(lambda x:x.eFname,getOwnerList()))  
     departments =getDepartmentList()
     buhList= getBUHList()
-
-
     return render(request, 
                   "show_vm_candidates.html",
                      {"candidate_list":all_vm_candidates,
@@ -696,6 +692,7 @@ def showVm(request,buh,dept,status):
                         "dept_select":dept,"bu_select":buh,"status_select":status})
 
 # Form to add only one VM candidate 
+@unauthenticated_user
 def addVm(request):
     if not request.user.check_permission(f'customUser.{PERM_VM_ADD}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
@@ -716,6 +713,7 @@ def addVm(request):
         return render(request, "add_vm_candidates.html",{'ownerList':ownerList,'bulist':BUList,"departments":departments})
 
 # To upload data containing VM candidates
+@unauthenticated_user
 def vmDataUpload(request): 
     if not request.user.check_permission(f'customUser.{PERM_VM_UPLOAD}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
@@ -769,10 +767,8 @@ def vmDataUpload(request):
         return redirect("/showVm/Choose/Choose/Choose")
     return render(request, "upload_vm_candidates.html")
 
-
-def updateVmCandidate(request, vmIdPK): 
-    if not request.user.is_authenticated:
-        return redirect('home')
+@unauthenticated_user
+def updateVmCandidate(request, vmIdPK):    
     if not request.user.check_permission(f'customUser.{PERM_VM_EDIT}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home") 
@@ -810,6 +806,7 @@ def updateVmCandidate(request, vmIdPK):
         vmResource.save()
         return redirect('/showVm/Choose/Choose/Choose')
 
+@unauthenticated_user
 def showTaList(request,reqIdPK):
     if not request.user.check_permission(f'customUser.{PERM_SALES_TA_RESOURCE}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
@@ -825,6 +822,7 @@ def showTaList(request,reqIdPK):
     
     return render(request,'selected_ta_list.html',{'form':form,"reqIdPK":reqIdPK})
 
+@unauthenticated_user
 def showVmList(request,reqIdPK):
     if not request.user.check_permission(f'customUser.{PERM_SALES_VM_RESOURCE}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
@@ -838,6 +836,7 @@ def showVmList(request,reqIdPK):
             form=VmResource.objects.filter(skillset__icontains=skills).exclude(resumeStatus='Deployed')
     return render(request,'selected_vm_list.html',{'form':form,'reqIdPK':reqIdPK})
 
+@unauthenticated_user
 def updateTaDetails(request,ta_id):
     if not request.user.check_permission(f'customUser.{PERM_TA_EDIT}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
@@ -876,6 +875,7 @@ def updateTaDetails(request,ta_id):
 
     return redirect("/showTa/Choose/Choose/Choose")
 
+@unauthenticated_user
 def addTaResume(request,ta_id):
     ta_instance=TA_Resource.objects.get(pk=ta_id)
     if request.method=='POST':
@@ -884,6 +884,7 @@ def addTaResume(request,ta_id):
         ta_instance.save()
     return redirect ('/showTa/Choose/Choose/Choose')
 
+@unauthenticated_user
 def mapEmpToReq(request,reqIdPK,choice):
     if not request.user.check_permission(f'customUser.{PERM_CUSTOMER_ADD}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
@@ -922,6 +923,7 @@ def mapEmpToReq(request,reqIdPK,choice):
     return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
 #dropdown customer names
+@unauthenticated_user
 def dropDownCustomer(request):
     if request.method == "POST":
         if request.POST.get('cName'):
@@ -933,17 +935,15 @@ def dropDownCustomer(request):
         
         else:
             return render(request,'mappedEmployeeToCustomer')
-        
+
+@unauthenticated_user        
 def showDropDown(request):
     display_cust = EmployeeReqMapping.objects.all()
-
     return render(request,'showEmpToCustomer.html',{'display_cust':display_cust})
 
-
+@unauthenticated_user
 def deleteAppliedCandidates(request,source,namearg,reqIdPK):   
-    req=Customer_Requirements.objects.get(pk=reqIdPK)
-    if not request.user.is_authenticated:
-        return redirect('home') 
+    req=Customer_Requirements.objects.get(pk=reqIdPK)    
     if not request.user.check_permission(f'customUser.{PERM_SALES_MAPPED_EMP_DELETE}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home") 
@@ -980,9 +980,8 @@ def deleteAppliedCandidates(request,source,namearg,reqIdPK):
     return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
 # To delete employee details
-def deleteLeadSocEmployee(request, e_id):
-    if not request.user.is_authenticated:
-        return redirect('home')
+@unauthenticated_user
+def deleteLeadSocEmployee(request, e_id):    
     if not request.user.check_permission(f'customUser.{PERM_EMPLOYEE_DELETE}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home") 
@@ -994,9 +993,8 @@ def deleteLeadSocEmployee(request, e_id):
 
 
 # To update employee details
-def updateLeadSocEmployee(request, e_id):
-    if not request.user.is_authenticated:
-        return redirect('home')
+@unauthenticated_user
+def updateLeadSocEmployee(request, e_id):   
     if not request.user.check_permission(f'customUser.{PERM_EMPLOYEE_EDIT}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home") 
@@ -1016,10 +1014,8 @@ def updateLeadSocEmployee(request, e_id):
 
     return redirect("/listEmployeeFiltered/All/All/All")
 
-        
-def save_emp_details(request): 
-    if not request.user.is_authenticated:
-        return redirect('home')
+@unauthenticated_user        
+def save_emp_details(request):     
     if not request.user.check_permission(f'customUser.{PERM_CUSTOMER_ADD}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home") 
@@ -1038,9 +1034,8 @@ def save_emp_details(request):
 
 
 # this is working upload employee data to model
-def bulkUploadEmployee(request):
-    if not request.user.is_authenticated:
-        return redirect('home')
+@unauthenticated_user
+def bulkUploadEmployee(request):   
     if not request.user.check_permission(f'customUser.{PERM_EMPLOYEE_UPLOAD}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home")  
@@ -1114,8 +1109,7 @@ def bulkUploadEmployee(request):
                 data[13],
                 isManager,
                 data[15],
-                isDeleted,
-
+                isDeleted                
 
                 )
             value.save()
@@ -1125,10 +1119,8 @@ def bulkUploadEmployee(request):
     return render(request,'upload.html')
 
 # upload customer data to model
-def customerDataUpload(request):
-    if not request.user.is_authenticated:
-        return redirect('home')
-    
+@unauthenticated_user
+def customerDataUpload(request):    
     if not request.user.check_permission(f'customUser.{PERM_CUSTOMER_UPLOAD}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home")  
@@ -1157,9 +1149,8 @@ def customerDataUpload(request):
     return render(request,'upload.html')
 
 # upload customer requirement data the model
-def salesDataUpload(request):
-    if not request.user.is_authenticated:
-        return redirect('home')
+@unauthenticated_user
+def salesDataUpload(request):    
     if not request.user.check_permission(f'customUser.{PERM_SALES_UPLOAD}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home")     
@@ -1220,9 +1211,8 @@ def salesDataUpload(request):
     return render(request,'customer_requirement_data.html')
 
 #TA Upload Excel File Option
-def taDataUpload(request):
-    if not request.user.is_authenticated:
-        return redirect('home')
+@unauthenticated_user
+def taDataUpload(request):    
     if not request.user.check_permission(f'customUser.{PERM_TA_UPLOAD}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home") 

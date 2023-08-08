@@ -61,31 +61,7 @@ sudo yum install nginx
 
 # new learnings for deployment
 
-# Starting services on AWS
-sudo nano /etc/systemd/system/crm.service
-content below
-====================
-[Unit]
-Description=gunicorn daemon for Your Project Name
-After=network.target
 
-[Service]
-User=ec2-user  # Replace with your username
-Group=ec2-user    # Replace with your user's group
-WorkingDirectory=/home/ec2-user/CRM1.0
-ExecStart=/home/ec2-user/venv/bin/gunicorn management.wsgi:application --bind 0.0.0.0:8000
-
-[Install]
-WantedBy=multi-user.target
-=======================
-
-
-# Commands to start service
-sudo systemctl daemon-reload
-sudo systemctl start crm
-sudo systemctl stop crm
-sudo systemctl enable crm
-sudo systemctl status crm
 
 
 
@@ -99,6 +75,7 @@ git rm -r --cached path/to/folder/
 git rm --cached path/to/file.ext
 
 # To Delete branch from Git repo
+git branch -r
 git push origin --delete <branch-name>
 
 
@@ -126,9 +103,39 @@ pip freeze > requirements.txt
 pip install -r requirements.txt
 python manage.py collectstatic
 
+python manage.py makemigrations emp_data
+
+python manage.py migrate
+
+python manage.py createsuperuser
+
 gunicorn management.wsgi:application --bind 0.0.0.0:8000  --workers 4 --threads 2
 
+# Starting services on AWS
+sudo vi /etc/systemd/system/crm.service
+content below
+====================
+[Unit]
+Description=Start my Project
+After=network.target
 
+[Service]
+User=ec2-user  
+Group=ec2-user    
+WorkingDirectory=/home/ec2-user/CRM1.0
+ExecStart=/home/ec2-user/venv/bin/gunicorn management.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 2
+
+[Install]
+WantedBy=multi-user.target
+=======================
+
+
+# Commands to start service
+sudo systemctl daemon-reload
+sudo systemctl start crm
+sudo systemctl stop crm
+sudo systemctl enable crm
+sudo systemctl status crm
 
 
 
