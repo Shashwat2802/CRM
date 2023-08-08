@@ -43,6 +43,8 @@ urlpatterns = [
     path("customerDataUpload",views.customerDataUpload),
     path('salesDataUpload',views.salesDataUpload),
     path("home",views.home),
+    path('addUser/<str:e_id>',views.addUser),
+    #path('account_dropdown_view',views.account_dropdown_view),
     
    # customer requirements details
     path('listSalesReqsFiltered/<str:bu>/<str:sales>/<str:st>',views.filteredSaleReqs),
