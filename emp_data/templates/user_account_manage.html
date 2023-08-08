@@ -14,8 +14,9 @@
         <h2 class="bg-info text-white">User Login Accounts</h2>
     </div>
 </center>
+
 <body>
-<table class="table table-bordered table-hover" id="taTable" name="taTable">
+    <table class="table table-bordered table-hover" id="taTable" name="taTable">
         <tr>
             <th>Username</th>
             <th>Role</th>
@@ -28,9 +29,9 @@
             <td>{{ user.role }}</td>
             <td>{{ user.emp_id }}</td>
             <td>
-            <p  onclick="location.href='/edit_user_permissions/{{user.emp_id}}'">
+                <p onclick="location.href='/edit_user_permissions/{{user.emp_id}}'">
                     {% for permission in user.enabled_permissions %}
-                        <spann>{{ permission }},</spann>
+                    <spann>{{ permission }},</spann>
                     {% endfor %}
                 </p>
             </td>
@@ -39,4 +40,4 @@
     </table>
 </body>
 
-    {% endblock %}
+{% endblock %}

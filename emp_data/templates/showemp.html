@@ -73,10 +73,6 @@
   }
 </script>
 
-
-
-
-
 <div class="container-fluid">
   <table class="table table-bordered table-hover" id="empTable" name="empTable">
     <thead class="bg-info text-white">
@@ -244,6 +240,10 @@
           <!-- Button to open the Experiance modal -->
           <button type="button" class="btn btn-primary" id="openEmpExpModalBtn{{employee.e_id}}"
             data-e_id="{{ employee.e_id }}"><i class="fa-solid fa-eye"></i>
+          </button><br>
+          <!--Add user-->
+          <button class="btn-info btn-sm" onclick="location.href='/addUser/{{employee.e_id}}'"><i
+            class="fa-sharp fa-regular fa-plus"></i>
           </button>
 
         </td>

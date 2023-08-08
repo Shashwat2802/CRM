@@ -1,7 +1,7 @@
 from django.db import models
 from datetime import datetime
 
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser,Group
 from django.db import models
 
 from .permissions import FILENAME, PERMISSION_ITEMS
@@ -9,7 +9,7 @@ from .permissions import FILENAME, PERMISSION_ITEMS
 class CustomUser(AbstractUser):
     role = models.CharField(max_length=100, default='user')
     emp_id = models.CharField(max_length=100, default='LS111')
-    user_permissions = models.BigIntegerField(default=0x7FFFFFFFFFFFFFFF)
+    user_permissions = models.BigIntegerField(default=0x7FFFFFFFFFFFFFFF)  
 
     PERMISSION_ITEMS = [
         (f'customUser.{item[0]}', item[1]) for item in PERMISSION_ITEMS
