@@ -123,3 +123,4 @@ emp_data/migrations
 db.sqlite3
 management/__pycache__/
 static/
+credentials
