@@ -16,7 +16,7 @@
         </div>
     </center>
 
-    <table class="table">
+    <table class="table table-bordered table-hover" id="mapTable" name="mapTable">
         <thead class="badge-info text-white">
             <tr>
                 <th>Candidate</th>
@@ -81,7 +81,8 @@
                     {{values.source}}
                 </td>
                 <td>
-                    {{values.empstatus}}
+                    {{values.empstatus}}&nbsp;&nbsp;&nbsp;
+                    {{values.added_date}}
                 </td>
                 <td>
                     {% if position > 0 %}

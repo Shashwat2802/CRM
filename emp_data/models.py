@@ -1,8 +1,9 @@
 from django.db import models
-from datetime import datetime
+from datetime import date, datetime
 
 from django.contrib.auth.models import AbstractUser,Group
 from django.db import models
+#from phonenumber_field.modelfields import PhoneNumberField
 
 from .permissions import FILENAME, PERMISSION_ITEMS
 
@@ -74,7 +75,7 @@ class Employee(models.Model):
     eLname = models.CharField(max_length=50,null=True)
     refer_Customer = models.ForeignKey(Customer, on_delete = models.CASCADE)
     eEmail = models.EmailField(max_length=200,null=True)
-    ePhone = models.CharField(max_length=50)
+    ePhone = models.CharField(max_length=20)
     eExperience = models.IntegerField(default=0,null=True)
     eskills = models.CharField(max_length=100,null=True)
     eRole = models.ForeignKey(Role,on_delete=models.CASCADE) # designation
@@ -125,11 +126,13 @@ class Customer_Requirements(models.Model):
     ReqClosedDate=models.DateField(null=True)
       
     SalesIncharge = models.CharField(max_length=50,null=True)# name of the person
-    buHead=models.CharField(max_length=50,null=True)
+    buHead=models.CharField(max_length=50,null=True)    
     history = models.TextField(default="")
     priority = models.IntegerField(default=1)
     fulfillThru = models.CharField(max_length=10,default='BENCH')
     ActiveSubmissionCount = models.IntegerField(default=0)
+    department = models.ForeignKey(Department,on_delete=models.CASCADE)
+
 # ActiveResumeList  == This is only for Excel sheet 
 
 
@@ -148,13 +151,16 @@ class EmployeeReqMapping(models.Model):
     eskills = models.CharField(max_length=100,null=True)
     estatus = models.CharField(max_length=100,null=True)
     empstatus = models.CharField(max_length=100,null=True, default='')
-    added_date = models.DateField(null=True)
+    added_date = models.DateField(default=date.today)
     source = models.CharField(max_length=100,null=True, default='BENCH')
     sourceid_1 = models.CharField(max_length=10,null=True) # Can We  give foriegn key from 3 different table, like VM,TA, employee
     sourceid_2=models.CharField(max_length=10,null=True)
     sourceid_3=models.IntegerField(default=0)
     history = models.TextField(default="")
     resumeURL = models.CharField(max_length=1000,null=True)
+    department = models.ForeignKey(Department,on_delete=models.CASCADE)
+    BU = models.CharField(max_length=50)
+    archive_status = models.CharField(max_length=50,default='Active')
 
     class Meta:
         db_table = "employeereqmapping"

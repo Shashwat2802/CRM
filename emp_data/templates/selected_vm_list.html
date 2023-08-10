@@ -38,14 +38,40 @@
             </td>
     </tr>
 </table>
-</div>
-<div class="container text-white" style="margin-top: 30px;">
-
-    <div class="col-xl-12">
-
+<div class="form-inline">
+    <div class="d-inline-block">
+        <span class="btn">
+            <span style="margin-left: 30;" class="btn">
+                BUH
+                <select name="buhead" id="buhead" class="btn" style="border-radius: 30px;">
+                    <option value="{{bu_select}}" selected disabled hidden>{{bu_select}}</option>
+                    {% for val in buHead %}
+                    <option value="{{val.eFname}}">{{val.eFname}}</option>
+                    {% endfor %}
+                    <option value="All">All</option>
+                </select>
+            </span>
+            <span style="margin-left: 30">
+                <button class="go-btn" style="border-radius: 30px" type="submit"
+                    onClick="window.location.href = getLink()">
+                    Search
+                </button>
+            </span>
+            <span style="margin-left: 10">
+                <button class="go-btn" style="border-radius: 30px" type="submit"
+                    onclick="location.href='/mappedEmployeeToCustomer'">
+                    Refresh
+                </button>
+            </span>
     </div>
 </div>
-
+<script>
+    function getLink() {
+      var buhead = document.querySelector('#BU').value    
+      var url ='/mappedEmployeeToCustomer/' + encodeURIComponent(buhead) 
+      return url
+    }
+  </script>
 <center>
     <div>
         <h3 class="bg-info text-white">VM List</h3>
@@ -56,11 +82,13 @@
 
     {% csrf_token %}
 
-    <table class="table">
+    <table class="table table-bordered table-hover" id="mapTable" name="mapTable">
         <thead class="badge-info text-white">
             <tr>
-                <th>select</th>
-                <th>Candidate name</th>
+                <th>Select</th>
+                <th>Candidate Name</th>
+                <th>Department</th>
+                <th>Bu Head.</th>
                 <th>Candidate Skills</th>
                 <th>Selection Status</th>
             </tr>
@@ -73,6 +101,8 @@
                     <label for="vmIdPK"></label>
                 </td>
                 <td>{{candidate_list.candidateName}}</td>
+                <td>{{candidate_list.department}}</td>
+                <td>{{candidate_list.BU}}</td>
                 <td>{{candidate_list.skillset}}</td>
                 <td>{{candidate_list.resumeStatus}}</td>
             </tr>
