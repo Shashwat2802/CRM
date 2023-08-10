@@ -23,7 +23,7 @@
         </span>
         <span class="btn">
             Sales
-            <select class="btn" name="saleslist" id="sales">
+            <select class="btn" name="saleslist" id="sales" style="border-radius: 30px;">
                 <option value="{{sales_select}}" selected hidden disabled>{{sales_select}}</option>
                 {% for val in SalesTeam %}
                 <option value="{{val.eFname}}">{{val.eFname}}</option>
@@ -74,7 +74,16 @@
                 <option value="All">ANY</option>
             </select>
         </span>
-
+        <span class="btn">
+            Dept
+            <select class="btn" name="department" id="department" style="border-radius: 30px;">
+                <option value="{{department}}" selected hidden disabled>{{department}}</option>
+                {% for val in departments %}
+                <option value="{{val}}">{{val}}</option>
+                {% endfor %}
+                <option value="All">All</option>
+            </select>
+        </span>
 
         <span style="margin-left: 30;">
             <button class="go-btn" style="border-radius: 30px;" type="submit"
@@ -83,7 +92,7 @@
         </span>
         <span style="margin-left: 10;">
             <button class="go-btn" style="border-radius: 30px;" type="submit"
-                onclick="location.href='/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose'">Refresh</button>
+                onclick="location.href='/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose/Choose'">Refresh</button>
         </span>
 
     </div>
@@ -95,7 +104,8 @@
         var status = document.querySelector("#status").value;
         var priority = document.querySelector("#priority_select").value;
         var fulfillThru = document.querySelector("#fulfillThru").value;
-        var url = '/listSalesReqsFiltered/' + encodeURIComponent(buhead) + '/' + encodeURIComponent(salesincharge) + '/' + encodeURIComponent(status) + '/' + encodeURIComponent(priority) + '/' + encodeURIComponent(fulfillThru);
+        var department = document.querySelector("#department").value;
+        var url = '/listSalesReqsFiltered/' + encodeURIComponent(buhead) + '/' + encodeURIComponent(salesincharge) + '/' + encodeURIComponent(status) + '/' + encodeURIComponent(priority) + '/' + encodeURIComponent(fulfillThru) + '/' + encodeURIComponent(department);
         console.log("URL ",url)
         return url;
     }
@@ -118,6 +128,7 @@
             <th>Status</th>
             <th>BDM</th>
             <th>BU Head</th>
+            <th>DEPT.</th>
             <th>Fulfill</th>
             <th>Actions</th>
         </tr>
@@ -212,6 +223,7 @@
                 <td>{{val.reqStatus}}</td>
                 <td>{{val.SalesIncharge}}</td>
                 <td>{{val.buHead}}</td>
+                <td>{{val.department}}</td>
                 <td>{{val.fulfillThru}}</td>
                 <!-- Button trigger modal -->
                 <td>

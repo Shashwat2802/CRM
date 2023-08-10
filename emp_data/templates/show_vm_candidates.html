@@ -30,7 +30,7 @@
   <div class="d-inline-block">
     <span class="btn">
       Dept
-      <select class="btn" name="department" id="department">
+      <select class="btn" name="department" id="department" style="border-radius: 30px">
         <option value="{{dept_select}}" selected hidden disabled>{{dept_select}}</option>
         {% for val in departments %}
         <option value="{{val}}">{{val}}</option>
@@ -42,7 +42,7 @@
       BUH
       <select name="buhead" id="buhead" class="btn" style="border-radius: 30px">
         <option value="{{bu_select}}" selected disabled hidden>{{bu_select}}</option>
-        {% for val in BUHList %}
+        {% for val in buhList %}
         <option value="{{val}}">{{val}}</option>
         {% endfor %}
         <option value="All">All</option>

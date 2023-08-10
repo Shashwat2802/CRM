@@ -217,7 +217,7 @@ def addSalesReqs(request):
             instance.ReqClosedDate = None
             instance.save()
             messages.success(request,'Details Saved !')
-            return redirect('/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose')
+            return redirect('/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose/Choose')
         else:
             return HttpResponse(form.errors)
 
@@ -240,15 +240,14 @@ def updateSaleReqs(request,reqIdPK):
     if not request.user.check_permission(f'customUser.{PERM_SALES_EDIT}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home")  
-    
-
 
     model_instance=Customer_Requirements.objects.get(pk=reqIdPK)
 
-    # buh=model_instance.buHead
-    # saleperson=model_instance.SalesIncharge
-
-    # currentUser=request.user.emp_id
+    buh=model_instance.buHead
+    salesperson=model_instance.SalesIncharge        
+    currentUser=request.user
+    if ((currentUser == salesperson) or (currentUser == buh)):        
+        print(salesperson)
 
     model_instance.RequiredSkills=request.POST['RequiredSkills']
     model_instance.JD=request.POST['JD']
@@ -291,7 +290,7 @@ def updateSaleReqs(request,reqIdPK):
 
 
     model_instance.save()
-    return redirect('/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose')  
+    return redirect('/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose/Choose')  
         
 @unauthenticated_user
 def listCustomers(request):    
@@ -342,7 +341,7 @@ def getBUHList():
     return Employee.objects.filter(eRole='BUH',isDeleted=False)
 
 @unauthenticated_user
-def listSalesReqsFiltered(request,bu,sales,st,priority,fillThru):    
+def listSalesReqsFiltered(request,bu,sales,st,priority,fillThru,department):    
     if not request.user.check_permission(f'customUser.{PERM_SALES_VIEW}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home")  
@@ -362,19 +361,20 @@ def listSalesReqsFiltered(request,bu,sales,st,priority,fillThru):
 
     if fillThru != 'All' and fillThru != 'Choose':
         filter_conditions['fulfillThru'] = fillThru
-
-
-
+    
+    if department != 'All' and department != 'Choose':
+        filter_conditions['department'] = department
 
     print("FIlter COndition",filter_conditions,bu,sales,st)
     customer_requirements=  Customer_Requirements.objects.filter(**filter_conditions)
-
+    departments =getDepartmentList()
     buList = getBUHList()
     current_user = request.user.username.title() 
     SalesTeam= getSalesTeam()
-    return render(request,'show_cust_requirements.html',{'customer_requirements':customer_requirements,
-                                                        'SalesTeam': SalesTeam, 'buList': buList, 
-                                                        'current_user':current_user,'bu_select': bu, "sales_select": sales, 'status_select': st,"priority_select":priority,"fulfillThru_select":fillThru})
+    return render(request,'show_cust_requirements.html',{'customer_requirements':customer_requirements,'departments':departments,
+                                                        'SalesTeam': SalesTeam, 'buList': buList,'department':department,
+                                                        'current_user':current_user,'bu_select': bu, "sales_select": sales,
+                                                         'status_select': st,"priority_select":priority,"fulfillThru_select":fillThru})
 
 @unauthenticated_user
 def listEmployeeFiltered(request,department,buh,manager):    
@@ -400,10 +400,10 @@ def listEmployeeFiltered(request,department,buh,manager):
     customerlist=getCustomerList()
 
     managerList=getManagers()
-    current_user = request.user.username  
-    current_emp = Employee.objects.get(eFname__icontains=current_user,isDeleted=False)     
+    #current_user = request.user.username  
+    #current_emp = Employee.objects.get(eFname__icontains=current_user,isDeleted=False)     
     return render(request, "showemp.html", {'employees':employees,"department":department,"buh":buh,'customerlist':customerlist,
-                                             "manager":manager,"current_emp":current_emp,'rolelist':rolelist,
+                                             "manager":manager,'rolelist':rolelist,
                                               'departments':departments,'BUHList':buhList,'managerList':managerList}) 
 
 @unauthenticated_user
@@ -427,7 +427,7 @@ def addSalesReqComment(request, reqIdPK):
         print("Existing Comment",salesReq.history)
         salesReq.history=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+salesReq.history
         salesReq.save()
-        return redirect('/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose')
+        return redirect('/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose/Choose')
 
 @unauthenticated_user
 def addCommentsToVmCandidate(request, reqIdPK):
@@ -470,7 +470,7 @@ def cust_req_dropdown(request, ref):
         cust = Customer_Requirements.objects.get(pk=ref[1:2])
         cust.buHead = ref[2:]
     cust.save()
-    return redirect('/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose')
+    return redirect('/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose/Choose')
     
 @unauthenticated_user
 def salesSummary(request):
@@ -619,11 +619,11 @@ def checkbox(request):
 def mappedEmployeeToCustomer(request,reqIdPK):      
     if not request.user.check_permission(f'customUser.{PERM_SALES_MAPPED_EMP_TO_CUSTOMER}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
-        return redirect("/home") 
+        return redirect("/home")     
     emp_data = EmployeeReqMapping.objects.filter(req_id=reqIdPK)
     req_instance=Customer_Requirements.objects.get(pk=reqIdPK)
     position=req_instance.remainPositions
-    return render(request, "showEmpToCustomer.html", {'form':emp_data,'reqIdPK':reqIdPK,'position':position,
+    return render(request, "showEmpToCustomer.html", {'form':emp_data,'reqIdPK':reqIdPK,'position':position
     })
 
 
@@ -906,7 +906,9 @@ def mapEmpToReq(request,reqIdPK,choice):
                 emp=Employee.objects.get(e_id=i,isDeleted=False)
                 emp.estatus='ScreeningPending'
                 emp.save()
-                final=EmployeeReqMapping(req_id=salesReq,name=emp.eFname + " " +emp.eLname,eskills=emp.eskills,  added_date=today,source='BENCH',sourceid_1=emp.e_id,empstatus='shortlisted',resumeURL='None')
+                final=EmployeeReqMapping(req_id=salesReq,name=emp.eFname + " " +emp.eLname,eskills=emp.eskills,  
+                                         added_date=today,source='BENCH',sourceid_1=emp.e_id,empstatus='shortlisted',resumeURL='None',
+                                         department=emp.department,BU=emp.BUH,archive_status='Active')
                 final.save()
         if choice=='TA':
             selectedtaList = request.POST.getlist('ta_id')
@@ -915,7 +917,9 @@ def mapEmpToReq(request,reqIdPK,choice):
                 ta=TA_Resource.objects.get(ta_id=i)
                 ta.status='shortlisted'
                 ta.save()
-                final=EmployeeReqMapping(resumeURL=ta.resume,req_id=salesReq,name=ta.name,eskills=ta.skillset,added_date=today,source='TA',empstatus='shortlisted',sourceid_2=ta.ta_id)
+                final=EmployeeReqMapping(resumeURL=ta.resume,req_id=salesReq,name=ta.name,eskills=ta.skillset,
+                                         added_date=today,source='TA',empstatus='shortlisted',sourceid_2=ta.ta_id,
+                                         department=ta.department,BU=ta.BU,archive_status='Active')
                 final.save()
         if choice=='VM':
             selectedvmList = request.POST.getlist('vmIdPK')
@@ -924,7 +928,9 @@ def mapEmpToReq(request,reqIdPK,choice):
                 vm=VmResource.objects.get(vmIdPK=id)
                 vm.resumeStatus='shortlisted'
                 vm.save()
-                final=EmployeeReqMapping(resumeURL=vm.resumeURL, req_id=salesReq,name=vm.candidateName,eskills=vm.skillset,  added_date=today,source='VM',empstatus='shortlisted',sourceid_3=vm.vmIdPK)
+                final=EmployeeReqMapping(resumeURL=vm.resumeURL, req_id=salesReq,name=vm.candidateName,eskills=vm.skillset,
+                                         added_date=today,source='VM',empstatus='shortlisted',sourceid_3=vm.vmIdPK,
+                                         department=vm.department,BU=vm.buh,archive_status='Active')
                 final.save()
     return redirect(f'/mappedEmployeeToCustomer/{reqIdPK}')
 
@@ -1040,7 +1046,7 @@ def save_emp_details(request):
 
 
 # this is working upload employee data to model
-@unauthenticated_user
+#@unauthenticated_user
 def bulkUploadEmployee(request):   
     if not request.user.check_permission(f'customUser.{PERM_EMPLOYEE_UPLOAD}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
@@ -1212,7 +1218,7 @@ def salesDataUpload(request):
 
                 )
             value.save()
-        return redirect("/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose")
+        return redirect("/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose/Choose")
         
     return render(request,'customer_requirement_data.html')
 
