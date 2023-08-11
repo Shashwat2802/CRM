@@ -332,13 +332,13 @@ def getDepartmentList():
     return Department.objects.all()
 
 def getManagers():
-    return Employee.objects.filter(IsManager=True, isDeleted=False)
+    return Employee.objects.filter(IsManager=True, isDeleted=True)
 
 def getSalesTeam():
     return Employee.objects.filter((Q(eRole='SALES_STAFF')| Q(eRole='SALES_HEAD')),isDeleted=False)
 
 def getBUHList():
-    return Employee.objects.filter(eRole='BUH',isDeleted=False)
+    return Employee.objects.filter(eRole='BUH',isDeleted=True)
 
 @unauthenticated_user
 def listSalesReqsFiltered(request,bu,sales,st,priority,fillThru,department):    
@@ -368,8 +368,7 @@ def listSalesReqsFiltered(request,bu,sales,st,priority,fillThru,department):
     print("FIlter COndition",filter_conditions,bu,sales,st)
     customer_requirements=  Customer_Requirements.objects.filter(**filter_conditions)
     departments =getDepartmentList()
-    buList = getBUHList()
-    print("buh list",buList)
+    buList = getBUHList()    
     current_user = request.user.username.title() 
     SalesTeam= getSalesTeam()
     return render(request,'show_cust_requirements.html',{'customer_requirements':customer_requirements,'departments':departments,
@@ -691,11 +690,11 @@ def showVm(request,buh,dept,status):
     all_vm_candidates = VmResource.objects.filter(**filter_conditions)
     ownerList = list(map(lambda x:x.eFname,getOwnerList()))  
     departments =getDepartmentList()
-    buhList= getBUHList()
+    buhList= getBUHList()    
     return render(request, 
                   "show_vm_candidates.html",
                      {"candidate_list":all_vm_candidates,
-                        'ownerList':ownerList,'departments':departments,'BUHList':buhList,
+                        'ownerList':ownerList,'departments':departments,'buhList':buhList,
                         "dept_select":dept,"bu_select":buh,"status_select":status})
 
 # Form to add only one VM candidate 

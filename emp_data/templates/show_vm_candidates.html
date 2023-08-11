@@ -13,7 +13,7 @@
 
 <script>
   function getLink() {
-    var buhead = document.querySelector('#buhead').value
+    var buhead = document.querySelector('#buh').value
     var department = document.querySelector('#department').value
     var status = document.querySelector('#status').value
     var url =
@@ -40,7 +40,7 @@
     </span>
     <span style="margin-left: 30" class="btn">
       BUH
-      <select name="buhead" id="buhead" class="btn" style="border-radius: 30px">
+      <select name="buh" id="buh" class="btn" style="border-radius: 30px">
         <option value="{{bu_select}}" selected disabled hidden>{{bu_select}}</option>
         {% for val in buhList %}
         <option value="{{val}}">{{val}}</option>
