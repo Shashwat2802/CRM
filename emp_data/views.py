@@ -369,6 +369,7 @@ def listSalesReqsFiltered(request,bu,sales,st,priority,fillThru,department):
     customer_requirements=  Customer_Requirements.objects.filter(**filter_conditions)
     departments =getDepartmentList()
     buList = getBUHList()
+    print("buh list",buList)
     current_user = request.user.username.title() 
     SalesTeam= getSalesTeam()
     return render(request,'show_cust_requirements.html',{'customer_requirements':customer_requirements,'departments':departments,
@@ -1180,7 +1181,8 @@ def salesDataUpload(request):
         imported_data = dataset.load(new_Requirements.read(), format='xlsx')
         for data in imported_data:
             print(data)
-            custName=data[1]
+            custName=data[2]
+            dept=data[21]
             cust=Customer.objects.filter(cName=custName)
 
             if cust.exists():
@@ -1189,6 +1191,14 @@ def salesDataUpload(request):
                 print("Customer does not exists")
                 newCust=Customer(cName=custName,cEmail='test@gmail.com',cUrl="test.com")
                 newCust.save()
+
+            deptment=Department.objects.filter(department=dept)
+            if deptment.exists():
+                print("Extsing dept",deptment)
+            else :
+                print("dept does not exists")
+                newDept=Department(department=dept)
+                newDept.save()
 
             # Parse the comma separated and fillin customerReqemp table 
             activeResList=data[20]    
@@ -1214,7 +1224,7 @@ def salesDataUpload(request):
                 data[18], 
                 data[19], 
                 data[20], 
-       
+                data[21],       
 
                 )
             value.save()
