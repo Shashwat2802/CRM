@@ -42,7 +42,7 @@
         BUH
         <select name="BU" id="BU" class="btn" style="border-radius: 30px;">
           <option value="{{bu_select}}" selected disabled hidden>{{bu_select}}</option>
-          {% for val in buHead %}
+          {% for val in buList %}
           <option value="{{val.eFname}}">{{val.eFname}}</option>
           {% endfor %}
           <option value="All">All</option>
@@ -55,7 +55,7 @@
       </span>
       <span style="margin-left: 10">
         <button class="go-btn" style="border-radius: 30px" type="submit"
-          onclick="location.href='/mappedEmployeeToCustomer'">
+          onclick="location.href='/freeFromAllSource/{{reqIdPK}}'">
           Refresh
         </button>
       </span>
@@ -63,8 +63,9 @@
 </div>
 <script>
   function getLink() {
-    var buhead = document.querySelector('#BU').value    
-    var url ='/mappedEmployeeToCustomer/' + encodeURIComponent(buhead) 
+    var buhead = document.querySelector('#BU').value  
+    var id= "{{reqIdPK}}"
+    var url ='/buFilterForMappedEmployee/' + encodeURIComponent(buhead) +'/' + encodeURIComponent(id)
     return url
   }
 </script>
@@ -101,7 +102,7 @@
         <td>{{candidate_list.e_id}}</td>
         <td>{{candidate_list.eFname}} {{candidate_list.eLname}}</td>
         <td>{{candidate_list.department}}</td>
-        <td>{{candidate_list.BU}}</td>
+        <td>{{candidate_list.BUH}}</td>
         <td>{{candidate_list.eskills}}</td>
         <td>{{candidate_list.estatus}}</td>
       </tr>

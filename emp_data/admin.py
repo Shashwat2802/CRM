@@ -33,7 +33,7 @@ class EmployeeAdmin(ImportExportModelAdmin):
 @admin.register(models.Customer_Requirements)
 class Customer_RequirementsAdmin(ImportExportModelAdmin):
     list_display = ('reqIdPK','customers','CustReqId','RequiredSkills','JD','minExp','openPositions','reqStatus','SalesIncharge','buHead','history')
-    search_fields = ['JD','RequiredSkills','history']
+    search_fields = ['JD','RequiredSkills','SalesIncharge','buHead']
     filter_horizontal = ()
     list_filter = ()
     fieldsets = ()
@@ -41,8 +41,8 @@ class Customer_RequirementsAdmin(ImportExportModelAdmin):
 
 @admin.register(models.EmployeeReqMapping)
 class EmployeeReqMappingAdmin(ImportExportModelAdmin):
-    list_display = ('req_id','name','eskills')
-    search_fields = ['eFname','eLname','eskills']
+    list_display = ('req_id','name','source','department','BU','eskills')
+    search_fields = ['name','eskills','department','BU']
     filter_horizontal = ()
     list_filter = ()
     fieldsets = ()

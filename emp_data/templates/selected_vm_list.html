@@ -43,10 +43,10 @@
         <span class="btn">
             <span style="margin-left: 30;" class="btn">
                 BUH
-                <select name="buhead" id="buhead" class="btn" style="border-radius: 30px;">
+                <select name="BU" id="BU" class="btn" style="border-radius: 30px;">
                     <option value="{{bu_select}}" selected disabled hidden>{{bu_select}}</option>
-                    {% for val in buHead %}
-                    <option value="{{val.eFname}}">{{val.eFname}}</option>
+                    {% for val in buList %}
+                    <option value="{{val}}">{{val}}</option>
                     {% endfor %}
                     <option value="All">All</option>
                 </select>
@@ -59,7 +59,7 @@
             </span>
             <span style="margin-left: 10">
                 <button class="go-btn" style="border-radius: 30px" type="submit"
-                    onclick="location.href='/mappedEmployeeToCustomer'">
+                    onclick="location.href='/showVmList/{{reqIdPK}}'">
                     Refresh
                 </button>
             </span>
@@ -68,7 +68,7 @@
 <script>
     function getLink() {
       var buhead = document.querySelector('#BU').value    
-      var url ='/mappedEmployeeToCustomer/' + encodeURIComponent(buhead) 
+      var url ='/buFilterForMappedEmployee/' + encodeURIComponent(buhead) 
       return url
     }
   </script>

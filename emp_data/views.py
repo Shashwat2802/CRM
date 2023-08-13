@@ -580,7 +580,8 @@ def JD(request):
 def freeFromAllSource(request,reqIdPK):
     if not request.user.check_permission(f'customUser.{PERM_SALES_BENCH_EMP_VIEW}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
-        return redirect("/home") 
+        return redirect("/home")    
+    buList = getBUHList()
     #form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='ScreeningPending')),isDeleted=False ).values()
     selected_employee=EmployeeReqMapping.objects.filter(req_id=reqIdPK,source='BENCH')
     fnamelist=[]
@@ -594,7 +595,39 @@ def freeFromAllSource(request,reqIdPK):
         skills = request.GET.get('searchskill')      
         if skills != None: 
             form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='ScreeningPending')),eskills__icontains= skills,isDeleted=False).exclude(eFname__in=fnamelist,eLname__in=lnamelist)
-    return render(request,'show_candidate.html',{'form':form ,'reqIdPK':reqIdPK})
+    return render(request,'show_candidate.html',{'form':form ,'reqIdPK':reqIdPK,'buList':buList})
+
+def buFilterForMappedEmployee(request,buhead,reqIdPK):
+    # # # filter={}
+    # # if buhead != "All" and buhead != "Choose":
+    # #     form = EmployeeReqMapping.objects.filter(BUH=buhead)
+    # #     # filter['BU'] = buhead
+
+    
+    # buList = getBUHList()
+    # return render(request,'show_candidate.html',{
+    #         'form':form,'bu_select':buhead,'buList':buList,
+    # })
+    if not request.user.check_permission(f'customUser.{PERM_SALES_BENCH_EMP_VIEW}'):
+        messages.error(request, 'Sorry, You are NOT authorized to do this action')
+        return redirect("/home")    
+    buList = getBUHList()
+    #form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='ScreeningPending')),isDeleted=False ).values()
+    selected_employee=EmployeeReqMapping.objects.filter(req_id=reqIdPK,source='BENCH')
+    fnamelist=[]
+    lnamelist=[]
+    for item in selected_employee:
+        namelist=item.name.split(' ',1)
+        fnamelist.append(namelist[0])
+        lnamelist.append(namelist[1])
+    form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='ScreeningPending')),BUH=buhead,isDeleted=False ).exclude(eFname__in=fnamelist,eLname__in=lnamelist)
+    if request.method == "GET":   
+        skills = request.GET.get('searchskill')      
+        if skills != None: 
+            form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='ScreeningPending')),BUH=buhead,eskills__icontains= skills,isDeleted=False).exclude(eFname__in=fnamelist,eLname__in=lnamelist)
+    return render(request,'show_candidate.html',{'form':form ,'reqIdPK':reqIdPK,'buList':buList})
+
+
 
 @unauthenticated_user
 def checkbox(request):    
@@ -820,13 +853,14 @@ def showTaList(request,reqIdPK):
     # form=TA_Resource.objects.filter(status='Selected').values()
     #form=TA_Resource.objects.filter(archived__icontains='Active').values()
     form=TA_Resource.objects.filter(archived__icontains='Active').exclude(status='Deployed')
+    buList=getBUHList()
     if request.method=='GET':
         skills=request.GET.get('searchskill')
         if skills != None:
             #form=TA_Resource.objects.filter(skillset__icontains=skills)
             form=TA_Resource.objects.filter(archived__icontains='Active',skillset__icontains=skills).exclude(status='Deployed')
     
-    return render(request,'selected_ta_list.html',{'form':form,"reqIdPK":reqIdPK})
+    return render(request,'selected_ta_list.html',{'form':form,"reqIdPK":reqIdPK,'buList':buList})
 
 @unauthenticated_user
 def showVmList(request,reqIdPK):
@@ -835,12 +869,13 @@ def showVmList(request,reqIdPK):
         return redirect("/home") 
     #form=VmResource.objects.filter(archivalStatus__icontains='Active').values()
     form=VmResource.objects.filter(archivalStatus__icontains='Active').exclude(resumeStatus='Deployed')
+    buList=getBUHList()
     if request.method=='GET':
         skills=request.GET.get('searchskill')
         if skills!=None:
             #form=VmResource.objects.filter(skillset__icontains=skills)
             form=VmResource.objects.filter(skillset__icontains=skills).exclude(resumeStatus='Deployed')
-    return render(request,'selected_vm_list.html',{'form':form,'reqIdPK':reqIdPK})
+    return render(request,'selected_vm_list.html',{'form':form,'reqIdPK':reqIdPK,'buList':buList})
 
 @unauthenticated_user
 def updateTaDetails(request,ta_id):

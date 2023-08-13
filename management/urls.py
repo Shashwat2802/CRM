@@ -60,6 +60,7 @@ urlpatterns = [
     path('addSalesReqs',views.addSalesReqs),
     path('JD',views.JD),  
     path('freeFromAllSource/<int:reqIdPK>',views.freeFromAllSource),
+    path('buFilterForMappedEmployee/<str:buhead>/<int:reqIdPK>',views.buFilterForMappedEmployee),
     path('mapEmpToReq/<int:reqIdPK>/<str:choice>',views.mapEmpToReq),
     path('mappedEmployeeToCustomer/<int:reqIdPK>',views.mappedEmployeeToCustomer),
     #path("addCommentToEmployeedReqTable/<int:reqIdPK>/<str:source>/<str:sourceId>", views.addCommentToEmployeedReqTable),

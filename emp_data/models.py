@@ -159,7 +159,7 @@ class EmployeeReqMapping(models.Model):
     history = models.TextField(default="")
     resumeURL = models.CharField(max_length=1000,null=True)
     department = models.ForeignKey(Department,on_delete=models.CASCADE)
-    BU = models.CharField(max_length=50)
+    BU= models.CharField(max_length=50)
     archive_status = models.CharField(max_length=50,default='Active')
 
     class Meta:
