@@ -187,6 +187,10 @@ def addEmployeeExperience(request, e_id):
         end_date = request.POST.get('end_date')
         instance=EmpExperienceHistory(e_id=e_id,refer_customer=c_name,customer_start_date=start_date,customer_end_date=end_date)
         instance.save()
+        emp_instance=Employee.objects.get(pk=e_id)
+        emp_instance.customer_start_date=start_date
+        emp_instance.refer_Customer=Customer(cName=c_name)
+        emp_instance.save()
         return redirect('/listEmployeeFiltered/All/All/All')
     else:
         return HttpResponse("Error")
@@ -852,13 +856,18 @@ def showTaList(request,reqIdPK):
         return redirect("/home") 
     # form=TA_Resource.objects.filter(status='Selected').values()
     #form=TA_Resource.objects.filter(archived__icontains='Active').values()
-    form=TA_Resource.objects.filter(archived__icontains='Active').exclude(status='Deployed')
+
+    namelist=[]
+    selected_employee=EmployeeReqMapping.objects.filter(req_id=reqIdPK,source='TA')
+    for item in selected_employee:
+        namelist.append(item.name)
+    form=TA_Resource.objects.filter(archived__icontains='Active').exclude(status='Deployed',name__in=namelist)
     buList=getBUHList()
     if request.method=='GET':
         skills=request.GET.get('searchskill')
         if skills != None:
             #form=TA_Resource.objects.filter(skillset__icontains=skills)
-            form=TA_Resource.objects.filter(archived__icontains='Active',skillset__icontains=skills).exclude(status='Deployed')
+            form=TA_Resource.objects.filter(archived__icontains='Active',skillset__icontains=skills).exclude(status='Deployed',name__in=namelist)
     
     return render(request,'selected_ta_list.html',{'form':form,"reqIdPK":reqIdPK,'buList':buList})
 
@@ -868,13 +877,17 @@ def showVmList(request,reqIdPK):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home") 
     #form=VmResource.objects.filter(archivalStatus__icontains='Active').values()
-    form=VmResource.objects.filter(archivalStatus__icontains='Active').exclude(resumeStatus='Deployed')
+    selected_employee=EmployeeReqMapping.objects.filter(req_id=reqIdPK,source='VM')
+    namelist=[]
+    for item in selected_employee:
+        namelist.append(item.name)
+    form=VmResource.objects.filter(archivalStatus__icontains='Active').exclude(resumeStatus='Deployed',candidateName__in=namelist)
     buList=getBUHList()
     if request.method=='GET':
         skills=request.GET.get('searchskill')
         if skills!=None:
             #form=VmResource.objects.filter(skillset__icontains=skills)
-            form=VmResource.objects.filter(skillset__icontains=skills).exclude(resumeStatus='Deployed')
+            form=VmResource.objects.filter(skillset__icontains=skills).exclude(resumeStatus='Deployed',candidateName__in=namelist)
     return render(request,'selected_vm_list.html',{'form':form,'reqIdPK':reqIdPK,'buList':buList})
 
 @unauthenticated_user
