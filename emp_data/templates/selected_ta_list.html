@@ -66,8 +66,9 @@
   </div>
   <script>
     function getLink() {
-      var buhead = document.querySelector('#BU').value    
-      var url ='/buFilterForMappedEmployee/' + encodeURIComponent(buhead) 
+      var buhead = document.querySelector('#BU').value
+      var id= "{{reqIdPK}}"    
+      var url ='/buFilterForMappedEmployee/' + encodeURIComponent(buhead) +'/' + encodeURIComponent(id) + '/TA'
       return url
     }
   </script>

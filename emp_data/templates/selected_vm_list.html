@@ -68,7 +68,8 @@
 <script>
     function getLink() {
       var buhead = document.querySelector('#BU').value    
-      var url ='/buFilterForMappedEmployee/' + encodeURIComponent(buhead) 
+      var id= "{{reqIdPK}}"
+      var url ='/buFilterForMappedEmployee/' + encodeURIComponent(buhead) + '/' + encodeURIComponent(id) +'/VM'
       return url
     }
   </script>
@@ -102,7 +103,7 @@
                 </td>
                 <td>{{candidate_list.candidateName}}</td>
                 <td>{{candidate_list.department}}</td>
-                <td>{{candidate_list.BU}}</td>
+                <td>{{candidate_list.buh}}</td>
                 <td>{{candidate_list.skillset}}</td>
                 <td>{{candidate_list.resumeStatus}}</td>
             </tr>

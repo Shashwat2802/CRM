@@ -601,7 +601,7 @@ def freeFromAllSource(request,reqIdPK):
             form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='ScreeningPending')),eskills__icontains= skills,isDeleted=False).exclude(eFname__in=fnamelist,eLname__in=lnamelist)
     return render(request,'show_candidate.html',{'form':form ,'reqIdPK':reqIdPK,'buList':buList})
 
-def buFilterForMappedEmployee(request,buhead,reqIdPK):
+def buFilterForMappedEmployee(request,buhead,reqIdPK,choice):
     # # # filter={}
     # # if buhead != "All" and buhead != "Choose":
     # #     form = EmployeeReqMapping.objects.filter(BUH=buhead)
@@ -614,22 +614,80 @@ def buFilterForMappedEmployee(request,buhead,reqIdPK):
     # })
     if not request.user.check_permission(f'customUser.{PERM_SALES_BENCH_EMP_VIEW}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
-        return redirect("/home")    
-    buList = getBUHList()
-    #form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='ScreeningPending')),isDeleted=False ).values()
-    selected_employee=EmployeeReqMapping.objects.filter(req_id=reqIdPK,source='BENCH')
-    fnamelist=[]
-    lnamelist=[]
-    for item in selected_employee:
-        namelist=item.name.split(' ',1)
-        fnamelist.append(namelist[0])
-        lnamelist.append(namelist[1])
-    form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='ScreeningPending')),BUH=buhead,isDeleted=False ).exclude(eFname__in=fnamelist,eLname__in=lnamelist)
-    if request.method == "GET":   
-        skills = request.GET.get('searchskill')      
-        if skills != None: 
-            form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='ScreeningPending')),BUH=buhead,eskills__icontains= skills,isDeleted=False).exclude(eFname__in=fnamelist,eLname__in=lnamelist)
-    return render(request,'show_candidate.html',{'form':form ,'reqIdPK':reqIdPK,'buList':buList})
+        return redirect("/home")
+    if choice == 'LEADSOC':
+            buList = getBUHList()
+            #form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='ScreeningPending')),isDeleted=False ).values()
+            selected_employee=EmployeeReqMapping.objects.filter(req_id=reqIdPK,source='BENCH')
+            fnamelist=[]
+            lnamelist=[]
+            for item in selected_employee:
+                namelist=item.name.split(' ',1)
+                fnamelist.append(namelist[0])
+                lnamelist.append(namelist[1])
+            val={}
+            if buhead!='All':
+               val['BUH']=buhead
+            form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='ScreeningPending')),**val,isDeleted=False ).exclude(eFname__in=fnamelist,eLname__in=lnamelist)
+            if request.method == "GET":   
+                skills = request.GET.get('searchskill')      
+                if skills != None: 
+                    form = Employee.objects.filter((Q(estatus ='Free')|Q(estatus='ScreeningPending')),**val,eskills__icontains= skills,isDeleted=False).exclude(eFname__in=fnamelist,eLname__in=lnamelist)
+            return render(request,'show_candidate.html',{'form':form ,'reqIdPK':reqIdPK,'buList':buList})
+    if choice=='TA':
+            ta_instance=TA_Resource.objects.all()
+            buList=[]
+            for item in ta_instance:
+                flag=0
+                for value in buList:
+                    if value == item.BU:
+                        flag=1
+                        break
+                if flag!=1:
+                    buList.append(item.BU)
+            namelist=[]
+            selected_employee=EmployeeReqMapping.objects.filter(req_id=reqIdPK,source='TA')
+            for item in selected_employee:
+                namelist.append(item.name)
+            val={}
+            if buhead!='All':
+               val['BU']=buhead
+            form=TA_Resource.objects.filter(archived__icontains='Active',**val).exclude(status='Deployed',name__in=namelist)
+            if request.method=='GET':
+                skills=request.GET.get('searchskill')
+                if skills != None:
+                    #form=TA_Resource.objects.filter(skillset__icontains=skills)
+                    form=TA_Resource.objects.filter(archived__icontains='Active',skillset__icontains=skills,**val).exclude(status='Deployed',name__in=namelist)
+            return render(request,'selected_ta_list.html',{'form':form,"reqIdPK":reqIdPK,'buList':buList})
+    if choice=='VM':
+            vm_instance=VmResource.objects.all()
+            buList=[]
+            for item in vm_instance:
+                    flag=0
+                    for value in buList:
+                        if value == item.buh:
+                            flag=1
+                            break
+                    if flag!=1:
+                        buList.append(item.buh)
+            namelist=[]
+            selected_employee=EmployeeReqMapping.objects.filter(req_id=reqIdPK,source='VM')
+            for item in selected_employee:
+                namelist.append(item.name)
+            val={}
+            if buhead!='All':
+               val['buh']=buhead
+            form=VmResource.objects.filter(archivalStatus__icontains='Active',**val).exclude(resumeStatus='Deployed',candidateName__in=namelist)
+            if request.method=='GET':
+                skills=request.GET.get('searchskill')
+                if skills!=None:
+                    #form=VmResource.objects.filter(skillset__icontains=skills)
+                    form=VmResource.objects.filter(archivalStatus__icontains='Active',skillset__icontains=skills,**val).exclude(resumeStatus='Deployed',candidateName__in=namelist)
+            return render(request,'selected_vm_list.html',{'form':form,'reqIdPK':reqIdPK,'buList':buList})
+
+            
+
+    
 
 
 
@@ -862,7 +920,16 @@ def showTaList(request,reqIdPK):
     for item in selected_employee:
         namelist.append(item.name)
     form=TA_Resource.objects.filter(archived__icontains='Active').exclude(status='Deployed',name__in=namelist)
-    buList=getBUHList()
+    ta_instance=TA_Resource.objects.all()
+    buList=[]
+    for item in ta_instance:
+        flag=0
+        for value in buList:
+          if value == item.BU:
+              flag=1
+              break
+        if flag!=1:
+            buList.append(item.BU)
     if request.method=='GET':
         skills=request.GET.get('searchskill')
         if skills != None:
@@ -870,6 +937,8 @@ def showTaList(request,reqIdPK):
             form=TA_Resource.objects.filter(archived__icontains='Active',skillset__icontains=skills).exclude(status='Deployed',name__in=namelist)
     
     return render(request,'selected_ta_list.html',{'form':form,"reqIdPK":reqIdPK,'buList':buList})
+
+from emp_data.models import VmResource
 
 @unauthenticated_user
 def showVmList(request,reqIdPK):
@@ -882,12 +951,21 @@ def showVmList(request,reqIdPK):
     for item in selected_employee:
         namelist.append(item.name)
     form=VmResource.objects.filter(archivalStatus__icontains='Active').exclude(resumeStatus='Deployed',candidateName__in=namelist)
-    buList=getBUHList()
+    vm_instance=VmResource.objects.all()
+    buList=[]
+    for item in vm_instance:
+        flag=0
+        for value in buList:
+          if value == item.buh:
+              flag=1
+              break
+        if flag!=1:
+            buList.append(item.buh)
     if request.method=='GET':
         skills=request.GET.get('searchskill')
         if skills!=None:
             #form=VmResource.objects.filter(skillset__icontains=skills)
-            form=VmResource.objects.filter(skillset__icontains=skills).exclude(resumeStatus='Deployed',candidateName__in=namelist)
+            form=VmResource.objects.filter(archivalStatus__icontains='Active',skillset__icontains=skills).exclude(resumeStatus='Deployed',candidateName__in=namelist)
     return render(request,'selected_vm_list.html',{'form':form,'reqIdPK':reqIdPK,'buList':buList})
 
 @unauthenticated_user
