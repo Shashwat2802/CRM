@@ -10,7 +10,7 @@ from .models import Customer
 from django.http import HttpResponse
 from django.db.models import Q
 from datetime import date
-
+from django.urls import reverse
 from django.contrib import messages
 from django.http import JsonResponse
 
@@ -221,7 +221,7 @@ def addSalesReqs(request):
             instance.ReqClosedDate = None
             instance.save()
             messages.success(request,'Details Saved !')
-            return redirect('/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose/Choose')
+            return redirect('/listSalesReqsFiltered')
         else:
             return HttpResponse(form.errors)
 
@@ -229,8 +229,8 @@ def addSalesReqs(request):
         customerList=getCustomerList()
         BUList=list(map(lambda x:x.eFname ,getBUHList()))
         SalesList=list(map(lambda x:x.eFname ,getSalesTeam()))
-
-        return render(request, 'addcustrequirements.html',{'customerlist': customerList, 'bulist': BUList, 'saleslist' : SalesList})
+        department=Department.objects.all()
+        return render(request, 'addcustrequirements.html',{'customerlist': customerList, 'bulist': BUList, 'saleslist' : SalesList,'department':department})
 
 
 def getCustomerList () :
@@ -294,7 +294,7 @@ def updateSaleReqs(request,reqIdPK):
 
 
     model_instance.save()
-    return redirect('/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose/Choose')  
+    return redirect('/listSalesReqsFiltered')  
         
 @unauthenticated_user
 def listCustomers(request):    
@@ -345,28 +345,35 @@ def getBUHList():
     return Employee.objects.filter(eRole='BUH',isDeleted=True)
 
 @unauthenticated_user
-def listSalesReqsFiltered(request,bu,sales,st,priority,fillThru,department):    
+def listSalesReqsFiltered(request):    
     if not request.user.check_permission(f'customUser.{PERM_SALES_VIEW}'):
         messages.error(request, 'Sorry, You are NOT authorized to do this action')
         return redirect("/home")  
     print("****** Filter ",)
+    bu=request.POST.get('buhead')
+    sales=request.POST.get('saleslist')
+    st=request.POST.get('statuslist')
+    priority=request.POST.get('priority_select')
+    fillThru=request.POST.get('fulfillThru')
+    department=request.POST.get('department')
+    print(bu,sales,st,priority,fillThru,department)
     filter_conditions={}
-    if bu != 'All' and bu != 'Choose':
+    if bu != 'All' and bu != None:
         filter_conditions['buHead'] = bu
 
-    if sales != 'All' and sales != 'Choose':
+    if sales != 'All' and sales != None:
         filter_conditions['SalesIncharge'] = sales
 
-    if st != 'All' and st != 'Choose':
+    if st != 'All' and st != None:
         filter_conditions['reqStatus'] = st
 
-    if priority != 'All' and priority != 'Choose':
+    if priority != 'All' and priority != None:
         filter_conditions['priority'] = int(priority)
 
-    if fillThru != 'All' and fillThru != 'Choose':
+    if fillThru != 'All' and fillThru != None:
         filter_conditions['fulfillThru'] = fillThru
     
-    if department != 'All' and department != 'Choose':
+    if department != 'All' and department != None:
         filter_conditions['department'] = department
 
     print("FIlter COndition",filter_conditions,bu,sales,st)
@@ -375,6 +382,8 @@ def listSalesReqsFiltered(request,bu,sales,st,priority,fillThru,department):
     buList = getBUHList()    
     current_user = request.user.username.title() 
     SalesTeam= getSalesTeam()
+    # url=reverse('salesrequirements')
+    # return HttpResponse(url)
     return render(request,'show_cust_requirements.html',{'customer_requirements':customer_requirements,'departments':departments,
                                                         'SalesTeam': SalesTeam, 'buList': buList,'department':department,
                                                         'current_user':current_user,'bu_select': bu, "sales_select": sales,
@@ -431,7 +440,7 @@ def addSalesReqComment(request, reqIdPK):
         print("Existing Comment",salesReq.history)
         salesReq.history=today.strftime('%Y-%m-%d')+ ":"+current_user+"# "+remark_text +"\n\n"+salesReq.history
         salesReq.save()
-        return redirect('/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose/Choose')
+        return redirect('/listSalesReqsFiltered')
 
 @unauthenticated_user
 def addCommentsToVmCandidate(request, reqIdPK):
@@ -474,7 +483,7 @@ def cust_req_dropdown(request, ref):
         cust = Customer_Requirements.objects.get(pk=ref[1:2])
         cust.buHead = ref[2:]
     cust.save()
-    return redirect('/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose/Choose')
+    return redirect('/listSalesReqsFiltered')
     
 @unauthenticated_user
 def salesSummary(request):
@@ -1353,7 +1362,7 @@ def salesDataUpload(request):
 
                 )
             value.save()
-        return redirect("/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose/Choose")
+        return redirect("/listSalesReqsFiltered")
         
     return render(request,'customer_requirement_data.html')
 

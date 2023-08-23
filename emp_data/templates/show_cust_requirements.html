@@ -17,13 +17,15 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 <div class="form-inline">
     <div class="d-inline-block">
-        <span>
-            <button class="go-btn" style="border-radius: 30px;"
-                onclick="location.href='/salesSummary'">salesSummary</button>
+        <form action="/listSalesReqsFiltered" method="POST" style="margin-top: -5;">
+            {% csrf_token %}
+        <span style="margin-top: -4;">
+            <button class="go-btn" style="border-radius: 10px; "
+                onclick="location.href='/salesSummary'">Sales Summary</button>
         </span>
         <span class="btn">
             Sales
-            <select class="btn" name="saleslist" id="sales" style="border-radius: 30px;">
+            <select class="btn" name="saleslist" id="sales" style="border-radius: 10px; margin-top: -3;">
                 <option value="{{sales_select}}" selected hidden disabled>{{sales_select}}</option>
                 {% for val in SalesTeam %}
                 <option value="{{val.eFname}}">{{val.eFname}}</option>
@@ -33,7 +35,7 @@
         </span>
         <span style="margin-left: 30;" class="btn">
             BUH
-            <select name="buhead" id="buhead" class="btn" style="border-radius: 30px;">
+            <select name="buhead" id="buhead" class="btn" style="border-radius: 10px; margin-top: -3;">
                 <option value="{{bu_select}}" selected disabled hidden>{{bu_select}}</option>
                 {% for val in buList %}
                 <option value="{{val.eFname}}">{{val.eFname}}</option>
@@ -44,7 +46,7 @@
 
         <span style="margin-left: 30;" class="btn">
             Status
-            <select name="statuslist" id="status" class="btn" style="border-radius: 30px;">
+            <select name="statuslist" id="status" class="btn" style="border-radius: 10px; margin-top: -3;">
                 <option value="{{status_select}}" selected disabled hidden>{{status_select}}</option>
                 <option value="Active">Active</option>
                 <option value="Closed">Closed</option>
@@ -55,7 +57,7 @@
 
         <span style="margin-left: 30;" class="btn">
             Priority
-            <select name="priority_select" id="priority_select" class="btn" style="border-radius: 30px;">
+            <select name="priority_select" id="priority_select" class="btn" style="border-radius: 10px; margin-top: -3;">
                 <option value="{{priority_select}}" selected disabled hidden>{{priority_select}}</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
@@ -66,7 +68,7 @@
 
         <span style="margin-left: 30;" class="btn">
             FullFilment
-            <select name="fulfillThru" id="fulfillThru" class="btn" style="border-radius: 30px;">
+            <select name="fulfillThru" id="fulfillThru" class="btn" style="border-radius: 10px; margin-top: -3;">
                 <option value={{fulfillThru_select}} selected disabled hidden>{{fulfillThru_select}}</option>
                 <option value=BENCH>BENCH</option>
                 <option value=TA>TA</option>
@@ -74,9 +76,9 @@
                 <option value="All">ANY</option>
             </select>
         </span>
-        <span class="btn">
+        <span class="btn" style="margin-left: 20;">
             Dept
-            <select class="btn" name="department" id="department" style="border-radius: 30px;">
+            <select class="btn" name="department" id="department" style="border-radius: 10px; margin-top: -3;">
                 <option value="{{department}}" selected hidden disabled>{{department}}</option>
                 {% for val in departments %}
                 <option value="{{val}}">{{val}}</option>
@@ -85,19 +87,21 @@
             </select>
         </span>
 
-        <span style="margin-left: 30;">
-            <button class="go-btn" style="border-radius: 30px;" type="submit"
-                onClick="window.location.href = getLink()">Search</button>
+        <span style="margin-left: 20;">
+            <button class="go-btn" style="border-radius: 10px;" type="submit"">Search</button>
 
         </span>
-        <span style="margin-left: 10;">
+        <span style="margin-left: 20;">
+            <button style="border-radius: 10px;"><a onclick="location.href='/listSalesReqsFiltered'">Refresh</a></button>
+        </span>
+        <!-- <span style="margin-left: 10;">
             <button class="go-btn" style="border-radius: 30px;" type="submit"
                 onclick="location.href='/listSalesReqsFiltered/Choose/Choose/Choose/Choose/Choose/Choose'">Refresh</button>
-        </span>
-
+        </span> -->
+    </form>
     </div>
 </div>
-<script>
+<!-- <script>
     function getLink() {
         var buhead = document.querySelector("#buhead").value;
         var salesincharge = document.querySelector("#sales").value;
@@ -109,8 +113,12 @@
         console.log("URL ",url)
         return url;
     }
+</script> -->
+<script type="text/javascript">  
+    if(performance.navigation.type == 2){
+       location.reload(true);
+    }
 </script>
-
 </div>
 <table class="table relative-top" id="salesReqTable">
     <thead class="badge-info text-white">

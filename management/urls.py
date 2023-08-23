@@ -47,7 +47,8 @@ urlpatterns = [
     #path('account_dropdown_view',views.account_dropdown_view),
     
    # customer requirements details
-    path('listSalesReqsFiltered/<str:bu>/<str:sales>/<str:st>/<str:priority>/<str:fillThru>/<str:department>',views.listSalesReqsFiltered),
+    # path('listSalesReqsFiltered/<str:bu>/<str:sales>/<str:st>/<str:priority>/<str:fillThru>/<str:department>',views.listSalesReqsFiltered,name='salesrequirements'),
+    path('listSalesReqsFiltered',views.listSalesReqsFiltered,name='salesrequirements'),
     path('listEmployeeFiltered/<str:department>/<str:buh>/<str:manager>',views.listEmployeeFiltered),
 
     path("addCommentsToVmCandidate/<int:reqIdPK>", views.addCommentsToVmCandidate),
